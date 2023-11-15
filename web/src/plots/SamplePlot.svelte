@@ -23,7 +23,7 @@
   }
 </script>
 
-<div on:mousemove={onMousemove}>
+<div on:mousemove={onMousemove} class='card bg-base-100 shadow-xl'>
   <svg width={width} height={height}>
     <g bind:this={gx} transform="translate(0,{height - marginBottom})" />
     <g bind:this={gy} transform="translate({marginLeft},0)" />
