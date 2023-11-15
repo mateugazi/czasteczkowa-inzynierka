@@ -7,6 +7,8 @@
 <style>
   .navbar-container {
     display: flex;
+    /* position: sticky; */
+    /* top: 0; */
   }
 
   .navbar {

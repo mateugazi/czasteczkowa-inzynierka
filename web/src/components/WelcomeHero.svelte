@@ -1,9 +1,14 @@
 <script>
-	import FileReceiver from "./FileReceiver.svelte";
+	import SamplePlot from "../plots/SamplePlot.svelte";
+  import FileReceiver from "./FileReceiver.svelte";
+  import PredictionsTable from './PredictionsTable.svelte';
+	import SummaryDetails from "./SummaryDetails.svelte";
   let wereCalculationsTriggered = false;
+  let shouldShowCalculations = false;
 
   function onTriggerCalculations() {
     wereCalculationsTriggered = true;
+    setTimeout(() => shouldShowCalculations = true, 5000);
   }
 </script>
 <div class="hero min-h-screen">
@@ -13,6 +18,14 @@
         <h1 class="text-5xl font-bold">Hello there</h1>
         <p class="py-6">Upload a csv file in smiles notation below</p>
         <FileReceiver on:triggercalculations={onTriggerCalculations} />
+      </div>
+    </div>
+  {:else if shouldShowCalculations}
+    <div>
+      <PredictionsTable /> 
+      <div class="hero-content flex-col lg:flex-row">
+        <SamplePlot />
+        <SummaryDetails />
       </div>
     </div>
   {:else}
@@ -29,5 +42,9 @@
     display: flex;
     flex-direction: column;
     row-gap: 20px;
+  }
+
+  .summary-plot-container {
+    display: flex;
   }
 </style>
