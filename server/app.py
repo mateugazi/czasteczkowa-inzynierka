@@ -20,7 +20,6 @@ def getPredictions():
   
   df = LoadDatasetCSV(csvFile)
   X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
-  app.logger.info(X_morgan)
 
   predictions = model.predict(X_morgan).tolist()
   result = []
@@ -28,7 +27,6 @@ def getPredictions():
   for index, prediction in enumerate(predictions):
      result.append({'mol': df.iloc[index]['mol'], 'predictedClass': prediction})
 
-  app.logger.info(result)
   return jsonify({
     'predictions': result
   })
