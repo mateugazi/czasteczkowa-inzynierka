@@ -1,15 +1,20 @@
 <script>
+	import { fetchPredictions } from "../helpers/fetchPredictions";
 	import SamplePlot from "../plots/SamplePlot.svelte";
   import FileReceiver from "./FileReceiver.svelte";
   import PredictionsTable from './PredictionsTable.svelte';
 	import SummaryDetails from "./SummaryDetails.svelte";
   let wereCalculationsTriggered = false;
   let shouldShowCalculations = false;
+  let predictions = [];
 
-  function onTriggerCalculations() {
+  async function onTriggerCalculations(event) {
     wereCalculationsTriggered = true;
-    setTimeout(() => shouldShowCalculations = true, 5000);
+    const fetchedPredictions = await fetchPredictions(event.detail.file);
+    predictions = fetchedPredictions.predictions;
+    shouldShowCalculations = true;
   }
+
 </script>
 <div class="hero min-h-screen">
   {#if !wereCalculationsTriggered}
@@ -22,7 +27,7 @@
     </div>
   {:else if shouldShowCalculations}
     <div>
-      <PredictionsTable /> 
+      <PredictionsTable predictions={predictions} /> 
       <div class="hero-content flex-col lg:flex-row">
         <SamplePlot />
         <SummaryDetails />

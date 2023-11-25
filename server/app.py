@@ -18,8 +18,17 @@ def getPredictions():
   if not csvFile:
       return 'Upload a CSV file'
   
-  X_morgan = getXMorgan(csvFile)
+  df = LoadDatasetCSV(csvFile)
+  X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
+  app.logger.info(X_morgan)
 
+  predictions = model.predict(X_morgan).tolist()
+  result = []
+
+  for index, prediction in enumerate(predictions):
+     result.append({'mol': df.iloc[index]['mol'], 'predictedClass': prediction})
+
+  app.logger.info(result)
   return jsonify({
-    'predictions': model.predict(X_morgan).tolist()
+    'predictions': result
   })
