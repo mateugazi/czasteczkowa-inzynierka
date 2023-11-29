@@ -1,0 +1,149 @@
+,Classifier,Accuracy
+0,RandomForestRegressor-50-None-2-1,-0.6268
+1,RandomForestRegressor-50-None-2-2,-0.6381
+2,RandomForestRegressor-50-None-2-4,-0.6863
+3,RandomForestRegressor-50-None-5-1,-0.6479
+4,RandomForestRegressor-50-None-5-2,-0.6422
+5,RandomForestRegressor-50-None-5-4,-0.6541
+6,RandomForestRegressor-50-None-10-1,-0.6430
+7,RandomForestRegressor-50-None-10-2,-0.6546
+8,RandomForestRegressor-50-None-10-4,-0.6586
+9,RandomForestRegressor-50-10-2-1,-0.6937
+10,RandomForestRegressor-50-10-2-2,-0.7122
+11,RandomForestRegressor-50-10-2-4,-0.7157
+12,RandomForestRegressor-50-10-5-1,-0.7095
+13,RandomForestRegressor-50-10-5-2,-0.6969
+14,RandomForestRegressor-50-10-5-4,-0.7317
+15,RandomForestRegressor-50-10-10-1,-0.7009
+16,RandomForestRegressor-50-10-10-2,-0.7229
+17,RandomForestRegressor-50-10-10-4,-0.7265
+18,RandomForestRegressor-50-20-2-1,-0.6300
+19,RandomForestRegressor-50-20-2-2,-0.6372
+20,RandomForestRegressor-50-20-2-4,-0.6732
+21,RandomForestRegressor-50-20-5-1,-0.6406
+22,RandomForestRegressor-50-20-5-2,-0.6411
+23,RandomForestRegressor-50-20-5-4,-0.6679
+24,RandomForestRegressor-50-20-10-1,-0.6644
+25,RandomForestRegressor-50-20-10-2,-0.6386
+26,RandomForestRegressor-50-20-10-4,-0.6801
+27,RandomForestRegressor-100-None-2-1,-0.6267
+28,RandomForestRegressor-100-None-2-2,-0.6391
+29,RandomForestRegressor-100-None-2-4,-0.6678
+30,RandomForestRegressor-100-None-5-1,-0.6333
+31,RandomForestRegressor-100-None-5-2,-0.6364
+32,RandomForestRegressor-100-None-5-4,-0.6654
+33,RandomForestRegressor-100-None-10-1,-0.6393
+34,RandomForestRegressor-100-None-10-2,-0.6287
+35,RandomForestRegressor-100-None-10-4,-0.6706
+36,RandomForestRegressor-100-10-2-1,-0.6888
+37,RandomForestRegressor-100-10-2-2,-0.6942
+38,RandomForestRegressor-100-10-2-4,-0.7257
+39,RandomForestRegressor-100-10-5-1,-0.7017
+40,RandomForestRegressor-100-10-5-2,-0.6950
+41,RandomForestRegressor-100-10-5-4,-0.7124
+42,RandomForestRegressor-100-10-10-1,-0.7047
+43,RandomForestRegressor-100-10-10-2,-0.7099
+44,RandomForestRegressor-100-10-10-4,-0.7203
+45,RandomForestRegressor-100-20-2-1,-0.6347
+46,RandomForestRegressor-100-20-2-2,-0.6302
+47,RandomForestRegressor-100-20-2-4,-0.6716
+48,RandomForestRegressor-100-20-5-1,-0.6334
+49,RandomForestRegressor-100-20-5-2,-0.6331
+50,RandomForestRegressor-100-20-5-4,-0.6663
+51,RandomForestRegressor-100-20-10-1,-0.6500
+52,RandomForestRegressor-100-20-10-2,-0.6375
+53,RandomForestRegressor-100-20-10-4,-0.6694
+54,RandomForestRegressor-200-None-2-1,-0.6165
+55,RandomForestRegressor-200-None-2-2,-0.6298
+56,RandomForestRegressor-200-None-2-4,-0.6632
+57,RandomForestRegressor-200-None-5-1,-0.6267
+58,RandomForestRegressor-200-None-5-2,-0.6292
+59,RandomForestRegressor-200-None-5-4,-0.6622
+60,RandomForestRegressor-200-None-10-1,-0.6308
+61,RandomForestRegressor-200-None-10-2,-0.6383
+62,RandomForestRegressor-200-None-10-4,-0.6670
+63,RandomForestRegressor-200-10-2-1,-0.6792
+64,RandomForestRegressor-200-10-2-2,-0.6958
+65,RandomForestRegressor-200-10-2-4,-0.7170
+66,RandomForestRegressor-200-10-5-1,-0.6933
+67,RandomForestRegressor-200-10-5-2,-0.6925
+68,RandomForestRegressor-200-10-5-4,-0.7215
+69,RandomForestRegressor-200-10-10-1,-0.7030
+70,RandomForestRegressor-200-10-10-2,-0.6968
+71,RandomForestRegressor-200-10-10-4,-0.7325
+72,RandomForestRegressor-200-20-2-1,-0.6240
+73,RandomForestRegressor-200-20-2-2,-0.6258
+74,RandomForestRegressor-200-20-2-4,-0.6623
+75,RandomForestRegressor-200-20-5-1,-0.6343
+76,RandomForestRegressor-200-20-5-2,-0.6325
+77,RandomForestRegressor-200-20-5-4,-0.6605
+78,RandomForestRegressor-200-20-10-1,-0.6368
+79,RandomForestRegressor-200-20-10-2,-0.6429
+80,RandomForestRegressor-200-20-10-4,-0.6667
+81,LinearRegression-0.001-l1-liblinear,-2399973441342135242588160.0000
+82,"MLPRegressor-(50,)-relu-0.0001-200",-17.7331
+83,"MLPRegressor-(50,)-relu-0.0001-500",-18.8046
+84,"MLPRegressor-(50,)-relu-0.0001-1000",-28.8113
+85,"MLPRegressor-(50,)-relu-0.001-200",-21.5191
+86,"MLPRegressor-(50,)-relu-0.001-500",-16.4983
+87,"MLPRegressor-(50,)-relu-0.001-1000",-22.8981
+88,"MLPRegressor-(50,)-relu-0.01-200",-13.6926
+89,"MLPRegressor-(50,)-relu-0.01-500",-19.1237
+90,"MLPRegressor-(50,)-relu-0.01-1000",-21.7781
+91,"MLPRegressor-(50,)-tanh-0.0001-200",-64.8598
+92,"MLPRegressor-(50,)-tanh-0.0001-500",-57.5980
+93,"MLPRegressor-(50,)-tanh-0.0001-1000",-65.4082
+94,"MLPRegressor-(50,)-tanh-0.001-200",-58.6396
+95,"MLPRegressor-(50,)-tanh-0.001-500",-67.5114
+96,"MLPRegressor-(50,)-tanh-0.001-1000",-62.0853
+97,"MLPRegressor-(50,)-tanh-0.01-200",-56.7865
+98,"MLPRegressor-(50,)-tanh-0.01-500",-61.0124
+99,"MLPRegressor-(50,)-tanh-0.01-1000",-65.7909
+100,"MLPRegressor-(100,)-relu-0.0001-200",-19.7761
+101,"MLPRegressor-(100,)-relu-0.0001-500",-20.3914
+102,"MLPRegressor-(100,)-relu-0.0001-1000",-15.6739
+103,"MLPRegressor-(100,)-relu-0.001-200",-15.2126
+104,"MLPRegressor-(100,)-relu-0.001-500",-23.3124
+105,"MLPRegressor-(100,)-relu-0.001-1000",-13.9066
+106,"MLPRegressor-(100,)-relu-0.01-200",-19.8460
+107,"MLPRegressor-(100,)-relu-0.01-500",-22.0539
+108,"MLPRegressor-(100,)-relu-0.01-1000",-23.4256
+109,"MLPRegressor-(100,)-tanh-0.0001-200",-60.0364
+110,"MLPRegressor-(100,)-tanh-0.0001-500",-57.6946
+111,"MLPRegressor-(100,)-tanh-0.0001-1000",-59.4669
+112,"MLPRegressor-(100,)-tanh-0.001-200",-60.4817
+113,"MLPRegressor-(100,)-tanh-0.001-500",-58.0847
+114,"MLPRegressor-(100,)-tanh-0.001-1000",-58.1744
+115,"MLPRegressor-(100,)-tanh-0.01-200",-60.2411
+116,"MLPRegressor-(100,)-tanh-0.01-500",-61.2790
+117,"MLPRegressor-(100,)-tanh-0.01-1000",-60.5579
+118,"MLPRegressor-(50, 50)-relu-0.0001-200",-4.0551
+119,"MLPRegressor-(50, 50)-relu-0.0001-500",-4.3170
+120,"MLPRegressor-(50, 50)-relu-0.0001-1000",-3.7867
+121,"MLPRegressor-(50, 50)-relu-0.001-200",-4.3570
+122,"MLPRegressor-(50, 50)-relu-0.001-500",-4.4788
+123,"MLPRegressor-(50, 50)-relu-0.001-1000",-3.8974
+124,"MLPRegressor-(50, 50)-relu-0.01-200",-4.1652
+125,"MLPRegressor-(50, 50)-relu-0.01-500",-3.8489
+126,"MLPRegressor-(50, 50)-relu-0.01-1000",-3.3995
+127,"MLPRegressor-(50, 50)-tanh-0.0001-200",-51.2107
+128,"MLPRegressor-(50, 50)-tanh-0.0001-500",-49.9580
+129,"MLPRegressor-(50, 50)-tanh-0.0001-1000",-46.8772
+130,"MLPRegressor-(50, 50)-tanh-0.001-200",-51.2213
+131,"MLPRegressor-(50, 50)-tanh-0.001-500",-52.1120
+132,"MLPRegressor-(50, 50)-tanh-0.001-1000",-48.1745
+133,"MLPRegressor-(50, 50)-tanh-0.01-200",-54.4897
+134,"MLPRegressor-(50, 50)-tanh-0.01-500",-52.0377
+135,"MLPRegressor-(50, 50)-tanh-0.01-1000",-53.0804
+136,GradientBoostingRegressor-10-0.1,-1.2030
+137,GradientBoostingRegressor-10-0.5,-0.7649
+138,GradientBoostingRegressor-10-1.0,-0.9777
+139,GradientBoostingRegressor-10-2.0,-1.8784
+140,GradientBoostingRegressor-100-0.1,-0.6831
+141,GradientBoostingRegressor-100-0.5,-0.7229
+142,GradientBoostingRegressor-100-1.0,-1.0894
+143,GradientBoostingRegressor-100-2.0,-3.9598
+144,GradientBoostingRegressor-200-0.1,-0.6427
+145,GradientBoostingRegressor-200-0.5,-0.7581
+146,GradientBoostingRegressor-200-1.0,-1.1798
+147,GradientBoostingRegressor-200-2.0,-3.7254
