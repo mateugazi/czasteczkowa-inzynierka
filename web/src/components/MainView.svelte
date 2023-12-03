@@ -3,6 +3,7 @@
 	import { store } from "../store/store";
 	import PredictionsTable from "./PredictionsTable.svelte";
 	import SummaryDetails from "./SummaryDetails.svelte";
+	import FileReceiver from "./selectMode/FileReceiver.svelte";
 	import SelectModeView from "./selectMode/SelectModeView.svelte";
 
   let viewMode;
@@ -18,6 +19,8 @@
 <div class="hero min-h-screen">
   {#if viewMode === 'selectMode'}
     <SelectModeView />
+  {:else if viewMode === 'predictionMode'}
+    <FileReceiver />
   {:else if viewMode === 'summaryMode'}
     <div>
       <PredictionsTable predictions={predictions} /> 

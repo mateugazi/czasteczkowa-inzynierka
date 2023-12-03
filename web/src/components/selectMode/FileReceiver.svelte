@@ -12,15 +12,22 @@
 
 </script>
 
-<input accept=".csv" bind:files type="file" class="file-input file-input-bordered file-input-primary w-full max-w-xs" />
-
-{#if files}
-  <button class="btn btn-primary btn-lg" on:click={onTriggerCalculations}>Run predictions</button>
-{/if}
+<div class="file-receiver-container">
+  <input accept=".csv" bind:files type="file" class="file-input file-input-bordered file-input-primary w-full max-w-xs" />
+  {#if files}
+    <button class="btn btn-primary btn-lg" on:click={onTriggerCalculations}>Run predictions</button>
+  {/if}
+</div>
 
 <style>
   .btn {
     margin-top: 30px;
+  }
+
+  .file-receiver-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 </style>
 

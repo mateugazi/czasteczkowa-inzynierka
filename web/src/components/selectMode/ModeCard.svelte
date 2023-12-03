@@ -2,6 +2,7 @@
   export let title;
   export let description;
   export let iconPath;
+  export let onSelect = function() {console.log('// TO BE DONE')};
 </script>
 
 <div class="card w-96 bg-base-100 shadow-xl">
@@ -12,7 +13,7 @@
     <h2 class="card-title">{title}</h2>
     <p>{description}</p>
     <div class="card-actions justify-end">
-      <button class="btn btn-primary">Select</button>
+      <button class="btn btn-primary" on:click={onSelect}>Select</button>
     </div>
   </div>
 </div>

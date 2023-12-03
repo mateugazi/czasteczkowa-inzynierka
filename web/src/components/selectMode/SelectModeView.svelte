@@ -1,5 +1,6 @@
 <script>
-  import FileReceiver from "./FileReceiver.svelte";
+  import { store } from "../../store/store";
+import FileReceiver from "./FileReceiver.svelte";
 	import ModeCard from "./ModeCard.svelte";
 	import { predictionIconPath, predictionsDescription, predictionsTitle, retrainModelDescription, retrainModelIconPath, retrainModelTitle, trainNewModelDescription, trainNewModelIconPath, trainNewModelTitle } from "./data/descriptions";
 </script>
@@ -12,7 +13,12 @@
       <div class='select-workflow-container'>
         <ModeCard title={retrainModelTitle} description={retrainModelDescription} iconPath={retrainModelIconPath} />
         <ModeCard title={trainNewModelTitle} description={trainNewModelDescription} iconPath={trainNewModelIconPath} />
-        <ModeCard title={predictionsTitle} description={predictionsDescription} iconPath={predictionIconPath} />
+        <ModeCard 
+          title={predictionsTitle} 
+          description={predictionsDescription} 
+          iconPath={predictionIconPath} 
+          onSelect={() => store.update((previousState) => ({...previousState, viewMode: 'predictionMode'}))} 
+        />
       </div>
     </div>
   </div>
