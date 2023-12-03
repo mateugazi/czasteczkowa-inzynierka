@@ -1,6 +1,7 @@
 <script>
-	import { fetchPredictions } from "../helpers/fetchPredictions";
-	import { store } from "../store/store";
+	import { fetchPredictions } from "../../helpers/fetchPredictions";
+	import { store } from "../../store/store";
+
   let files;
 
   async function onTriggerCalculations() {

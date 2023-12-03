@@ -1,9 +1,9 @@
 <script>
 	import SamplePlot from "../plots/SamplePlot.svelte";
 	import { store } from "../store/store";
-	import FileReceiver from "./FileReceiver.svelte";
 	import PredictionsTable from "./PredictionsTable.svelte";
 	import SummaryDetails from "./SummaryDetails.svelte";
+	import SelectModeView from "./selectMode/SelectModeView.svelte";
 
   let viewMode;
   let predictions;
@@ -17,13 +17,7 @@
 
 <div class="hero min-h-screen">
   {#if viewMode === 'selectMode'}
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Hello there</h1>
-        <p class="py-6">Upload a csv file in smiles notation below</p>
-        <FileReceiver />
-      </div>
-    </div>
+    <SelectModeView />
   {:else if viewMode === 'summaryMode'}
     <div>
       <PredictionsTable predictions={predictions} /> 
