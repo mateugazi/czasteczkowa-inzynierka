@@ -1,10 +1,9 @@
 <script>
 	import SamplePlot from "../plots/SamplePlot.svelte";
 	import { store } from "../store/store";
-	import PredictionsTable from "./PredictionsTable.svelte";
-	import SummaryDetails from "./SummaryDetails.svelte";
 	import FileReceiver from "./selectMode/FileReceiver.svelte";
 	import SelectModeView from "./selectMode/SelectModeView.svelte";
+	import SummaryView from "./summaryMode/SummaryView.svelte";
 
   let viewMode;
   let predictions;
@@ -22,13 +21,7 @@
   {:else if viewMode === 'predictionMode'}
     <FileReceiver />
   {:else if viewMode === 'summaryMode'}
-    <div>
-      <PredictionsTable predictions={predictions} /> 
-      <div class="hero-content flex-col lg:flex-row">
-        <SamplePlot />
-        <SummaryDetails />
-      </div>
-    </div>
+    <SummaryView />
   {:else if viewMode === 'loadingMode'}
     <div class='predictions-placeholder-container'>
       <h3 class="text-3xl font-bold">Getting predictions...</h3>

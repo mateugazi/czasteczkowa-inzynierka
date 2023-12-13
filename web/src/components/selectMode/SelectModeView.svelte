@@ -9,8 +9,8 @@ import FileReceiver from "./FileReceiver.svelte";
   <div class="hero-content text-center">
     <div class="max-w-lg">
       <h1 class="text-5xl font-bold">Welcome back</h1>
-      <p class="py-6">Please choose one of the following workflows</p>
-      <div class='select-workflow-container'>
+      <p class="text-2xl py-6">Please choose one of the following workflows</p>
+      <div class='py-6 select-workflow-container'>
         <ModeCard title={retrainModelTitle} description={retrainModelDescription} iconPath={retrainModelIconPath} />
         <ModeCard title={trainNewModelTitle} description={trainNewModelDescription} iconPath={trainNewModelIconPath} />
         <ModeCard 
@@ -27,7 +27,7 @@ import FileReceiver from "./FileReceiver.svelte";
 <style>
   .select-workflow-container {
     display: flex;
-    gap: 1rem;
+    gap: 3rem;
   }
 
   .max-w-lg {
