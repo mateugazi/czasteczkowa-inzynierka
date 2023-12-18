@@ -1,145 +1,145 @@
 ,Classifier,Accuracy
-0,RandomForestClassifier-50-None-2-1,0.8447
-1,RandomForestClassifier-50-None-2-2,0.8555
-2,RandomForestClassifier-50-None-2-4,0.8602
-3,RandomForestClassifier-50-None-5-1,0.8598
-4,RandomForestClassifier-50-None-5-2,0.8575
-5,RandomForestClassifier-50-None-5-4,0.8602
-6,RandomForestClassifier-50-None-10-1,0.8586
-7,RandomForestClassifier-50-None-10-2,0.8546
-8,RandomForestClassifier-50-None-10-4,0.8590
-9,RandomForestClassifier-50-10-2-1,0.8537
-10,RandomForestClassifier-50-10-2-2,0.8537
-11,RandomForestClassifier-50-10-2-4,0.8548
-12,RandomForestClassifier-50-10-5-1,0.8585
-13,RandomForestClassifier-50-10-5-2,0.8552
-14,RandomForestClassifier-50-10-5-4,0.8487
-15,RandomForestClassifier-50-10-10-1,0.8541
-16,RandomForestClassifier-50-10-10-2,0.8594
-17,RandomForestClassifier-50-10-10-4,0.8548
-18,RandomForestClassifier-50-20-2-1,0.8546
-19,RandomForestClassifier-50-20-2-2,0.8528
-20,RandomForestClassifier-50-20-2-4,0.8614
-21,RandomForestClassifier-50-20-5-1,0.8505
-22,RandomForestClassifier-50-20-5-2,0.8508
-23,RandomForestClassifier-50-20-5-4,0.8528
-24,RandomForestClassifier-50-20-10-1,0.8585
-25,RandomForestClassifier-50-20-10-2,0.8526
-26,RandomForestClassifier-50-20-10-4,0.8539
-27,RandomForestClassifier-100-None-2-1,0.8582
-28,RandomForestClassifier-100-None-2-2,0.8594
-29,RandomForestClassifier-100-None-2-4,0.8635
-30,RandomForestClassifier-100-None-5-1,0.8593
-31,RandomForestClassifier-100-None-5-2,0.8576
-32,RandomForestClassifier-100-None-5-4,0.8624
-33,RandomForestClassifier-100-None-10-1,0.8597
-34,RandomForestClassifier-100-None-10-2,0.8637
-35,RandomForestClassifier-100-None-10-4,0.8631
-36,RandomForestClassifier-100-10-2-1,0.8633
-37,RandomForestClassifier-100-10-2-2,0.8624
-38,RandomForestClassifier-100-10-2-4,0.8596
-39,RandomForestClassifier-100-10-5-1,0.8618
-40,RandomForestClassifier-100-10-5-2,0.8630
-41,RandomForestClassifier-100-10-5-4,0.8581
-42,RandomForestClassifier-100-10-10-1,0.8639
-43,RandomForestClassifier-100-10-10-2,0.8575
-44,RandomForestClassifier-100-10-10-4,0.8645
-45,RandomForestClassifier-100-20-2-1,0.8568
-46,RandomForestClassifier-100-20-2-2,0.8602
-47,RandomForestClassifier-100-20-2-4,0.8555
-48,RandomForestClassifier-100-20-5-1,0.8584
-49,RandomForestClassifier-100-20-5-2,0.8619
-50,RandomForestClassifier-100-20-5-4,0.8618
-51,RandomForestClassifier-100-20-10-1,0.8597
-52,RandomForestClassifier-100-20-10-2,0.8601
-53,RandomForestClassifier-100-20-10-4,0.8593
-54,LogisticRegression-0.001-l1-liblinear,0.5772
-55,LogisticRegression-0.001-l1-saga,0.5772
-56,LogisticRegression-0.001-l2-liblinear,0.8139
-57,LogisticRegression-0.001-l2-saga,0.8137
-58,LogisticRegression-0.01-l1-liblinear,0.7945
-59,LogisticRegression-0.01-l1-saga,0.7965
-60,LogisticRegression-0.01-l2-liblinear,0.8368
-61,LogisticRegression-0.01-l2-saga,0.8368
-62,LogisticRegression-0.1-l1-liblinear,0.8366
-63,LogisticRegression-0.1-l1-saga,0.8370
-64,LogisticRegression-0.1-l2-liblinear,0.8366
-65,LogisticRegression-0.1-l2-saga,0.8379
-66,LogisticRegression-1-l1-liblinear,0.8357
-67,LogisticRegression-1-l1-saga,0.8377
-68,LogisticRegression-1-l2-liblinear,0.8334
-69,LogisticRegression-1-l2-saga,0.8372
-70,LogisticRegression-10-l1-liblinear,0.8326
-71,LogisticRegression-10-l1-saga,0.8371
-72,LogisticRegression-10-l2-liblinear,0.8323
-73,LogisticRegression-10-l2-saga,0.8373
-74,LogisticRegression-100-l1-liblinear,0.8317
-75,LogisticRegression-100-l1-saga,0.8371
-76,LogisticRegression-100-l2-liblinear,0.8317
-77,LogisticRegression-100-l2-saga,0.8372
-78,"MLPClassifier-(50,)-relu-0.0001-200",0.8595
-79,"MLPClassifier-(50,)-relu-0.0001-500",0.8520
-80,"MLPClassifier-(50,)-relu-0.0001-1000",0.8440
-81,"MLPClassifier-(50,)-relu-0.001-200",0.8536
-82,"MLPClassifier-(50,)-relu-0.001-500",0.8474
-83,"MLPClassifier-(50,)-relu-0.001-1000",0.8435
-84,"MLPClassifier-(50,)-relu-0.01-200",0.8581
-85,"MLPClassifier-(50,)-relu-0.01-500",0.8444
-86,"MLPClassifier-(50,)-relu-0.01-1000",0.8369
-87,"MLPClassifier-(50,)-tanh-0.0001-200",0.8644
-88,"MLPClassifier-(50,)-tanh-0.0001-500",0.8572
-89,"MLPClassifier-(50,)-tanh-0.0001-1000",0.8479
-90,"MLPClassifier-(50,)-tanh-0.001-200",0.8642
-91,"MLPClassifier-(50,)-tanh-0.001-500",0.8565
-92,"MLPClassifier-(50,)-tanh-0.001-1000",0.8473
-93,"MLPClassifier-(50,)-tanh-0.01-200",0.8578
-94,"MLPClassifier-(50,)-tanh-0.01-500",0.8498
-95,"MLPClassifier-(50,)-tanh-0.01-1000",0.8513
-96,"MLPClassifier-(100,)-relu-0.0001-200",0.8534
-97,"MLPClassifier-(100,)-relu-0.0001-500",0.8513
-98,"MLPClassifier-(100,)-relu-0.0001-1000",0.8424
-99,"MLPClassifier-(100,)-relu-0.001-200",0.8574
-100,"MLPClassifier-(100,)-relu-0.001-500",0.8463
-101,"MLPClassifier-(100,)-relu-0.001-1000",0.8513
-102,"MLPClassifier-(100,)-relu-0.01-200",0.8601
-103,"MLPClassifier-(100,)-relu-0.01-500",0.8505
-104,"MLPClassifier-(100,)-relu-0.01-1000",0.8450
-105,"MLPClassifier-(100,)-tanh-0.0001-200",0.8610
-106,"MLPClassifier-(100,)-tanh-0.0001-500",0.8585
-107,"MLPClassifier-(100,)-tanh-0.0001-1000",0.8586
-108,"MLPClassifier-(100,)-tanh-0.001-200",0.8557
-109,"MLPClassifier-(100,)-tanh-0.001-500",0.8567
-110,"MLPClassifier-(100,)-tanh-0.001-1000",0.8596
-111,"MLPClassifier-(100,)-tanh-0.01-200",0.8589
-112,"MLPClassifier-(100,)-tanh-0.01-500",0.8555
-113,"MLPClassifier-(100,)-tanh-0.01-1000",0.8556
-114,"MLPClassifier-(50, 50)-relu-0.0001-200",0.8512
-115,"MLPClassifier-(50, 50)-relu-0.0001-500",0.8524
-116,"MLPClassifier-(50, 50)-relu-0.0001-1000",0.8430
-117,"MLPClassifier-(50, 50)-relu-0.001-200",0.8482
-118,"MLPClassifier-(50, 50)-relu-0.001-500",0.8516
-119,"MLPClassifier-(50, 50)-relu-0.001-1000",0.8458
-120,"MLPClassifier-(50, 50)-relu-0.01-200",0.8489
-121,"MLPClassifier-(50, 50)-relu-0.01-500",0.8419
-122,"MLPClassifier-(50, 50)-relu-0.01-1000",0.8397
-123,"MLPClassifier-(50, 50)-tanh-0.0001-200",0.8405
-124,"MLPClassifier-(50, 50)-tanh-0.0001-500",0.8355
-125,"MLPClassifier-(50, 50)-tanh-0.0001-1000",0.8499
-126,"MLPClassifier-(50, 50)-tanh-0.001-200",0.8416
-127,"MLPClassifier-(50, 50)-tanh-0.001-500",0.8424
-128,"MLPClassifier-(50, 50)-tanh-0.001-1000",0.8533
-129,"MLPClassifier-(50, 50)-tanh-0.01-200",0.8431
-130,"MLPClassifier-(50, 50)-tanh-0.01-500",0.8432
-131,"MLPClassifier-(50, 50)-tanh-0.01-1000",0.8549
-132,GradientBoostingClassifier-10-0.1,0.8289
-133,GradientBoostingClassifier-10-0.5,0.8343
-134,GradientBoostingClassifier-10-1.0,0.8012
-135,GradientBoostingClassifier-10-2.0,0.7364
-136,GradientBoostingClassifier-100-0.1,0.8529
-137,GradientBoostingClassifier-100-0.5,0.8456
-138,GradientBoostingClassifier-100-1.0,0.8338
-139,GradientBoostingClassifier-100-2.0,0.6625
-140,GradientBoostingClassifier-200-0.1,0.8514
-141,GradientBoostingClassifier-200-0.5,0.8409
-142,GradientBoostingClassifier-200-1.0,0.8320
-143,GradientBoostingClassifier-200-2.0,0.6639
+0,RandomForestClassifier-50-None-2-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+1,RandomForestClassifier-50-None-2-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+2,RandomForestClassifier-50-None-2-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+3,RandomForestClassifier-50-None-5-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+4,RandomForestClassifier-50-None-5-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+5,RandomForestClassifier-50-None-5-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+6,RandomForestClassifier-50-None-10-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+7,RandomForestClassifier-50-None-10-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+8,RandomForestClassifier-50-None-10-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+9,RandomForestClassifier-50-10-2-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+10,RandomForestClassifier-50-10-2-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+11,RandomForestClassifier-50-10-2-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+12,RandomForestClassifier-50-10-5-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+13,RandomForestClassifier-50-10-5-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+14,RandomForestClassifier-50-10-5-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+15,RandomForestClassifier-50-10-10-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+16,RandomForestClassifier-50-10-10-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+17,RandomForestClassifier-50-10-10-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+18,RandomForestClassifier-50-20-2-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+19,RandomForestClassifier-50-20-2-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+20,RandomForestClassifier-50-20-2-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+21,RandomForestClassifier-50-20-5-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+22,RandomForestClassifier-50-20-5-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+23,RandomForestClassifier-50-20-5-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+24,RandomForestClassifier-50-20-10-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+25,RandomForestClassifier-50-20-10-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+26,RandomForestClassifier-50-20-10-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+27,RandomForestClassifier-100-None-2-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+28,RandomForestClassifier-100-None-2-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+29,RandomForestClassifier-100-None-2-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+30,RandomForestClassifier-100-None-5-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+31,RandomForestClassifier-100-None-5-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+32,RandomForestClassifier-100-None-5-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+33,RandomForestClassifier-100-None-10-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+34,RandomForestClassifier-100-None-10-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+35,RandomForestClassifier-100-None-10-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+36,RandomForestClassifier-100-10-2-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+37,RandomForestClassifier-100-10-2-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+38,RandomForestClassifier-100-10-2-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+39,RandomForestClassifier-100-10-5-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+40,RandomForestClassifier-100-10-5-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+41,RandomForestClassifier-100-10-5-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+42,RandomForestClassifier-100-10-10-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+43,RandomForestClassifier-100-10-10-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+44,RandomForestClassifier-100-10-10-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+45,RandomForestClassifier-100-20-2-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+46,RandomForestClassifier-100-20-2-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+47,RandomForestClassifier-100-20-2-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+48,RandomForestClassifier-100-20-5-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+49,RandomForestClassifier-100-20-5-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+50,RandomForestClassifier-100-20-5-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+51,RandomForestClassifier-100-20-10-1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+52,RandomForestClassifier-100-20-10-2,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+53,RandomForestClassifier-100-20-10-4,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+54,LogisticRegression-0.001-l1-liblinear,Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+55,LogisticRegression-0.001-l1-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+56,LogisticRegression-0.001-l2-liblinear,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+57,LogisticRegression-0.001-l2-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+58,LogisticRegression-0.01-l1-liblinear,Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+59,LogisticRegression-0.01-l1-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+60,LogisticRegression-0.01-l2-liblinear,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+61,LogisticRegression-0.01-l2-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+62,LogisticRegression-0.1-l1-liblinear,Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+63,LogisticRegression-0.1-l1-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+64,LogisticRegression-0.1-l2-liblinear,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+65,LogisticRegression-0.1-l2-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+66,LogisticRegression-1-l1-liblinear,Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+67,LogisticRegression-1-l1-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+68,LogisticRegression-1-l2-liblinear,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+69,LogisticRegression-1-l2-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+70,LogisticRegression-10-l1-liblinear,Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+71,LogisticRegression-10-l1-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+72,LogisticRegression-10-l2-liblinear,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+73,LogisticRegression-10-l2-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+74,LogisticRegression-100-l1-liblinear,Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+75,LogisticRegression-100-l1-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+76,LogisticRegression-100-l2-liblinear,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+77,LogisticRegression-100-l2-saga,Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+78,"MLPClassifier-(50,)-relu-0.0001-200",Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+79,"MLPClassifier-(50,)-relu-0.0001-500",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+80,"MLPClassifier-(50,)-relu-0.0001-1000",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+81,"MLPClassifier-(50,)-relu-0.001-200",Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+82,"MLPClassifier-(50,)-relu-0.001-500",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+83,"MLPClassifier-(50,)-relu-0.001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+84,"MLPClassifier-(50,)-relu-0.01-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+85,"MLPClassifier-(50,)-relu-0.01-500",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+86,"MLPClassifier-(50,)-relu-0.01-1000",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+87,"MLPClassifier-(50,)-tanh-0.0001-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+88,"MLPClassifier-(50,)-tanh-0.0001-500",Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+89,"MLPClassifier-(50,)-tanh-0.0001-1000",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+90,"MLPClassifier-(50,)-tanh-0.001-200",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+91,"MLPClassifier-(50,)-tanh-0.001-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+92,"MLPClassifier-(50,)-tanh-0.001-1000",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+93,"MLPClassifier-(50,)-tanh-0.01-200",Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+94,"MLPClassifier-(50,)-tanh-0.01-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+95,"MLPClassifier-(50,)-tanh-0.01-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+96,"MLPClassifier-(100,)-relu-0.0001-200",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+97,"MLPClassifier-(100,)-relu-0.0001-500",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+98,"MLPClassifier-(100,)-relu-0.0001-1000",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+99,"MLPClassifier-(100,)-relu-0.001-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+100,"MLPClassifier-(100,)-relu-0.001-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+101,"MLPClassifier-(100,)-relu-0.001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+102,"MLPClassifier-(100,)-relu-0.01-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+103,"MLPClassifier-(100,)-relu-0.01-500",Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+104,"MLPClassifier-(100,)-relu-0.01-1000",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+105,"MLPClassifier-(100,)-tanh-0.0001-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+106,"MLPClassifier-(100,)-tanh-0.0001-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+107,"MLPClassifier-(100,)-tanh-0.0001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+108,"MLPClassifier-(100,)-tanh-0.001-200",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+109,"MLPClassifier-(100,)-tanh-0.001-500",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+110,"MLPClassifier-(100,)-tanh-0.001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+111,"MLPClassifier-(100,)-tanh-0.01-200",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+112,"MLPClassifier-(100,)-tanh-0.01-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+113,"MLPClassifier-(100,)-tanh-0.01-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+114,"MLPClassifier-(50, 50)-relu-0.0001-200",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+115,"MLPClassifier-(50, 50)-relu-0.0001-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+116,"MLPClassifier-(50, 50)-relu-0.0001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+117,"MLPClassifier-(50, 50)-relu-0.001-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+118,"MLPClassifier-(50, 50)-relu-0.001-500",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+119,"MLPClassifier-(50, 50)-relu-0.001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+120,"MLPClassifier-(50, 50)-relu-0.01-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+121,"MLPClassifier-(50, 50)-relu-0.01-500",Accuracy: 0.5683794466403163 | Precision: 0.0 | Recall: 0.0 | F1: 0.0
+122,"MLPClassifier-(50, 50)-relu-0.01-1000",Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+123,"MLPClassifier-(50, 50)-tanh-0.0001-200",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+124,"MLPClassifier-(50, 50)-tanh-0.0001-500",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+125,"MLPClassifier-(50, 50)-tanh-0.0001-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+126,"MLPClassifier-(50, 50)-tanh-0.001-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+127,"MLPClassifier-(50, 50)-tanh-0.001-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+128,"MLPClassifier-(50, 50)-tanh-0.001-1000",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+129,"MLPClassifier-(50, 50)-tanh-0.01-200",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+130,"MLPClassifier-(50, 50)-tanh-0.01-500",Accuracy: 0.44189723320158103 | Precision: 0.43474714518760194 | Recall: 0.9761904761904762 | F1: 0.6015801354401806
+131,"MLPClassifier-(50, 50)-tanh-0.01-1000",Accuracy: 0.558102766798419 | Precision: 0.3333333333333333 | Recall: 0.023809523809523808 | F1: 0.044444444444444446
+132,GradientBoostingClassifier-10-0.1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+133,GradientBoostingClassifier-10-0.5,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+134,GradientBoostingClassifier-10-1.0,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+135,GradientBoostingClassifier-10-2.0,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+136,GradientBoostingClassifier-100-0.1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+137,GradientBoostingClassifier-100-0.5,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+138,GradientBoostingClassifier-100-1.0,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+139,GradientBoostingClassifier-100-2.0,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+140,GradientBoostingClassifier-200-0.1,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+141,GradientBoostingClassifier-200-0.5,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+142,GradientBoostingClassifier-200-1.0,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
+143,GradientBoostingClassifier-200-2.0,Accuracy: 0.4316205533596838 | Precision: 0.4316205533596838 | Recall: 1.0 | F1: 0.6029817780231916
