@@ -1,5 +1,4 @@
 <script>
-	import SamplePlot from "../plots/SamplePlot.svelte";
 	import { store } from "../store/store";
 	import FileReceiver from "./selectMode/FileReceiver.svelte";
 	import SelectModeView from "./selectMode/SelectModeView.svelte";

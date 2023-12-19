@@ -24,21 +24,19 @@
 					title={retrainModelTitle}
 					description={retrainModelDescription}
 					iconPath={retrainModelIconPath}
+					viewMode={"predictionMode"}
 				/>
 				<ModeCard
 					title={trainNewModelTitle}
 					description={trainNewModelDescription}
 					iconPath={trainNewModelIconPath}
+					viewMode={"predictionMode"}
 				/>
 				<ModeCard
 					title={predictionsTitle}
 					description={predictionsDescription}
 					iconPath={predictionIconPath}
-					onSelect={() =>
-						store.update((previousState) => ({
-							...previousState,
-							viewMode: "predictionMode",
-						}))}
+					viewMode={"predictionMode"}
 				/>
 			</div>
 		</div>
