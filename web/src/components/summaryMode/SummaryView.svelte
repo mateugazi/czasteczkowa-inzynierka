@@ -6,22 +6,21 @@
 	import SummaryDetails from "../SummaryDetails.svelte";
 	import { scrollToTop } from "../../helpers/scrollToTop";
 
-  let predictions;
+	let predictions;
 
-  onMount(() => {
-    scrollToTop();
-  });
+	onMount(() => {
+		scrollToTop();
+	});
 
-  const unsubscribe = store.subscribe((state) => {
-    predictions = state.predictions;
-  });
-
+	const unsubscribe = store.subscribe((state) => {
+		predictions = state.predictions;
+	});
 </script>
 
 <div>
-  <PredictionsTable predictions={predictions} /> 
-  <div class="hero-content flex-col lg:flex-row">
-    <SamplePlot />
-    <SummaryDetails />
-  </div>
+	<PredictionsTable {predictions} />
+	<div class="hero-content flex-col lg:flex-row">
+		<SamplePlot />
+		<SummaryDetails />
+	</div>
 </div>
