@@ -1,0 +1,145 @@
+,Classifier,Accuracy
+0,RandomForestClassifier-50-None-2-1,0.8767
+1,RandomForestClassifier-50-None-2-2,0.8761
+2,RandomForestClassifier-50-None-2-4,0.8758
+3,RandomForestClassifier-50-None-5-1,0.8759
+4,RandomForestClassifier-50-None-5-2,0.8758
+5,RandomForestClassifier-50-None-5-4,0.8768
+6,RandomForestClassifier-50-None-10-1,0.8765
+7,RandomForestClassifier-50-None-10-2,0.8739
+8,RandomForestClassifier-50-None-10-4,0.8743
+9,RandomForestClassifier-50-10-2-1,0.8748
+10,RandomForestClassifier-50-10-2-2,0.8754
+11,RandomForestClassifier-50-10-2-4,0.8752
+12,RandomForestClassifier-50-10-5-1,0.8807
+13,RandomForestClassifier-50-10-5-2,0.8749
+14,RandomForestClassifier-50-10-5-4,0.8753
+15,RandomForestClassifier-50-10-10-1,0.8771
+16,RandomForestClassifier-50-10-10-2,0.8752
+17,RandomForestClassifier-50-10-10-4,0.8735
+18,RandomForestClassifier-50-20-2-1,0.8782
+19,RandomForestClassifier-50-20-2-2,0.8762
+20,RandomForestClassifier-50-20-2-4,0.8727
+21,RandomForestClassifier-50-20-5-1,0.8765
+22,RandomForestClassifier-50-20-5-2,0.8798
+23,RandomForestClassifier-50-20-5-4,0.8766
+24,RandomForestClassifier-50-20-10-1,0.8789
+25,RandomForestClassifier-50-20-10-2,0.8746
+26,RandomForestClassifier-50-20-10-4,0.8752
+27,RandomForestClassifier-100-None-2-1,0.8791
+28,RandomForestClassifier-100-None-2-2,0.8783
+29,RandomForestClassifier-100-None-2-4,0.8803
+30,RandomForestClassifier-100-None-5-1,0.8792
+31,RandomForestClassifier-100-None-5-2,0.8808
+32,RandomForestClassifier-100-None-5-4,0.8771
+33,RandomForestClassifier-100-None-10-1,0.8779
+34,RandomForestClassifier-100-None-10-2,0.8781
+35,RandomForestClassifier-100-None-10-4,0.8773
+36,RandomForestClassifier-100-10-2-1,0.8775
+37,RandomForestClassifier-100-10-2-2,0.8778
+38,RandomForestClassifier-100-10-2-4,0.8777
+39,RandomForestClassifier-100-10-5-1,0.8776
+40,RandomForestClassifier-100-10-5-2,0.8771
+41,RandomForestClassifier-100-10-5-4,0.8745
+42,RandomForestClassifier-100-10-10-1,0.8799
+43,RandomForestClassifier-100-10-10-2,0.8803
+44,RandomForestClassifier-100-10-10-4,0.8790
+45,RandomForestClassifier-100-20-2-1,0.8824
+46,RandomForestClassifier-100-20-2-2,0.8815
+47,RandomForestClassifier-100-20-2-4,0.8751
+48,RandomForestClassifier-100-20-5-1,0.8771
+49,RandomForestClassifier-100-20-5-2,0.8782
+50,RandomForestClassifier-100-20-5-4,0.8783
+51,RandomForestClassifier-100-20-10-1,0.8787
+52,RandomForestClassifier-100-20-10-2,0.8794
+53,RandomForestClassifier-100-20-10-4,0.8760
+54,LogisticRegression-0.001-l1-liblinear,0.5000
+55,LogisticRegression-0.001-l1-saga,0.5000
+56,LogisticRegression-0.001-l2-liblinear,0.8567
+57,LogisticRegression-0.001-l2-saga,0.8572
+58,LogisticRegression-0.01-l1-liblinear,0.7848
+59,LogisticRegression-0.01-l1-saga,0.7853
+60,LogisticRegression-0.01-l2-liblinear,0.8763
+61,LogisticRegression-0.01-l2-saga,0.8761
+62,LogisticRegression-0.1-l1-liblinear,0.8717
+63,LogisticRegression-0.1-l1-saga,0.8671
+64,LogisticRegression-0.1-l2-liblinear,0.8698
+65,LogisticRegression-0.1-l2-saga,0.8748
+66,LogisticRegression-1-l1-liblinear,0.8673
+67,LogisticRegression-1-l1-saga,0.8749
+68,LogisticRegression-1-l2-liblinear,0.8525
+69,LogisticRegression-1-l2-saga,0.8745
+70,LogisticRegression-10-l1-liblinear,0.8301
+71,LogisticRegression-10-l1-saga,0.8745
+72,LogisticRegression-10-l2-liblinear,0.8330
+73,LogisticRegression-10-l2-saga,0.8744
+74,LogisticRegression-100-l1-liblinear,0.8187
+75,LogisticRegression-100-l1-saga,0.8743
+76,LogisticRegression-100-l2-liblinear,0.8213
+77,LogisticRegression-100-l2-saga,0.8744
+78,"MLPClassifier-(50,)-relu-0.0001-200",0.8674
+79,"MLPClassifier-(50,)-relu-0.0001-500",0.8608
+80,"MLPClassifier-(50,)-relu-0.0001-1000",0.8625
+81,"MLPClassifier-(50,)-relu-0.001-200",0.8620
+82,"MLPClassifier-(50,)-relu-0.001-500",0.8666
+83,"MLPClassifier-(50,)-relu-0.001-1000",0.8642
+84,"MLPClassifier-(50,)-relu-0.01-200",0.8644
+85,"MLPClassifier-(50,)-relu-0.01-500",0.8645
+86,"MLPClassifier-(50,)-relu-0.01-1000",0.8666
+87,"MLPClassifier-(50,)-tanh-0.0001-200",0.8738
+88,"MLPClassifier-(50,)-tanh-0.0001-500",0.8723
+89,"MLPClassifier-(50,)-tanh-0.0001-1000",0.8767
+90,"MLPClassifier-(50,)-tanh-0.001-200",0.8735
+91,"MLPClassifier-(50,)-tanh-0.001-500",0.8734
+92,"MLPClassifier-(50,)-tanh-0.001-1000",0.8732
+93,"MLPClassifier-(50,)-tanh-0.01-200",0.8766
+94,"MLPClassifier-(50,)-tanh-0.01-500",0.8712
+95,"MLPClassifier-(50,)-tanh-0.01-1000",0.8737
+96,"MLPClassifier-(100,)-relu-0.0001-200",0.8668
+97,"MLPClassifier-(100,)-relu-0.0001-500",0.8655
+98,"MLPClassifier-(100,)-relu-0.0001-1000",0.8663
+99,"MLPClassifier-(100,)-relu-0.001-200",0.8655
+100,"MLPClassifier-(100,)-relu-0.001-500",0.8646
+101,"MLPClassifier-(100,)-relu-0.001-1000",0.8652
+102,"MLPClassifier-(100,)-relu-0.01-200",0.8632
+103,"MLPClassifier-(100,)-relu-0.01-500",0.8691
+104,"MLPClassifier-(100,)-relu-0.01-1000",0.8654
+105,"MLPClassifier-(100,)-tanh-0.0001-200",0.8742
+106,"MLPClassifier-(100,)-tanh-0.0001-500",0.8713
+107,"MLPClassifier-(100,)-tanh-0.0001-1000",0.8661
+108,"MLPClassifier-(100,)-tanh-0.001-200",0.8728
+109,"MLPClassifier-(100,)-tanh-0.001-500",0.8714
+110,"MLPClassifier-(100,)-tanh-0.001-1000",0.8748
+111,"MLPClassifier-(100,)-tanh-0.01-200",0.8734
+112,"MLPClassifier-(100,)-tanh-0.01-500",0.8724
+113,"MLPClassifier-(100,)-tanh-0.01-1000",0.8688
+114,"MLPClassifier-(50, 50)-relu-0.0001-200",0.8721
+115,"MLPClassifier-(50, 50)-relu-0.0001-500",0.8721
+116,"MLPClassifier-(50, 50)-relu-0.0001-1000",0.8612
+117,"MLPClassifier-(50, 50)-relu-0.001-200",0.8688
+118,"MLPClassifier-(50, 50)-relu-0.001-500",0.8749
+119,"MLPClassifier-(50, 50)-relu-0.001-1000",0.8609
+120,"MLPClassifier-(50, 50)-relu-0.01-200",0.8751
+121,"MLPClassifier-(50, 50)-relu-0.01-500",0.8608
+122,"MLPClassifier-(50, 50)-relu-0.01-1000",0.8700
+123,"MLPClassifier-(50, 50)-tanh-0.0001-200",0.8748
+124,"MLPClassifier-(50, 50)-tanh-0.0001-500",0.8710
+125,"MLPClassifier-(50, 50)-tanh-0.0001-1000",0.8687
+126,"MLPClassifier-(50, 50)-tanh-0.001-200",0.8688
+127,"MLPClassifier-(50, 50)-tanh-0.001-500",0.8734
+128,"MLPClassifier-(50, 50)-tanh-0.001-1000",0.8704
+129,"MLPClassifier-(50, 50)-tanh-0.01-200",0.8636
+130,"MLPClassifier-(50, 50)-tanh-0.01-500",0.8736
+131,"MLPClassifier-(50, 50)-tanh-0.01-1000",0.8717
+132,GradientBoostingClassifier-10-0.1,0.8464
+133,GradientBoostingClassifier-10-0.5,0.8549
+134,GradientBoostingClassifier-10-1.0,0.8201
+135,GradientBoostingClassifier-10-2.0,0.7264
+136,GradientBoostingClassifier-100-0.1,0.8793
+137,GradientBoostingClassifier-100-0.5,0.8642
+138,GradientBoostingClassifier-100-1.0,0.8486
+139,GradientBoostingClassifier-100-2.0,0.7302
+140,GradientBoostingClassifier-200-0.1,0.8776
+141,GradientBoostingClassifier-200-0.5,0.8629
+142,GradientBoostingClassifier-200-1.0,0.8476
+143,GradientBoostingClassifier-200-2.0,0.7293
