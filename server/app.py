@@ -8,7 +8,7 @@ from Model import Model
 from ModelType import ModelType
 from utils import *
 import json
-import os, sys
+from Validator import Validator
 
 app = Flask(__name__)
 CORS(app)
@@ -128,11 +128,6 @@ def triggerTraining():
   modelType = request.form['modelType']
   parameters = json.loads(request.form['parameters'])
 
-  print(modelType)
-  print(parameters)
-  print(parameters.keys())
-  print(parameters['epsilon'])
-
   if not csvFile:
     return 'Upload a CSV file'
   
@@ -141,6 +136,13 @@ def triggerTraining():
   
   if not parameters:
     return 'No parameters'
+
+  print(csvFile)
+
+  df, mess, stat = Validator(csvFile)
+
+  if df is None:
+    return jsonify({'message': mess, 'stat': stat})
   
   return jsonify({'message': 'OK'})
 
