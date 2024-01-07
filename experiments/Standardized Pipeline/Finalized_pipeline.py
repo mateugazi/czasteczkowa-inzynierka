@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 import datetime
+from itertools import product
+import pickle
 
 from mordred import Calculator, descriptors
 from rdkit import Chem
@@ -243,12 +245,23 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
 
     regression = True
 
-    models_with_parameters = [
+    models_with_parameters_to_separate = [
     ['rf', rf_parameters],
     ['lr', lr_parameters],
     ['nn', nn_parameters],
     ['gb', gb_parameters],
     ['sv', sv_parameters]]
+
+    models_with_parameters = []
+
+    for model_name, parameter_grid in models_with_parameters_to_separate:
+        keys = parameter_grid.keys()
+        param_combinations = list(product(*parameter_grid.values()))
+        for combination in param_combinations:
+            param_set = {}
+            for index, k in enumerate(keys):
+                param_set[k] = combination[index]
+            models_with_parameters.append([model_name, param_set])
 
     metrics = []
     
@@ -279,6 +292,15 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
             data[metric] = []
 
     results_df = pd.DataFrame(data)
+
+    best_model = None
+    if regression:
+        compared_score = "mse"
+        best_model_score = 100000
+    else:
+        compared_score = "roc_auc"
+        best_model_score = 0
+
     for model_name, hyperparams in models_with_parameters:
         print(model_name)
 
@@ -297,6 +319,14 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
             results_test["model"] = model_name_dict_class[model_name]
         results_test["set"] = "test"
         results_df.loc[len(results_df)] = results_test
+        if regression and results_test[compared_score] < best_model_score:
+            best_model_score = results_test[compared_score]
+            best_model = model
+        if not regression and results_test[compared_score] > best_model_score:
+            best_model_score = results_test[compared_score]
+            best_model = model
+
+
         if regression:
             results_valid["model"] = model_name_dict_reg[model_name]
         else:
@@ -305,4 +335,7 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
         results_df.loc[len(results_df)] = results_valid
 
     results_df.to_csv(output_path)
+
+    filename = os.path.join(os.path.dirname(output_path), 'model.sav')
+    pickle.dump(model, open(filename, 'wb'))
 
