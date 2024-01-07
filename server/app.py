@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from redis_om import Migrator
 from redis_om.model import NotFoundError
 from Model import Model
-
+from ModelType import ModelType
 from utils import *
 
 app = Flask(__name__)
@@ -85,4 +85,38 @@ def getModelById(id):
   except NotFoundError:
     return {}
   
+@app.route('/create-model-type', methods=['POST'])
+def createModelType():
+  data = request.json
+  name = data.get('name')
+  parameters = data.get('parameters')
+
+  try:
+    newModelType = ModelType(
+      name = name,
+      parameters = parameters,
+    )
+    print('======PK:', newModelType.pk)
+    newModelType.save()
+    return newModelType.pk
+
+  except ValidationError as e:
+    print(e)
+    return "Bad request.", 400
+
+
+@app.route('/model-type', methods=['GET'])
+def getAllModelTypes():
+  modelTypes = ModelType.find().all()
+  response = []
+
+  for modelType in modelTypes:
+    response.append({
+      'name': modelType.name,
+      'parameters': modelType.parameters,
+      'pk': modelType.pk
+    })
+
+  return jsonify(response)
+
 Migrator().run()
