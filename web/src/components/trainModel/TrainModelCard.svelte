@@ -1,18 +1,23 @@
 <script>
-	import { getModels } from "../../helpers/getModels";
+	import { getModelTypes } from "../../helpers/getModelTypes";
 	import { store } from "../../store/store";
 	import TrainModelModal from "./TrainModelModal.svelte";
 	export let title;
 	export let description;
 	export let iconPath;
 
-	let models;
+	let modelTypes;
 
 	const unsubscribe = store.subscribe((state) => {
-		models = state.models;
+		modelTypes = state.modelTypes;
 	});
 
-	const showModal = async () => {
+	const fetchModelTypes = async () => {
+		modelTypes = await getModelTypes();
+		store.update((previousState) => ({
+			...previousState,
+			modelTypes,
+		}));
 		document.getElementById("train-model-modal").showModal();
 	};
 </script>
@@ -25,8 +30,8 @@
 		<h2 class="card-title">{title}</h2>
 		<p>{description}</p>
 		<div class="card-actions justify-end">
-			<button class="btn" on:click={showModal}>Select</button>
-			<TrainModelModal />
+			<button class="btn" on:click={fetchModelTypes}>Select</button>
+			<TrainModelModal {modelTypes} />
 		</div>
 	</div>
 </div>

@@ -7,6 +7,7 @@ from redis_om.model import NotFoundError
 from Model import Model
 from ModelType import ModelType
 from utils import *
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -118,5 +119,44 @@ def getAllModelTypes():
     })
 
   return jsonify(response)
+
+
+@app.route("/trigger-training", methods=['POST'])
+def triggerTraining():
+  csvFile = request.files['file']
+  modelType = request.form['modelType']
+  parameters = json.loads(request.form['parameters'])
+
+  print(modelType)
+  print(parameters)
+  print(parameters.keys())
+  print(parameters['epsilon'])
+
+  if not csvFile:
+    return 'Upload a CSV file'
+  
+  if not modelType:
+    return 'No model type'
+  
+  if not parameters:
+    return 'No parameters'
+  
+  return jsonify({'message': 'OK'})
+
+  # model = pickle.load(open('./models/' + uniqueName  + '.sav', 'rb'))
+  
+  # df = LoadDatasetCSV(csvFile)
+  # X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
+
+  # predictions = model.predict(X_morgan).tolist()
+  # result = []
+
+  # for index, prediction in enumerate(predictions):
+  #    result.append({'mol': df.iloc[index]['mol'], 'predictedClass': prediction})
+
+  # return jsonify({
+  #   'predictions': result
+  # })
+
 
 Migrator().run()

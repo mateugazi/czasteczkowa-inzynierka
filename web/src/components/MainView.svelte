@@ -22,7 +22,7 @@
 		<SummaryView />
 	{:else if viewMode === "loadingMode"}
 		<div class="predictions-placeholder-container">
-			<h3 class="text-3xl font-bold">Getting predictions...</h3>
+			<h3 class="text-3xl font-bold">Loading...</h3>
 			<progress class="progress w-56"></progress>
 		</div>
 	{/if}
