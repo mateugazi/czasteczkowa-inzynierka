@@ -243,12 +243,29 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
 
     regression = True
 
+    #models_with_parameters_pending_split = [
     models_with_parameters = [
     ['rf', rf_parameters],
     ['lr', lr_parameters],
     ['nn', nn_parameters],
     ['gb', gb_parameters],
     ['sv', sv_parameters]]
+    
+    #models_with_parameters = []
+    #for row in models_with_parameters_pending_split:
+    #    parameter_dict = row[1]
+    #    static_params = {}
+    #    param_ranges = {}
+    #    
+    #    for key, values in parameter_dict.items():
+    #        if len(values) == 1:
+    #            static_params[key] = values
+    #        if len(values) >= 1:
+    #            param_ranges[key] = values
+    #            
+        ### TODO: make all combinations of parameters
+                
+        
 
     metrics = []
     
