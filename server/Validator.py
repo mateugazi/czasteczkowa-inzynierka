@@ -44,5 +44,5 @@ def Validator(path):
     if df is None:
         return df, mess, []
     else:
-        df, stat = Validate(df)
+        df, stat = ValidateSmiles(df)
     return df, mess, stat
