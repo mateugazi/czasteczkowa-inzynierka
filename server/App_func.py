@@ -5,6 +5,8 @@ from mordred import Calculator, descriptors
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
+from sklearn.ensemble import RandomForestClassifier
+
 
 def CalculateMorganFingerprint(mol):
     mol = mol.apply(Chem.MolFromSmiles)
@@ -26,10 +28,27 @@ def CalculateDescriptors(mol):
     return X_mordred
 
 
+
+def FeatureRanking(model, df):
+    features_importance = zip(df.columns, model.feature_importances_)
+    print(sorted(features_importance, key=lambda x:x[1], reverse=True)[:15])
+
+
 def Pipelines(input, output, models_dict, problem, threshold):
     pass
 
 
+def TestFeatureRanking():
+    df = pd.read_csv("C:/Users/Kuba/put/czasteczkowa-inzynierka/experiments/BACE/bace.csv")
+    model = RandomForestClassifier(n_estimators=100,
+                                    min_samples_split=2, 
+                                    criterion='gini',
+                                    bootstrap=True)
+    y = df['Class']
+    x = CalculateDescriptors(df['mol'])
+    model.fit(x, y)
+    FeatureRanking(model, x)
+    
 def RunPipeline(df, modelsDict, descriptiors=["mordred", "morgan"], 
                 problems=["classification"], threshold=7):
     for problem in problems:
@@ -39,3 +58,5 @@ def RunPipeline(df, modelsDict, descriptiors=["mordred", "morgan"],
             if descriptor == "morgan":
                 Pipelines(CalculateMorganFingerprint(df["SMILES"]), df["pIC50"], modelsDict, problem, threshold)
     return
+
+TestFeatureRanking()
