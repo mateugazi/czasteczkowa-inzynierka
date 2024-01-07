@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+
 from mordred import Calculator, descriptors
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -25,10 +26,16 @@ def CalculateDescriptors(mol):
     return X_mordred
 
 
-def RunPipeline(df, modelsDict, timeLimit=-1, descriptiors=["mordred", "morgan"]):
-    output_dataframes = pd.DataFrame() # run pipeline here
-    resultsDict = dict()
-    resultsDict["rf"] = dict()
-    resultsDict["rf"]["path"] = "Models/model.sav"
-    resultsDict["rf"]["metrics"] = output_dataframes["rf"]
-    return resultsDict
+def Pipelines(input, output, models_dict, problem, threshold):
+    pass
+
+
+def RunPipeline(df, modelsDict, descriptiors=["mordred", "morgan"], 
+                problems=["classification"], threshold=7):
+    for problem in problems:
+        for descriptor in descriptiors:
+            if descriptor == "mordred":
+                Pipelines(CalculateDescriptors(df["SMILES"]), df["pIC50"], modelsDict, problem, threshold)
+            if descriptor == "morgan":
+                Pipelines(CalculateMorganFingerprint(df["SMILES"]), df["pIC50"], modelsDict, problem, threshold)
+    return
