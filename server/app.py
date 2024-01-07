@@ -8,6 +8,7 @@ from Model import Model
 from ModelType import ModelType
 from utils import *
 import json
+import os, sys
 
 app = Flask(__name__)
 CORS(app)
@@ -142,21 +143,5 @@ def triggerTraining():
     return 'No parameters'
   
   return jsonify({'message': 'OK'})
-
-  # model = pickle.load(open('./models/' + uniqueName  + '.sav', 'rb'))
-  
-  # df = LoadDatasetCSV(csvFile)
-  # X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
-
-  # predictions = model.predict(X_morgan).tolist()
-  # result = []
-
-  # for index, prediction in enumerate(predictions):
-  #    result.append({'mol': df.iloc[index]['mol'], 'predictedClass': prediction})
-
-  # return jsonify({
-  #   'predictions': result
-  # })
-
 
 Migrator().run()
