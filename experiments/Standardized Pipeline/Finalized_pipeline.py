@@ -128,7 +128,7 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
     X_test = test.drop(['Target', 'Split'], axis=1)
     y_test = test[['Target']]
 
-    return X_train, X_test, y_train, y_test
+    return X_train, y_train, X_test, y_test
 
 #def Split_downloaded_CSV(df):
 #    X = df.drop(['Target'], axis=1)
