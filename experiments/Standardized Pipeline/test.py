@@ -69,13 +69,19 @@ else:
     }
 
 
-Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv")
-Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv", test_fraction_split=0.1)
-Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv", test_fraction_split=0.3)
+#Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv", train_fraction_split=0.9)
+#Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv")
+#Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv", train_fraction_split=0.7)
+#Finalized_pipeline.generate_split_dataset(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv", train_fraction_split=0.6)
+#
+#Finalized_pipeline.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv", train_fraction_split=0.9)
+#Finalized_pipeline.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv")
+#Finalized_pipeline.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv", train_fraction_split=0.7)
+#Finalized_pipeline.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv", train_fraction_split=0.6)
 
-
-Finalized_pipeline.pipeline(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
+Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
                             #r"experiments\split_datasets\split0.8_bace.csv",
+                            r"experiments\split_datasets\split0.8_ROR_data_1.csv",
                             regression, {}, {}, {}, 
-                            {}, {}, {}, 
+                            {}, {}, {}, {}, 
                             output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results2.csv")

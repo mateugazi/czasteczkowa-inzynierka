@@ -19,6 +19,7 @@ from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR, SVC
+from xgboost import XGBClassifier, XGBRegressor
 
 
 def uniquify(path):
@@ -52,7 +53,8 @@ def CalculateDescriptors(mol):
     return X_mordred
 
 
-def generate_split_dataset(path, test_fraction_split=0.2):
+def generate_split_dataset(path, train_fraction_split=0.8):
+    test_fraction_split = 1 - train_fraction_split
     df = pd.read_csv(path)   
 
     ### Generate Split column
@@ -84,26 +86,20 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
         df = pd.read_csv(new_path)
 
 
-    if 'target' in df.columns:
-        df['Target'] = df['target']
-        df.drop('target', axis=1, inplace=True)
+    df.rename(columns={"target": "Target", "SMILES": 'mol'})
         
     if regression:
         if 'IC50' in df.columns:
             calculate_pIC50 = True
             df['Target'] = df['IC50']
             df.drop('IC50', axis=1, inplace=True)
+            
         if 'pIC50' in df.columns:
             df['Target'] = df['pIC50']
             df.drop('pIC50', axis=1, inplace=True)
     else:
-        if 'Class' in df.columns:
-            df['Target'] = df['Class']
-            df.drop('Class', axis=1, inplace=True)
+        df.rename(columns={"Class": "Target"})
         
-    if 'SMILES' in df.columns:
-        df['mol'] = df['SMILES']
-        df.drop('SMILES', axis=1, inplace=True)
     
     if calculate_pIC50:
         df['Target'] = [-np.log10(i * 10**(-9)) for i in list(df['Target'])]
@@ -237,6 +233,18 @@ def model_builder(model_name, hyperparams, regression):
             model = GradientBoostingClassifier(n_estimators=hyperparams["n_estimators"], 
                                                learning_rate=hyperparams["learning_rate"])
 
+    if model_name == 'xg':
+        #if "C" not in hyperparams.keys():
+        #    hyperparams["C"] = 1
+        #if "degree" not in hyperparams.keys():
+        #    hyperparams["degree"] = 3
+        #if "kernel" not in hyperparams.keys():
+        #    hyperparams["kernel"] = "rbf"
+        if regression:
+            model = XGBRegressor()
+        else:
+            model = XGBRegressor()
+            
     if model_name == 'sv':
         if "C" not in hyperparams.keys():
             hyperparams["C"] = 1
@@ -303,9 +311,9 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
     return results_test
 
 ### All hyperparameters need to be supplimented into a function
-def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, split_column="Split", calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
-    model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "sv": "SVR"}
-    model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "sv": "SVC"}
+def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, nn_parameters, gb_parameters, xg_parameters, sv_parameters, split_column="Split", calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
+    model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "xg": "XGBRegressor", "sv": "SVR"}
+    model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "xg": "XGBClassifier", "sv": "SVC"}
 
     ### TODO: Change into args!
     use_descriptors = True
@@ -319,6 +327,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
     ['lr', lr_parameters],
     ['nn', nn_parameters],
     ['gb', gb_parameters],
+    ['xg', xg_parameters],
     ['sv', sv_parameters]]
 
     models_with_parameters = []
