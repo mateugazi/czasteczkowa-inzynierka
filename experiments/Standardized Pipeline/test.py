@@ -1,6 +1,6 @@
 import Finalized_pipeline
 
-regression = True
+regression = False
 
 if regression:
     param_grid_rf={

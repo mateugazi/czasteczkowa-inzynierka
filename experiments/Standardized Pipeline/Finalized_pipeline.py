@@ -87,9 +87,8 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
 def Split_downloaded_CSV(df):
     X = df.drop(['Target'], axis=1)
     y = df[['Target']]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-    X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.111, random_state=42)
-    return X_train, y_train, X_test, y_test, X_valid, y_valid
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    return X_train, y_train, X_test, y_test
 
 
 def model_builder(model_name, hyperparams, regression):
@@ -171,68 +170,48 @@ def model_builder(model_name, hyperparams, regression):
     return model
 
 
-def train_and_test(model, X_train, y_train, X_test, y_test, X_valid, y_valid, regression, metrics=[], iterations=1):
+def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
-        y_valid_predicted = model.predict(X_valid)
 
         #print("Standard train-test results:")
 
         results_test = {}
-        results_valid = {}
 
         if regression:
             if 'rmse' in metrics or len(metrics) == 0:
                 metric_test = mean_squared_error(y_test, y_test_predicted, squared=False)
-                metric_valid = mean_squared_error(y_valid, y_valid_predicted, squared=False)
                 results_test["rmse"] = metric_test
-                results_valid["rmse"] = metric_valid
             if 'mse' in metrics or len(metrics) == 0:
                 metric_test = mean_squared_error(y_test, y_test_predicted)
-                metric_valid = mean_squared_error(y_valid, y_valid_predicted)
                 results_test["mse"] = metric_test
-                results_valid["mse"] = metric_valid
             if 'mae' in metrics or len(metrics) == 0:
                 metric_test = mean_absolute_error(y_test, y_test_predicted)
-                metric_valid = mean_absolute_error(y_valid, y_valid_predicted)
                 results_test["mae"] = metric_test
-                results_valid["mae"] = metric_valid
             if 'r2' in metrics or len(metrics) == 0:
                 metric_test = r2_score(y_test, y_test_predicted)
-                metric_valid = r2_score(y_valid, y_valid_predicted)
                 results_test["r2"] = metric_test
-                results_valid["r2"] = metric_valid
             
         else:
             if 'roc_auc' in metrics or len(metrics) == 0:
                 metric_test = roc_auc_score(y_test, y_test_predicted)
-                metric_valid = roc_auc_score(y_valid, y_valid_predicted)
                 results_test["roc_auc"] = metric_test
-                results_valid["roc_auc"] = metric_valid
             if 'accuracy' in metrics or len(metrics) == 0:
                 metric_test = accuracy_score(y_test, y_test_predicted)
-                metric_valid = accuracy_score(y_valid, y_valid_predicted)
                 results_test["accuracy"] = metric_test
-                results_valid["accuracy"] = metric_valid
             if 'precision' in metrics or len(metrics) == 0:
                 metric_test = precision_score(y_test, y_test_predicted)
-                metric_valid = precision_score(y_valid, y_valid_predicted)
                 results_test["precision"] = metric_test
-                results_valid["precision"] = metric_valid
             if 'recall' in metrics or len(metrics) == 0:
                 metric_test = recall_score(y_test, y_test_predicted)
-                metric_valid = recall_score(y_valid, y_valid_predicted)
                 results_test["recall"] = metric_test
-                results_valid["recall"] = metric_valid
             if 'f1' in metrics or len(metrics) == 0:
                 metric_test = f1_score(y_test, y_test_predicted)
-                metric_valid = f1_score(y_valid, y_valid_predicted)
                 results_test["f1"] = metric_test
-                results_valid["f1"] = metric_valid
 
-    return results_test, results_valid
+    return results_test
 
 ### All hyperparameters need to be supplimented into a function
 def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
@@ -281,7 +260,7 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
     elapsed = (datetime.datetime.now() - begin).total_seconds()
     print(elapsed)
     
-    X_train, y_train, X_test, y_test, X_valid, y_valid = Split_downloaded_CSV(df_loaded)
+    X_train, y_train, X_test, y_test = Split_downloaded_CSV(df_loaded)
 
     data = {"model": [], "set": []}
     if regression:
@@ -308,7 +287,7 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
         
         begin = datetime.datetime.now()
         
-        results_test, results_valid = train_and_test(model, X_train, y_train, X_test, y_test, X_valid, y_valid, regression=regression, metrics=metrics)
+        results_test = train_and_test(model, X_train, y_train, X_test, y_test, regression=regression, metrics=metrics)
         
         elapsed = (datetime.datetime.now() - begin).total_seconds()
         print(elapsed)
@@ -326,16 +305,8 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
             best_model_score = results_test[compared_score]
             best_model = model
 
-
-        if regression:
-            results_valid["model"] = model_name_dict_reg[model_name]
-        else:
-            results_valid["model"] = model_name_dict_class[model_name]
-        results_valid["set"] = "valid"
-        results_df.loc[len(results_df)] = results_valid
-
     results_df.to_csv(output_path)
 
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
-    pickle.dump(model, open(filename, 'wb'))
+    pickle.dump(best_model, open(filename, 'wb'))
 
