@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, accuracy_score, f1_score
 
+from sklearn import tree
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, RandomForestRegressor, GradientBoostingRegressor
@@ -92,6 +93,26 @@ def Split_downloaded_CSV(df):
 
 
 def model_builder(model_name, hyperparams, regression):
+    if model_name == 'dt':
+        if "min_samples_split" not in hyperparams.keys():
+            hyperparams["min_samples_split"] = 2
+        if "max_depth" not in hyperparams.keys():
+            hyperparams["max_depth"] = None  
+
+        if regression:
+            if "criterion" not in hyperparams.keys():
+                hyperparams["criterion"] = "squared_error"
+            print(hyperparams)
+            model = tree.DecisionTreeRegressor(max_depth=hyperparams["max_depth"],
+                                    min_samples_split=hyperparams["min_samples_split"],
+                                    criterion=hyperparams["criterion"])
+        else:
+            if "criterion" not in hyperparams.keys():
+                hyperparams["criterion"] = "gini"
+            print(hyperparams)
+            model = tree.DecisionTreeClassifier(max_depth=hyperparams["max_depth"],
+                                    min_samples_split=hyperparams["min_samples_split"], 
+                                    criterion=hyperparams["criterion"])
     if model_name == 'rf':
         if "n_estimators" not in hyperparams.keys():
             hyperparams["n_estimators"] = 100
@@ -99,24 +120,31 @@ def model_builder(model_name, hyperparams, regression):
             hyperparams["min_samples_split"] = 2
         if "bootstrap" not in hyperparams.keys():
             hyperparams["bootstrap"] = True  
+        if "max_depth" not in hyperparams.keys():
+            hyperparams["max_depth"] = None  
 
         if regression:
             if "criterion" not in hyperparams.keys():
                 hyperparams["criterion"] = "squared_error"
+            print(hyperparams)
             model = RandomForestRegressor(n_estimators=hyperparams["n_estimators"],
+                                    max_depth=hyperparams["max_depth"],
                                     min_samples_split=hyperparams["min_samples_split"],
                                     criterion=hyperparams["criterion"],
                                     bootstrap=hyperparams["bootstrap"])
         else:
             if "criterion" not in hyperparams.keys():
                 hyperparams["criterion"] = "gini"
+            print(hyperparams)
             model = RandomForestClassifier(n_estimators=hyperparams["n_estimators"],
+                                    max_depth=hyperparams["max_depth"],
                                     min_samples_split=hyperparams["min_samples_split"], 
                                     criterion=hyperparams["criterion"],
                                     bootstrap=hyperparams["bootstrap"])
             
     if model_name == 'lr':
         if regression:
+            print("no hyperparameters")
             model = LinearRegression()
         else:
             if "C" not in hyperparams.keys():
@@ -125,7 +153,10 @@ def model_builder(model_name, hyperparams, regression):
                 hyperparams["penalty"] = "l2"
             if "solver" not in hyperparams.keys():
                 hyperparams["solver"] = "liblinear"
-            model = LogisticRegression(C=hyperparams["C"], penalty=hyperparams["penalty"], solver=hyperparams["solver"])
+            print(hyperparams)
+            model = LogisticRegression(C=hyperparams["C"], 
+                                       penalty=hyperparams["penalty"], 
+                                       solver=hyperparams["solver"])
 
     if model_name == 'nn':
         if "hidden_layer_sizes" not in hyperparams.keys():
@@ -137,11 +168,15 @@ def model_builder(model_name, hyperparams, regression):
         if "max_iter" not in hyperparams.keys():
             hyperparams["max_iter"] = 500#200
         if regression:
-            model = MLPRegressor(hidden_layer_sizes=hyperparams["hidden_layer_sizes"], activation=hyperparams["activation"], 
-                                  alpha=hyperparams["alpha"], max_iter=hyperparams["max_iter"])
+            print(hyperparams)
+            model = MLPRegressor(hidden_layer_sizes=hyperparams["hidden_layer_sizes"], 
+                                activation=hyperparams["activation"], 
+                                alpha=hyperparams["alpha"], max_iter=hyperparams["max_iter"])
         else:
-            model = MLPClassifier(hidden_layer_sizes=hyperparams["hidden_layer_sizes"], activation=hyperparams["activation"], 
-                                  alpha=hyperparams["alpha"], max_iter=hyperparams["max_iter"])
+            print(hyperparams)
+            model = MLPClassifier(hidden_layer_sizes=hyperparams["hidden_layer_sizes"], 
+                                activation=hyperparams["activation"], 
+                                alpha=hyperparams["alpha"], max_iter=hyperparams["max_iter"])
         
     if model_name == 'gb':
         if "n_estimators" not in hyperparams.keys():
@@ -149,9 +184,13 @@ def model_builder(model_name, hyperparams, regression):
         if "learning_rate" not in hyperparams.keys():
             hyperparams["learning_rate"] = 0.1
         if regression:
-            model = GradientBoostingRegressor(n_estimators=hyperparams["n_estimators"], learning_rate=hyperparams["learning_rate"])
+            print(hyperparams)
+            model = GradientBoostingRegressor(n_estimators=hyperparams["n_estimators"], 
+                                              learning_rate=hyperparams["learning_rate"])
         else:
-            model = GradientBoostingClassifier(n_estimators=hyperparams["n_estimators"], learning_rate=hyperparams["learning_rate"])
+            print(hyperparams)
+            model = GradientBoostingClassifier(n_estimators=hyperparams["n_estimators"], 
+                                               learning_rate=hyperparams["learning_rate"])
 
     if model_name == 'sv':
         if "C" not in hyperparams.keys():
@@ -163,9 +202,14 @@ def model_builder(model_name, hyperparams, regression):
         if regression:
             if "epsilon" not in hyperparams.keys():
                 hyperparams["epsilon"] = 0.1
-            model = SVR(C=hyperparams["C"], degree=hyperparams["degree"], kernel=hyperparams["kernel"], epsilon=hyperparams["epsilon"])
+            model = SVR(C=hyperparams["C"], 
+                        degree=hyperparams["degree"], 
+                        kernel=hyperparams["kernel"], 
+                        epsilon=hyperparams["epsilon"])
         else:
-            model = SVC(C=hyperparams["C"], degree=hyperparams["degree"], kernel=hyperparams["kernel"])
+            model = SVC(C=hyperparams["C"], 
+                        degree=hyperparams["degree"], 
+                        kernel=hyperparams["kernel"])
             
     return model
 
@@ -214,9 +258,9 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
     return results_test
 
 ### All hyperparameters need to be supplimented into a function
-def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
-    model_name_dict_reg = {"rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "sv": "SVR"}
-    model_name_dict_class = {"rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "sv": "SVC"}
+def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
+    model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "sv": "SVR"}
+    model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "sv": "SVC"}
 
     ### TODO: Change into args!
     use_descriptors = True
@@ -225,6 +269,7 @@ def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, 
     regression = True
 
     models_with_parameters_to_separate = [
+    ['dt', dt_parameters],
     ['rf', rf_parameters],
     ['lr', lr_parameters],
     ['nn', nn_parameters],

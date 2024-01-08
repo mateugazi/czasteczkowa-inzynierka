@@ -3,6 +3,11 @@ import Finalized_pipeline
 regression = False
 
 if regression:
+    param_grid_dt={
+        'max_depth': [None, 10, 20],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4]
+    }
     param_grid_rf={
         'n_estimators': [50, 100],
         'max_depth': [None, 10, 20],
@@ -31,6 +36,11 @@ if regression:
     }
 
 else:
+    param_grid_dt={
+        'max_depth': [None, 10, 20],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4]
+    }
     param_grid_rf={
         'n_estimators': [50, 100],
         'max_depth': [None, 10, 20],
@@ -60,6 +70,6 @@ else:
 
 
 Finalized_pipeline.pipeline(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
-                            regression, {}, {}, 
+                            regression, {}, {}, {}, 
                             {}, {}, {}, 
                             output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results2.csv")
