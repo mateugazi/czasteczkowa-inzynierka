@@ -21,6 +21,16 @@ from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier,
 from sklearn.svm import SVR, SVC
 
 
+def uniquify(path):
+    filename, extension = os.path.splitext(path)
+    counter = 1
+
+    while os.path.exists(path):
+        path = filename + " (" + str(counter) + ")" + extension
+        counter += 1
+
+    return path
+
 ### Input standard SMILES column
 def CalculateMorganFingerprint(mol):
     mol = mol.apply(Chem.MolFromSmiles)
@@ -41,13 +51,39 @@ def CalculateDescriptors(mol):
     X_mordred = X_mordred.loc[:,X_mordred.std()>0.01]
     return X_mordred
 
-def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, calculate_pIC50 = False, threshold=7):
+
+def generate_split_dataset(path, test_fraction_split=0.2):
+    df = pd.read_csv(path)   
+
+    ### Generate Split column
+    train, test = train_test_split(df, test_size=test_fraction_split, random_state=42)
+    train.insert(0, 'Split', 'train')
+    test.insert(0, 'Split', 'test')
+    df = pd.concat([train, test], axis=0)
+
+    output_path = r"experiments\split_datasets\\split" + str(1 - test_fraction_split) + "_" + os.path.basename(path)
+    df.to_csv(output_path)
+    print(output_path)
+    return output_path
+
+def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, calculate_pIC50 = False, threshold=7, split_column="Split"):
     df = pd.read_csv(path)
     
     ### Replace with standardizing molecules and then dropping duplicates
     #df.drop_duplicates('mol')
     #df = df.dropna()
-    
+
+    ### Check if the df has a split column already, if not, generate split column
+    if split_column in df.columns:
+        ### TODO: Check if only values in split are 'train' and 'test'?
+        if split_column != "Split":
+            df['Split'] = df[split_column]
+            df.drop(split_column, axis=1, inplace=True)
+    else:
+        new_path = generate_split_dataset(path)
+        df = pd.read_csv(new_path)
+
+
     if 'target' in df.columns:
         df['Target'] = df['target']
         df.drop('target', axis=1, inplace=True)
@@ -74,7 +110,7 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
         if not regression:
             df['Target'] = [int(i > threshold) for i in list(df['Target'])]
 
-    df = df[['mol', 'Target']]
+    df = df[['mol', 'Target', 'Split']]
 
     if use_descriptors:
         new_df = CalculateDescriptors(df['mol'])
@@ -82,14 +118,23 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
         new_df = CalculateMorganFingerprint(df['mol'])
         
     new_df['Target'] = df['Target']
+    new_df['Split'] = df['Split']
 
-    return new_df
+    train = new_df[new_df['Split'] == 'train']
+    test = new_df[new_df['Split'] == 'test']
 
-def Split_downloaded_CSV(df):
-    X = df.drop(['Target'], axis=1)
-    y = df[['Target']]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    return X_train, y_train, X_test, y_test
+    X_train = train.drop(['Target', 'Split'], axis=1)
+    y_train = train[['Target']]
+    X_test = test.drop(['Target', 'Split'], axis=1)
+    y_test = test[['Target']]
+
+    return X_train, X_test, y_train, y_test
+
+#def Split_downloaded_CSV(df):
+#    X = df.drop(['Target'], axis=1)
+#    y = df[['Target']]
+#    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+#    return X_train, y_train, X_test, y_test
 
 
 def model_builder(model_name, hyperparams, regression):
@@ -258,7 +303,7 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
     return results_test
 
 ### All hyperparameters need to be supplimented into a function
-def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
+def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, split_column="Split", calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
     model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "sv": "SVR"}
     model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "sv": "SVC"}
 
@@ -299,13 +344,12 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
     print("Calculating input data")
     begin = datetime.datetime.now()
     
-    df_loaded = Load_downloaded_CSV(csv_path, regression=regression, calculate_pIC50=calculate_pIC50, threshold=pIC50_classification_threshold,
-                                    use_descriptors=use_descriptors, use_fingerprints=use_fingerprints)
+    X_train, y_train, X_test, y_test = Load_downloaded_CSV(csv_path, regression=regression, calculate_pIC50=calculate_pIC50, threshold=pIC50_classification_threshold,
+                                    use_descriptors=use_descriptors, use_fingerprints=use_fingerprints, split_column=split_column)
     
     elapsed = (datetime.datetime.now() - begin).total_seconds()
     print(elapsed)
     
-    X_train, y_train, X_test, y_test = Split_downloaded_CSV(df_loaded)
 
     data = {"model": [], "set": []}
     if regression:
@@ -350,6 +394,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
             best_model_score = results_test[compared_score]
             best_model = model
 
+    output_path = uniquify(output_path)
     results_df.to_csv(output_path)
 
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
