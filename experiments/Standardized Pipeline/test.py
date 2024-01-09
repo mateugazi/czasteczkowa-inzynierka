@@ -29,7 +29,9 @@ if regression:
         'n_estimators': [10, 100, 200], 
         'learning_rate': [0.1,0.5,1.0,2.0]
     }
-    param_grid_svm = { ### regression
+    param_grid_xg = {
+    }
+    param_grid_sv = { ### regression
         'C': [0.01, 0.1, 1, 10, 100, 1000],
         'degree': [2, 3, 4],
         'epsilon': [0.01, 0.1, 1]
@@ -62,7 +64,9 @@ else:
         'n_estimators': [10, 100, 200], 
         'learning_rate': [0.1,0.5,1.0,2.0]
     }
-    param_grid_svm = {
+    param_grid_xg = {
+    }
+    param_grid_sv = {
         'C': [0.01, 0.1, 1, 10, 100, 1000],
         'degree': [2, 3, 4, 5],
         'epsilon': ["no epsilon"]
@@ -84,4 +88,11 @@ Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzy
                             r"experiments\split_datasets\split0.8_ROR_data_1.csv",
                             regression, {}, {}, {}, 
                             {}, {}, {}, {}, 
-                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results2.csv")
+                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv")
+
+#Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
+#                            #r"experiments\split_datasets\split0.8_bace.csv",
+#                            r"experiments\split_datasets\split0.8_ROR_data_1.csv",
+#                            regression, param_grid_dt, param_grid_rf, param_grid_lr,
+#                            param_grid_mlp, param_grid_gb, param_grid_xg, param_grid_sv, 
+#                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv")

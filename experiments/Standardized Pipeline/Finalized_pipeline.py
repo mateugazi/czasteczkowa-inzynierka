@@ -86,7 +86,7 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
         df = pd.read_csv(new_path)
 
 
-    df.rename(columns={"target": "Target", "SMILES": 'mol'})
+    df.rename(columns={"target": "Target", "SMILES": 'mol'}, inplace=True)
         
     if regression:
         if 'IC50' in df.columns:
@@ -98,7 +98,7 @@ def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, cal
             df['Target'] = df['pIC50']
             df.drop('pIC50', axis=1, inplace=True)
     else:
-        df.rename(columns={"Class": "Target"})
+        df.rename(columns={"Class": "Target"}, inplace=True)
         
     
     if calculate_pIC50:
@@ -269,6 +269,7 @@ def model_builder(model_name, hyperparams, regression):
 
 def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
+        print(y_train)
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
@@ -319,8 +320,6 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
     use_descriptors = True
     use_fingerprints = False
 
-    regression = True
-
     models_with_parameters_to_separate = [
     ['dt', dt_parameters],
     ['rf', rf_parameters],
@@ -360,9 +359,9 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
     print(elapsed)
     
 
-    data = {"model": [], "set": []}
+    data = {"model": []}
     if regression:
-        for metric in ["rmse", "mse", "mae", "r2"]:
+        for metric in ["mse", "rmse", "mae", "r2"]:
             data[metric] = []
     else:
         for metric in ["roc_auc", "accuracy", "precision", "recall", "f1"]:
@@ -378,7 +377,17 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
         compared_score = "roc_auc"
         best_model_score = 0
 
+    output_path = uniquify(output_path)
+
+
+    #
+    f = open(output_path, "w")
+    f.write(",".join(data.keys()))
+    f.write("\n")
+
+    i = -1
     for model_name, hyperparams in models_with_parameters:
+        i += 1
         print(model_name)
 
         model = model_builder(model_name, hyperparams, regression)
@@ -394,8 +403,12 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
             results_test["model"] = model_name_dict_reg[model_name]
         else:
             results_test["model"] = model_name_dict_class[model_name]
-        results_test["set"] = "test"
         results_df.loc[len(results_df)] = results_test
+
+        ### File write results
+        f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
+        f.write("\n")
+
         if regression and results_test[compared_score] < best_model_score:
             best_model_score = results_test[compared_score]
             best_model = model
@@ -403,7 +416,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
             best_model_score = results_test[compared_score]
             best_model = model
 
-    output_path = uniquify(output_path)
+    f.close()
     results_df.to_csv(output_path)
 
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
