@@ -88,7 +88,8 @@ Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzy
                             r"experiments\split_datasets\split0.8_ROR_data_1.csv",
                             regression, {}, {}, {}, 
                             {}, {}, {}, {}, 
-                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv")
+                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv",
+                            calculate_pIC50=True)
 
 #Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
 #                            #r"experiments\split_datasets\split0.8_bace.csv",

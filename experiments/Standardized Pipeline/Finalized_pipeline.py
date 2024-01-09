@@ -269,10 +269,10 @@ def model_builder(model_name, hyperparams, regression):
 
 def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
-        print(y_train)
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
+        y_test_predicted = list(map(round, y_test_predicted))
 
         #print("Standard train-test results:")
 
