@@ -83,17 +83,18 @@ else:
 #Finalized_pipeline.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv", train_fraction_split=0.7)
 #Finalized_pipeline.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv", train_fraction_split=0.6)
 
-Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
-                            #r"experiments\split_datasets\split0.8_bace.csv",
-                            r"experiments\split_datasets\split0.8_ROR_data_1.csv",
-                            regression, {}, {}, {}, 
-                            {}, {}, {}, {}, 
-                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv",
-                            calculate_pIC50=True)
-
 #Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
 #                            #r"experiments\split_datasets\split0.8_bace.csv",
 #                            r"experiments\split_datasets\split0.8_ROR_data_1.csv",
-#                            regression, param_grid_dt, param_grid_rf, param_grid_lr,
-#                            param_grid_mlp, param_grid_gb, param_grid_xg, param_grid_sv, 
-#                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv")
+#                            regression, {}, {}, {}, 
+#                            {}, {}, {}, {}, 
+#                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv",
+#                            calculate_pIC50=True)
+
+Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
+                            #r"experiments\split_datasets\split0.8_bace.csv",
+                            r"experiments\split_datasets\split0.8_ROR_data_1.csv",
+                            regression, param_grid_dt, param_grid_rf, param_grid_lr,
+                            param_grid_mlp, param_grid_gb, param_grid_xg, param_grid_sv, 
+                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\results_ROR_0.8.csv",
+                            calculate_pIC50=True)

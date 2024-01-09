@@ -269,6 +269,7 @@ def model_builder(model_name, hyperparams, regression):
 
 def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
+        ### TODO: Info if IC should've been calculated
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
