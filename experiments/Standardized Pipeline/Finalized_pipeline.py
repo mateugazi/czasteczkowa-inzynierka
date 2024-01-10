@@ -137,6 +137,8 @@ def model_builder(model_name, hyperparams, regression):
     if model_name == 'dt':
         if "min_samples_split" not in hyperparams.keys():
             hyperparams["min_samples_split"] = 2
+        if "min_samples_leaf" not in hyperparams.keys():
+            hyperparams["min_samples_leaf"] = 1
         if "max_depth" not in hyperparams.keys():
             hyperparams["max_depth"] = None  
 
@@ -146,6 +148,7 @@ def model_builder(model_name, hyperparams, regression):
             print(hyperparams)
             model = tree.DecisionTreeRegressor(max_depth=hyperparams["max_depth"],
                                     min_samples_split=hyperparams["min_samples_split"],
+                                    min_samples_leaf=hyperparams["min_samples_leaf"],
                                     criterion=hyperparams["criterion"])
         else:
             if "criterion" not in hyperparams.keys():
@@ -153,12 +156,15 @@ def model_builder(model_name, hyperparams, regression):
             print(hyperparams)
             model = tree.DecisionTreeClassifier(max_depth=hyperparams["max_depth"],
                                     min_samples_split=hyperparams["min_samples_split"], 
+                                    min_samples_leaf=hyperparams["min_samples_leaf"],
                                     criterion=hyperparams["criterion"])
     if model_name == 'rf':
         if "n_estimators" not in hyperparams.keys():
             hyperparams["n_estimators"] = 100
         if "min_samples_split" not in hyperparams.keys():
             hyperparams["min_samples_split"] = 2
+        if "min_samples_leaf" not in hyperparams.keys():
+            hyperparams["min_samples_leaf"] = 1
         if "bootstrap" not in hyperparams.keys():
             hyperparams["bootstrap"] = True  
         if "max_depth" not in hyperparams.keys():
@@ -171,6 +177,7 @@ def model_builder(model_name, hyperparams, regression):
             model = RandomForestRegressor(n_estimators=hyperparams["n_estimators"],
                                     max_depth=hyperparams["max_depth"],
                                     min_samples_split=hyperparams["min_samples_split"],
+                                    min_samples_leaf=hyperparams["min_samples_leaf"],
                                     criterion=hyperparams["criterion"],
                                     bootstrap=hyperparams["bootstrap"])
         else:
@@ -180,6 +187,7 @@ def model_builder(model_name, hyperparams, regression):
             model = RandomForestClassifier(n_estimators=hyperparams["n_estimators"],
                                     max_depth=hyperparams["max_depth"],
                                     min_samples_split=hyperparams["min_samples_split"], 
+                                    min_samples_leaf=hyperparams["min_samples_leaf"],
                                     criterion=hyperparams["criterion"],
                                     bootstrap=hyperparams["bootstrap"])
             
@@ -224,14 +232,18 @@ def model_builder(model_name, hyperparams, regression):
             hyperparams["n_estimators"] = 100
         if "learning_rate" not in hyperparams.keys():
             hyperparams["learning_rate"] = 0.1
+        if "max_depth" not in hyperparams.keys():
+            hyperparams["max_depth"] = 3
         if regression:
             print(hyperparams)
             model = GradientBoostingRegressor(n_estimators=hyperparams["n_estimators"], 
-                                              learning_rate=hyperparams["learning_rate"])
+                                              learning_rate=hyperparams["learning_rate"],
+                                              max_depth=hyperparams["max_depth"])
         else:
             print(hyperparams)
             model = GradientBoostingClassifier(n_estimators=hyperparams["n_estimators"], 
-                                               learning_rate=hyperparams["learning_rate"])
+                                               learning_rate=hyperparams["learning_rate"],
+                                              max_depth=hyperparams["max_depth"])
 
     if model_name == 'xg':
         #if "C" not in hyperparams.keys():
@@ -241,9 +253,11 @@ def model_builder(model_name, hyperparams, regression):
         #if "kernel" not in hyperparams.keys():
         #    hyperparams["kernel"] = "rbf"
         if regression:
+            print(hyperparams)
             model = XGBRegressor()
         else:
-            model = XGBRegressor()
+            print(hyperparams)
+            model = XGBClassifier()
             
     if model_name == 'sv':
         if "C" not in hyperparams.keys():
@@ -252,16 +266,22 @@ def model_builder(model_name, hyperparams, regression):
             hyperparams["degree"] = 3
         if "kernel" not in hyperparams.keys():
             hyperparams["kernel"] = "rbf"
+        if "gamma" not in hyperparams.keys():
+            hyperparams["gamma"] = "scale"
         if regression:
             if "epsilon" not in hyperparams.keys():
                 hyperparams["epsilon"] = 0.1
+            print(hyperparams)
             model = SVR(C=hyperparams["C"], 
                         degree=hyperparams["degree"], 
                         kernel=hyperparams["kernel"], 
+                        gamma=hyperparams["gamma"], 
                         epsilon=hyperparams["epsilon"])
         else:
+            print(hyperparams)
             model = SVC(C=hyperparams["C"], 
                         degree=hyperparams["degree"], 
+                        gamma=hyperparams["gamma"], 
                         kernel=hyperparams["kernel"])
             
     return model

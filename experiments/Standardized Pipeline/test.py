@@ -19,7 +19,7 @@ if regression:
         'penalty': ['l1'],
         'solver': ['liblinear']
     }
-    param_grid_mlp = {
+    param_grid_nn = {
         'hidden_layer_sizes': [(50,), (100,), (50, 50)],
         'activation': ['relu', 'tanh'],
         'alpha': [0.0001, 0.001, 0.01],
@@ -27,14 +27,16 @@ if regression:
     }
     param_grid_gb={
         'n_estimators': [10, 100, 200], 
-        'learning_rate': [0.1,0.5,1.0,2.0]
+        'learning_rate': [0.1,0.5,1.0,2.0],
+        'max_depth': [3, 5, 7]
     }
     param_grid_xg = {
     }
     param_grid_sv = { ### regression
         'C': [0.01, 0.1, 1, 10, 100, 1000],
         'degree': [2, 3, 4],
-        'epsilon': [0.01, 0.1, 1]
+        'epsilon': [0.01, 0.1, 1],
+        'gamma': ["scale", 0.1, 0.05]
     }
 
 else:
@@ -54,7 +56,7 @@ else:
         'penalty': ['l1', 'l2'],
         'solver': ['liblinear', 'saga']
     }
-    param_grid_mlp = {
+    param_grid_nn = {
         'hidden_layer_sizes': [(50,), (100,), (50, 50)],
         'activation': ['relu', 'tanh'],
         'alpha': [0.0001, 0.001, 0.01],
@@ -62,14 +64,16 @@ else:
     }
     param_grid_gb={
         'n_estimators': [10, 100, 200], 
-        'learning_rate': [0.1,0.5,1.0,2.0]
+        'learning_rate': [0.1,0.5,1.0,2.0],
+        'max_depth': [3, 5, 7]
     }
     param_grid_xg = {
     }
     param_grid_sv = {
         'C': [0.01, 0.1, 1, 10, 100, 1000],
-        'degree': [2, 3, 4, 5],
-        'epsilon': ["no epsilon"]
+        'degree': [2, 3, 4],
+        'epsilon': ["no epsilon"],
+        'gamma': ["scale", 0.1, 0.05]
     }
 
 
@@ -103,6 +107,6 @@ Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzy
                             #r"experiments\split_datasets\split0.8_bace.csv",
                             r"experiments\split_datasets\split0.8_ROR_data_1.csv",
                             regression, param_grid_dt, param_grid_rf, param_grid_lr,
-                            param_grid_mlp, param_grid_gb, param_grid_xg, param_grid_sv, 
+                            param_grid_nn, param_grid_gb, param_grid_xg, param_grid_sv, 
                             output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\RESULTS_ROR_regression.csv",
                             calculate_pIC50=True)
