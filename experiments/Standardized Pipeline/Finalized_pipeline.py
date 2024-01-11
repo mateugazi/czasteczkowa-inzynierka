@@ -418,7 +418,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
         results_test = train_and_test(model, X_train, y_train, X_test, y_test, regression=regression, metrics=metrics)
         
         elapsed = (datetime.datetime.now() - begin).total_seconds()
-        print(elapsed)
+        print("time: ", elapsed)
         
         if regression:
             results_test["model"] = model_name_dict_reg[model_name]
@@ -429,6 +429,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
         ### File write results
         f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
         f.write("\n")
+        print(" ".join([str(i)] + [str(i) for i in list(results_test.values())]))
 
         if regression and results_test[compared_score] < best_model_score:
             best_model_score = results_test[compared_score]

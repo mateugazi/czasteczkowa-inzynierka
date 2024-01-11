@@ -1,6 +1,6 @@
 import Finalized_pipeline
 
-regression = True
+regression = False
 
 if regression:
     param_grid_dt={
@@ -108,5 +108,5 @@ Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzy
                             r"experiments\split_datasets\split0.8_ROR_data_1.csv",
                             regression, param_grid_dt, param_grid_rf, param_grid_lr,
                             param_grid_nn, param_grid_gb, param_grid_xg, param_grid_sv, 
-                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\RESULTS_ROR_regression.csv",
+                            output_path=r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\Standardized Pipeline\RESULTS_ROR_classification.csv",
                             calculate_pIC50=True)
