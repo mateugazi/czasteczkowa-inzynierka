@@ -468,7 +468,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
             best_model = model
 
     f.close()
-    results_df = results_df.sort_values(by=[compared_score])
+    results_df = results_df.sort_values(by=[compared_score], ascending=False)
     results_df.to_csv(output_path)
 
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
