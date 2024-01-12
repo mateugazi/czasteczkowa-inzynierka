@@ -66,7 +66,7 @@ else:
     }
     param_grid_gb={
         'n_estimators': [10, 100, 200], 
-        'learning_rate': [0.1,0.5,1.0,2.0],
+        'learning_rate': [0.1,0.5], #,1.0,2.0],
         'max_depth': [3, 5, 7]
     }
     param_grid_xg = {

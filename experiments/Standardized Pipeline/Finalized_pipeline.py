@@ -407,7 +407,7 @@ def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, 
     print(elapsed)
     
 
-    data = {"model": []}
+    data = {"model": [], "hyperparams": []}
     if regression:
         for metric in ["mse", "rmse", "mae", "r2"]:
             data[metric] = []
