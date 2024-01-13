@@ -6,37 +6,43 @@ sys.path.insert(1, r'experiments\Standardized Pipeline')
 import Finalized_pipeline
 
 
-regression = False
+regression = True
 
 if regression:
     param_grid_dt={
         'max_depth': [None, 10, 20],
         'min_samples_split': [2, 5, 10],
         'min_samples_leaf': [1, 2, 4],
+        'min_impurity_decrease': [0, 0.05, 0.1, 0.2],
         'criterion': ["squared_error", "friedman_mse", "absolute_error", "poisson"],
         'splitter': ["best", "random"]
     }
     param_grid_rf={
-        'n_estimators': [50, 100],
-        'max_depth': [None, 10, 20],
+        'max_depth': [None, 3, 7, 10, 20],
         'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4]
+        'min_samples_leaf': [1, 2, 4],
+        'min_impurity_decrease': [0, 0.05, 0.1, 0.2],
+        'n_estimators': [10, 50, 100, 200]
     }
     param_grid_lr = { ### Regression
     }
     param_grid_nn = {
         'hidden_layer_sizes': [(50,), (100,), (50, 50)],
-        'activation': ['relu', 'tanh'],
+        'activation': ['relu', 'tanh', 'logistic'],
         'alpha': [0.0001, 0.001, 0.01],
-        'max_iter': [200, 500, 1000]
+        'max_iter': [200, 500, 1000],
+        'solver': ['lbfgs', 'sgd', 'adam']
     }
     param_grid_gb={
-        'n_estimators': [10, 100, 200], 
-        'learning_rate': [0.1,0.5,1.0,2.0],
-        'max_depth': [3, 5, 7]
+        'max_depth': [None, 3, 5, 7],
+        'loss': ['squared_error', 'absolute_error', 'huber', 'quantile'],
+        'n_estimators': [10, 50, 100, 200], 
+        'learning_rate': [0.01, 0.1, 0.5, 1.0, 2.0],
+        'min_impurity_decrease': [0, 0.05, 0.1, 0.2]
     }
     param_grid_xg = {
-        'eta': [0.3, 0.4, 0.5],
+        'max_depth': [None, 3, 5, 7],
+        'eta': [0.01, 0.1, 0.2],
         'gamma': [0, 0.01, 0.1]
     }
     param_grid_sv = { ### regression
@@ -50,13 +56,17 @@ else:
     param_grid_dt={
         'max_depth': [None, 10, 20],
         'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4]
+        'min_samples_leaf': [1, 2, 4],
+        'min_impurity_decrease': [0, 0.05, 0.1, 0.2],
+        'criterion': ['gini', 'entropy', 'log_loss'],
+        'splitter': ["best", "random"]
     }
     param_grid_rf={
-        'n_estimators': [50, 100],
-        'max_depth': [None, 10, 20],
+        'max_depth': [None, 3, 7, 10, 20],
         'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4]
+        'min_samples_leaf': [1, 2, 4],
+        'min_impurity_decrease': [0, 0.05, 0.1, 0.2],
+        'n_estimators': [10, 50, 100, 200]
     }
     param_grid_lr = {
         'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -65,23 +75,26 @@ else:
     }
     param_grid_nn = {
         'hidden_layer_sizes': [(50,), (100,), (50, 50)],
-        'activation': ['relu', 'tanh'],
+        'activation': ['relu', 'tanh', 'logistic'],
         'alpha': [0.0001, 0.001, 0.01],
-        'max_iter': [200, 500, 1000]
+        'max_iter': [200, 500, 1000],
+        'solver': ['lbfgs', 'sgd', 'adam']
     }
     param_grid_gb={
-        'n_estimators': [10, 100, 200], 
-        'learning_rate': [0.1,0.5], #,1.0,2.0],
-        'max_depth': [3, 5, 7]
+        'max_depth': [None, 3, 5, 7],
+        'loss': ['log_loss', 'exponential'],
+        'n_estimators': [10, 50, 100, 200], 
+        'learning_rate': [0.01, 0.1, 0.5, 1.0, 2.0],
+        'min_impurity_decrease': [0, 0.05, 0.1, 0.2]
     }
     param_grid_xg = {
+        'max_depth': [None, 3, 5, 7],
         'eta': [0.01, 0.1, 0.2],
-        'max_depth': [3, 5, 7],
         'gamma': [0, 0.01, 0.1]
     }
-    param_grid_sv = {
+    param_grid_sv = { ### classification
         'C': [0.01, 0.1, 1, 10, 100, 1000],
-        'kernel': ["rbf"], #, "linear", "poly", "sigmoid"],
+        'kernel': ["rbf", "linear", "poly", "sigmoid"],
         'gamma': ["scale", 0.1, 0.05]
     }
 
@@ -108,6 +121,4 @@ if not os.path.exists(preprocessed_dataset_path):
     print(df.head())
 
 hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
-hyperparams = {"xg": param_grid_xg}
-hyperparams = {"sv": param_grid_sv}
 Finalized_pipeline.hyperparameter_search(preprocessed_dataset_path, hyperparams, unique=True)

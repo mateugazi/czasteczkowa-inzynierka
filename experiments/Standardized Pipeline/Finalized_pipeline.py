@@ -275,7 +275,7 @@ def split_df(df):
     return X_train, y_train, X_test, y_test
 
 ### input df can be a df or a csv to read
-def hyperparameter_search(input_df, parameters, unique=True):
+def hyperparameter_search(input_df, parameters, unique=True, output_file_name="results.csv"):
     model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "xg": "XGBRegressor", "sv": "SVR"}
     model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "xg": "XGBClassifier", "sv": "SVC"}
     
@@ -328,7 +328,8 @@ def hyperparameter_search(input_df, parameters, unique=True):
         compared_score = "roc_auc"
         best_model_score = 0
 
-    output_path = "experiments\Standardized Pipeline\\results.csv"
+
+    output_path = "experiments\Standardized Pipeline\\" + output_file_name
     if unique:
         output_path = uniquify(output_path)
     
