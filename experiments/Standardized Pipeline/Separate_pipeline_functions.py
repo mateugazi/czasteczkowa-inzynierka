@@ -53,7 +53,7 @@ def CalculateDescriptors(mol):
     return X_mordred
 
 
-def generate_split_dataset(path, output_path="", train_fraction_split=0.8, return_df=True):
+def generate_split_dataset(path, train_fraction_split=0.8, output_csv_path=""):
     df = pd.read_csv(path)   
 
     ### Generate Split column
@@ -62,35 +62,74 @@ def generate_split_dataset(path, output_path="", train_fraction_split=0.8, retur
     test.insert(0, 'Split', 'test')
     df = pd.concat([train, test], axis=0)
     
-    if return_df:
-        return df
-    
-    if output_path == "":
-        output_path = r"experiments\split_datasets\\split" + str(train_fraction_split) + "_" + os.path.basename(path)
-    df.to_csv(output_path)
-    print(output_path)
-    return output_path
+    if output_csv_path != "":
+        df.to_csv(output_csv_path)
+    return df
 
 
-
-def calculate_pIC50(input_df, column_name, output_path="", return_df=True): ### takes df or path as input
+def calculate_pIC50(input_df, IC50_column_name, output_csv_path=""): ### takes df or path as input
     if isinstance(input_df, str):
         path = input_df
         df = pd.read_csv(path)
     else:
-        path = r"experiments\Standardized Pipeline\\temp.csv"
+        df = input_df
+
+    if not (IC50_column_name in df.columns):
+        print("Column does not exist")
+        return
+    
+    df['pIC50'] = [-np.log10(i * 10**(-9)) for i in list(df[IC50_column_name])]
+    
+    if output_csv_path != "":
+        df.to_csv(output_csv_path)
+    return df
+
+
+def calculate_classification_labels(input_df, pIC50_column_name, threshold=7, output_csv_path=""): ### takes df or path as input
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
         df = input_df
     
-    df['pIC50'] = [-np.log10(i * 10**(-9)) for i in list(df[column_name])]
+    if not (pIC50_column_name in df.columns):
+        print("Column does not exist")
+        return
     
-    if return_df:
-        return df
+    df['label'] = [int(i > threshold) for i in list(df[pIC50_column_name])]
     
-    if output_path == "":
-        output_path = os.path.join(os.path.dirname(path), os.path.splitext(os.path.basename(path))[0] + "_calc_pIC50" + os.path.splitext(os.path.basename(path))[1])
-    df.to_csv(output_path)
-    print(output_path)
-    return output_path
+    if output_csv_path != "":
+        df.to_csv(output_csv_path)
+    return df
+
+
+def calculate_features(input_df, calculate_descriptors, calculate_fingerprints, SMILES_column_name="SMILES", target_column_name="target", split_column_name="Split", output_csv_path=""): ### takes df or path as input
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+
+    if not (target_column_name in df.columns and SMILES_column_name in df.columns and split_column_name in df.columns):
+        print("Column does not exist")
+        return
+    
+    output_df = df[[target_column_name, split_column_name]]
+    
+    output_df.rename(columns={target_column_name: "Target", split_column_name: "Split"}, inplace=True)
+    
+    
+    if calculate_descriptors:
+        new_df = CalculateDescriptors(df[SMILES_column_name])
+        output_df = pd.concat([output_df, new_df], axis=1)
+
+    if calculate_fingerprints:
+        new_df = CalculateMorganFingerprint(df[SMILES_column_name])
+        output_df = pd.concat([output_df, new_df], axis=1)
+    
+    if output_csv_path != "":
+        output_df.to_csv(output_csv_path)
+    return output_df
 
 
 def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, calculate_pIC50 = False, threshold=7, split_column="Split"):
@@ -364,6 +403,117 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
                 results_test["f1"] = metric_test
 
     return results_test
+
+
+def hyperparameter_search(input_df, parameters):
+    model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "xg": "XGBRegressor", "sv": "SVR"}
+    model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "xg": "XGBClassifier", "sv": "SVC"}
+    
+
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+
+    if isinstance(parameters, dict):
+        parameters = list(parameters.items())
+
+    models_with_parameters = []
+
+    for model_name, parameter_grid in parameters:
+        keys = parameter_grid.keys()
+        param_combinations = list(product(*parameter_grid.values()))
+        for combination in param_combinations:
+            param_set = {}
+            for index, k in enumerate(keys):
+                param_set[k] = combination[index]
+            models_with_parameters.append([model_name, param_set])
+
+    
+    metrics = []
+
+    if df['Target'].nunique() > 2:
+        regression=True
+    else:
+        regression=False
+
+    print("Regression: ", regression)
+
+    data = {"model": []}
+    if regression:
+        for metric in ["mse", "rmse", "mae", "r2"]:
+            data[metric] = []
+    else:
+        for metric in ["roc_auc", "accuracy", "precision", "recall", "f1"]:
+            data[metric] = []
+
+    best_model = None
+    if regression:
+        compared_score = "mse"
+        best_model_score = 100000
+    else:
+        compared_score = "roc_auc"
+        best_model_score = 0
+
+    output_path = "experiments\Standardized Pipeline\\results.csv"
+    output_path = uniquify(output_path)
+    
+    f = open(output_path, "w")
+    f.write(",".join(data.keys()))
+    f.write("\n")
+    
+    train = df[df['Split'] == 'train']
+    test = df[df['Split'] == 'test']
+
+    X_train = train.drop(['Target', 'Split'], axis=1)
+    y_train = train[['Target']]
+    X_test = test.drop(['Target', 'Split'], axis=1)
+    y_test = test[['Target']]
+    
+    results_df = pd.DataFrame(data)
+
+    i = -1
+    for model_name, hyperparams in models_with_parameters:
+        i += 1
+        print(model_name)
+
+        model = model_builder(model_name, hyperparams, regression)
+        
+        begin = datetime.datetime.now()
+        
+        results_test = train_and_test(model, X_train, y_train, X_test, y_test, regression=regression, metrics=metrics)
+        
+        elapsed = (datetime.datetime.now() - begin).total_seconds()
+        print("time: ", elapsed)
+        
+        if regression:
+            results_test["model"] = model_name_dict_reg[model_name]
+        else:
+            results_test["model"] = model_name_dict_class[model_name]
+        results_test["hyperparams"] = str(hyperparams)
+        
+        results_df.loc[len(results_df)] = results_test
+
+        ### File write results
+        f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
+        f.write("\n")
+        print(" ".join([str(i)] + [str(i) for i in list(results_test.values())]))
+
+        if regression and results_test[compared_score] < best_model_score:
+            best_model_score = results_test[compared_score]
+            best_model = model
+        if not regression and results_test[compared_score] > best_model_score:
+            best_model_score = results_test[compared_score]
+            best_model = model
+
+    f.close()
+    results_df = results_df.sort_values(by=[compared_score], ascending=False)
+    results_df.to_csv(output_path)
+
+    filename = os.path.join(os.path.dirname(output_path), 'model.sav')
+    pickle.dump(best_model, open(filename, 'wb'))
+
 
 ### All hyperparameters need to be supplimented into a function
 def pipeline(csv_path, regression, dt_parameters, rf_parameters, lr_parameters, nn_parameters, gb_parameters, xg_parameters, sv_parameters, split_column="Split", calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):

@@ -2,7 +2,7 @@ import Finalized_pipeline
 import Separate_pipeline_functions
 
 import os
-regression = False
+regression = True
 
 if regression:
     param_grid_dt={
@@ -17,9 +17,6 @@ if regression:
         'min_samples_leaf': [1, 2, 4]
     }
     param_grid_lr = { ### Regression
-        'C': [0.001],
-        'penalty': ['l1'],
-        'solver': ['liblinear']
     }
     param_grid_nn = {
         'hidden_layer_sizes': [(50,), (100,), (50, 50)],
@@ -78,9 +75,35 @@ else:
     }
 
 
-#df = Separate_pipeline_functions.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv", output_path=os.path.join(os.path.dirname(__file__), "pipeline_test.csv"))
+#out_path = r"experiments\Standardized Pipeline\example_descriptors.csv"
+#df = Separate_pipeline_functions.generate_split_dataset(r"experiments\ROR-gamma\ROR_data_1.csv")
 #print(df.head())
 #df = Separate_pipeline_functions.calculate_pIC50(df, "target")
+#print(df.head())
+#df = Separate_pipeline_functions.calculate_classification_labels(df, "pIC50", threshold=7)
+#print(df.head())
+#df = Separate_pipeline_functions.calculate_features(df, calculate_descriptors=True, calculate_fingerprints=False, SMILES_column_name="SMILES", target_column_name="pIC50", split_column_name="Split", output_csv_path=out_path)
+#print(df.head())
+#
+#hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
+#Separate_pipeline_functions.hyperparameter_search(df, hyperparams)
+
+
+hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
+Separate_pipeline_functions.hyperparameter_search(r"experiments\Standardized Pipeline\example_descriptors.csv", hyperparams)
+
+#df = Separate_pipeline_functions.hyperparameter_search(r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
+#                            #r"experiments\split_datasets\split0.8_bace.csv",
+#                            r"experiments\split_datasets\split0.9_ROR_data_1.csv",
+#                            regression, param_grid_dt, param_grid_rf, param_grid_lr,
+#                            param_grid_nn, param_grid_gb, param_grid_xg, param_grid_sv, 
+#                            output_path=r"experiments\Standardized Pipeline\RESULTS_ROR0.9_classification.csv",
+#                            calculate_pIC50=True)
+#
+#print(df.head())
+
+
+#df = Separate_pipeline_functions.calculate_features(df, "target")
 #print(df.head())
 
 
@@ -111,10 +134,10 @@ else:
 #                            output_path=r"experiments\Standardized Pipeline\RESULTS_ROR0.9_classification.csv",
 #                            calculate_pIC50=True)
 
-Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
-                            #r"experiments\split_datasets\split0.8_bace.csv",
-                            r"experiments\split_datasets\split0.9_ROR_data_1.csv",
-                            regression, param_grid_dt, param_grid_rf, param_grid_lr,
-                            param_grid_nn, param_grid_gb, param_grid_xg, param_grid_sv, 
-                            output_path=r"experiments\Standardized Pipeline\RESULTS_ROR0.9_classification.csv",
-                            calculate_pIC50=True)
+#Finalized_pipeline.pipeline(#r"C:\Users\wojci\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv",
+#                            #r"experiments\split_datasets\split0.8_bace.csv",
+#                            r"experiments\split_datasets\split0.9_ROR_data_1.csv",
+#                            regression, param_grid_dt, param_grid_rf, param_grid_lr,
+#                            param_grid_nn, param_grid_gb, param_grid_xg, param_grid_sv, 
+#                            output_path=r"experiments\Standardized Pipeline\RESULTS_ROR0.9_classification.csv",
+#                            calculate_pIC50=True)
