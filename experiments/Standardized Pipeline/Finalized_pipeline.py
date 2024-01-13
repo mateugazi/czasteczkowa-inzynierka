@@ -200,6 +200,9 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
         y_test_predicted = model.predict(X_test)
         y_test_predicted = list(map(round, y_test_predicted))
 
+        y_train_predicted = model.predict(X_train)
+        y_train_predicted = list(map(round, y_train_predicted))
+
         #print("Standard train-test results:")
 
         results_test = {}
@@ -208,32 +211,50 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
             if 'rmse' in metrics or len(metrics) == 0:
                 metric_test = mean_squared_error(y_test, y_test_predicted, squared=False)
                 results_test["rmse"] = metric_test
+                metric_test = mean_squared_error(y_train, y_train_predicted, squared=False)
+                results_test["train_rmse"] = metric_test
             if 'mse' in metrics or len(metrics) == 0:
                 metric_test = mean_squared_error(y_test, y_test_predicted)
                 results_test["mse"] = metric_test
+                metric_test = mean_squared_error(y_train, y_train_predicted)
+                results_test["train_mse"] = metric_test
             if 'mae' in metrics or len(metrics) == 0:
                 metric_test = mean_absolute_error(y_test, y_test_predicted)
                 results_test["mae"] = metric_test
+                metric_test = mean_absolute_error(y_train, y_train_predicted)
+                results_test["train_mae"] = metric_test
             if 'r2' in metrics or len(metrics) == 0:
                 metric_test = r2_score(y_test, y_test_predicted)
                 results_test["r2"] = metric_test
+                metric_test = r2_score(y_train, y_train_predicted)
+                results_test["train_r2"] = metric_test
             
         else:
             if 'roc_auc' in metrics or len(metrics) == 0:
                 metric_test = roc_auc_score(y_test, y_test_predicted)
                 results_test["roc_auc"] = metric_test
+                metric_test = roc_auc_score(y_train, y_train_predicted)
+                results_test["train_roc_auc"] = metric_test
             if 'accuracy' in metrics or len(metrics) == 0:
                 metric_test = accuracy_score(y_test, y_test_predicted)
                 results_test["accuracy"] = metric_test
+                metric_test = accuracy_score(y_train, y_train_predicted)
+                results_test["train_accuracy"] = metric_test
             if 'precision' in metrics or len(metrics) == 0:
                 metric_test = precision_score(y_test, y_test_predicted)
                 results_test["precision"] = metric_test
+                metric_test = precision_score(y_train, y_train_predicted)
+                results_test["train_precision"] = metric_test
             if 'recall' in metrics or len(metrics) == 0:
                 metric_test = recall_score(y_test, y_test_predicted)
                 results_test["recall"] = metric_test
+                metric_test = recall_score(y_train, y_train_predicted)
+                results_test["train_recall"] = metric_test
             if 'f1' in metrics or len(metrics) == 0:
                 metric_test = f1_score(y_test, y_test_predicted)
                 results_test["f1"] = metric_test
+                metric_test = f1_score(y_train, y_train_predicted)
+                results_test["train_f1"] = metric_test
 
     return results_test
 
@@ -254,7 +275,7 @@ def split_df(df):
     return X_train, y_train, X_test, y_test
 
 ### input df can be a df or a csv to read
-def hyperparameter_search(input_df, parameters, unique=True):
+def hyperparameter_search(input_df, parameters, unique=True, output_file_name="results.csv"):
     model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "xg": "XGBRegressor", "sv": "SVR"}
     model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "xg": "XGBClassifier", "sv": "SVC"}
     
@@ -289,13 +310,15 @@ def hyperparameter_search(input_df, parameters, unique=True):
 
     print("Regression: ", regression)
 
-    data = {"model": []}
+    data = {"model": [], "hyperparams": []}
     if regression:
         for metric in ["mse", "rmse", "mae", "r2"]:
             data[metric] = []
+            data["train_" + metric] = []
     else:
         for metric in ["roc_auc", "accuracy", "precision", "recall", "f1"]:
             data[metric] = []
+            data["train_" + metric] = []
 
     best_model = None
     if regression:
@@ -305,7 +328,8 @@ def hyperparameter_search(input_df, parameters, unique=True):
         compared_score = "roc_auc"
         best_model_score = 0
 
-    output_path = "experiments\Standardized Pipeline\\results.csv"
+
+    output_path = "experiments\Standardized Pipeline\\" + output_file_name
     if unique:
         output_path = uniquify(output_path)
     
