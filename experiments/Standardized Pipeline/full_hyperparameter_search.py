@@ -3,8 +3,8 @@ import pandas as pd
 import Finalized_pipeline
 
 #name = "Asia"
-name = "Kuba"
-#name = "Wojtek"
+#name = "Kuba"
+name = "Wojtek"
 
 if name == "Asia":
     descriptors = True
@@ -84,6 +84,7 @@ for regression in [True, False]:
 
     for dataset in datasets:
         dataset_path = os.path.join(r"experiments\split_datasets", dataset)
+
         df = pd.read_csv(dataset_path)
 
         if not "pIC50" in df.columns:
@@ -100,9 +101,9 @@ for regression in [True, False]:
             
         df = Finalized_pipeline.calculate_features(df, calculate_descriptors=descriptors, calculate_fingerprints=fingerprints, 
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
-                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\\" + name + "_dataset_backup.csv")
+                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\\" + name + "_" + dataset[:13] + "_dataset_backup.csv")
                 
         hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
-        Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_run.csv")
+        Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_run.csv")
 
 
