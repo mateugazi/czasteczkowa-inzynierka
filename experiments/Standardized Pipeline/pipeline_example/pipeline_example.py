@@ -12,7 +12,9 @@ if regression:
     param_grid_dt={
         'max_depth': [None, 10, 20],
         'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4]
+        'min_samples_leaf': [1, 2, 4],
+        'criterion': ["squared_error", "friedman_mse", "absolute_error", "poisson"],
+        'splitter': ["best", "random"]
     }
     param_grid_rf={
         'n_estimators': [50, 100],
@@ -34,6 +36,8 @@ if regression:
         'max_depth': [3, 5, 7]
     }
     param_grid_xg = {
+        'eta': [0.3, 0.4, 0.5],
+        'gamma': [0, 0.01, 0.1]
     }
     param_grid_sv = { ### regression
         'C': [0.01, 0.1, 1, 10, 100, 1000],
@@ -71,7 +75,9 @@ else:
         'max_depth': [3, 5, 7]
     }
     param_grid_xg = {
-
+        'eta': [0.01, 0.1, 0.2],
+        'max_depth': [3, 5, 7],
+        'gamma': [0, 0.01, 0.1]
     }
     param_grid_sv = {
         'C': [0.01, 0.1, 1, 10, 100, 1000],
@@ -102,4 +108,6 @@ if not os.path.exists(preprocessed_dataset_path):
     print(df.head())
 
 hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
-Finalized_pipeline.hyperparameter_search(preprocessed_dataset_path, hyperparams, unique=False)
+hyperparams = {"xg": param_grid_xg}
+hyperparams = {"sv": param_grid_sv}
+Finalized_pipeline.hyperparameter_search(preprocessed_dataset_path, hyperparams, unique=True)
