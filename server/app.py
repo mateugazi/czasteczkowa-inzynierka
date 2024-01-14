@@ -115,7 +115,7 @@ def getAllModelTypes():
   for modelType in modelTypes:
     response.append({
       'name': modelType.name,
-      'parameters': modelType.parameters,
+      'parameters': [{'name': parameter.name, 'example': parameter.example} for parameter in modelType.parameters],
       'pk': modelType.pk
     })
 

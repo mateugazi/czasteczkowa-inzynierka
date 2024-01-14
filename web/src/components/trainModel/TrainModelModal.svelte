@@ -57,7 +57,8 @@
 			{#if selectedModelType !== defaultArchitecturePlaceholder}
 				{#each modelTypes.find((modelType) => modelType.name === selectedModelType).parameters as parameter}
 					<ParameterInputField
-						parameterLabel={parameter}
+						parameterLabel={parameter.name}
+						placeholder={parameter.example}
 						on:change={updateParametersValues}
 					/>
 				{/each}

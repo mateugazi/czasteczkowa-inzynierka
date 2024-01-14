@@ -1,5 +1,6 @@
 <script>
 	export let parameterLabel;
+	export let placeholder;
 </script>
 
 <label class="form-control w-full max-w-xs">
@@ -8,7 +9,7 @@
 	</div>
 	<input
 		type="text"
-		placeholder="Type here"
+		{placeholder}
 		class="input input-bordered w-full max-w-xs"
 		on:change
 	/>
