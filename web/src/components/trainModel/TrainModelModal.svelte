@@ -12,9 +12,13 @@
 	let parametersValues = {};
 
 	const updateParametersValues = (event) => {
-		parametersValues[event.target.labels[0].textContent.trim()] = Number(
-			event.target.value
-		);
+		const parameterName = event.target.labels[0].textContent.trim();
+		parametersValues[parameterName] = {
+			value: event.target.value,
+			...modelTypes
+				.find((modelType) => modelType.name === selectedModelType)
+				.parameters.find((parameter) => parameter.name === parameterName),
+		};
 	};
 
 	const onSubmit = async () => {
@@ -23,7 +27,7 @@
 		const trainingResults = await triggerTraining(
 			files[0],
 			parametersValues,
-			selectedModelType
+			modelTypes.find((modelType) => modelType.name === selectedModelType)
 		);
 		console.log(trainingResults);
 	};

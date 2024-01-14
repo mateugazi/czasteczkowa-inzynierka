@@ -12,5 +12,9 @@
 		{placeholder}
 		class="input input-bordered w-full max-w-xs"
 		on:change
+		list={parameterLabel}
 	/>
+	<datalist id={parameterLabel}>
+		<option value={placeholder} />
+	</datalist>
 </label>

@@ -91,12 +91,16 @@ def getModelById(id):
 def createModelType():
   data = request.json
   name = data.get('name')
+  identifier = data.get('identifier')
+  regression = data.get('regression')
   parameters = data.get('parameters')
 
   try:
     newModelType = ModelType(
       name = name,
-      parameters = parameters,
+      identifier = identifier,
+      regression = regression,
+      parameters = parameters
     )
     print('======PK:', newModelType.pk)
     newModelType.save()
@@ -115,7 +119,9 @@ def getAllModelTypes():
   for modelType in modelTypes:
     response.append({
       'name': modelType.name,
-      'parameters': [{'name': parameter.name, 'example': parameter.example} for parameter in modelType.parameters],
+      'identifier': modelType.identifier,
+      'regression': modelType.regression,
+      'parameters': [{'name': parameter.name, 'example': parameter.example, 'type': parameter.type} for parameter in modelType.parameters],
       'pk': modelType.pk
     })
 
@@ -125,25 +131,25 @@ def getAllModelTypes():
 @app.route("/trigger-training", methods=['POST'])
 def triggerTraining():
   csvFile = request.files['file']
-  modelType = request.form['modelType']
+  modelInfo = request.form['modelInfo']
   parameters = json.loads(request.form['parameters'])
 
   if not csvFile:
     return 'Upload a CSV file'
   
-  if not modelType:
+  if not modelInfo:
     return 'No model type'
   
   if not parameters:
     return 'No parameters'
-
-  print(csvFile)
 
   df, mess, stat = Validator(csvFile)
 
   if df is None:
     return jsonify({'message': mess, 'stat': stat})
   
+  modelInfo = json.loads(modelInfo)
+
   return jsonify({'message': 'OK'})
 
 Migrator().run()
