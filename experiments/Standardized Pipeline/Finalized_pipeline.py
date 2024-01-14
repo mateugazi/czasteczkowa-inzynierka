@@ -203,9 +203,6 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
         y_train_predicted = model.predict(X_train)
         y_train_predicted = list(map(np.round, y_train_predicted))
 
-        y_train_predicted = model.predict(X_train)
-        y_train_predicted = list(map(round, y_train_predicted))
-
         #print("Standard train-test results:")
 
         results_test = {}
