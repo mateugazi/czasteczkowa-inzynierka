@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import os
 import datetime
+from itertools import product
+import pickle
+from matplotlib import pyplot as plt
 
 from mordred import Calculator, descriptors
 from rdkit import Chem
@@ -12,11 +15,23 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, accuracy_score, f1_score
 
+from sklearn import tree
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR, SVC
+from xgboost import XGBClassifier, XGBRegressor
 
+
+def uniquify(path):
+    filename, extension = os.path.splitext(path)
+    counter = 1
+
+    while os.path.exists(path):
+        path = filename + " (" + str(counter) + ")" + extension
+        counter += 1
+
+    return path
 
 ### Input standard SMILES column
 def CalculateMorganFingerprint(mol):
@@ -38,271 +53,333 @@ def CalculateDescriptors(mol):
     X_mordred = X_mordred.loc[:,X_mordred.std()>0.01]
     return X_mordred
 
-def Load_downloaded_CSV(path, use_descriptors, use_fingerprints, regression, calculate_pIC50 = False, threshold=7):
-    df = pd.read_csv(path)
+
+def generate_split_dataset(path, train_fraction_split=0.8, output_csv_path=""):
+    df = pd.read_csv(path)   
+
+    ### Generate Split column
+    train, test = train_test_split(df, train_size=train_fraction_split, random_state=42)
+    train.insert(0, 'Split', 'train')
+    test.insert(0, 'Split', 'test')
+    df = pd.concat([train, test], axis=0)
     
-    ### Replace with standardizing molecules and then dropping duplicates
-    #df.drop_duplicates('mol')
-    #df = df.dropna()
-    
-    if 'target' in df.columns:
-        df['Target'] = df['target']
-        df.drop('target', axis=1, inplace=True)
-        
-    if regression:
-        if 'IC50' in df.columns:
-            calculate_pIC50 = True
-            df['Target'] = df['IC50']
-            df.drop('IC50', axis=1, inplace=True)
-        if 'pIC50' in df.columns:
-            df['Target'] = df['pIC50']
-            df.drop('pIC50', axis=1, inplace=True)
+    if output_csv_path != "":
+        df.to_csv(output_csv_path)
+    return df
+
+
+def calculate_pIC50(input_df, IC50_column_name, output_csv_path=""): ### takes df or path as input
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
     else:
-        if 'Class' in df.columns:
-            df['Target'] = df['Class']
-            df.drop('Class', axis=1, inplace=True)
-        
-    if 'SMILES' in df.columns:
-        df['mol'] = df['SMILES']
-        df.drop('SMILES', axis=1, inplace=True)
+        df = input_df
+
+    if not (IC50_column_name in df.columns):
+        print("Column does not exist")
+        return
     
-    if calculate_pIC50:
-        df['Target'] = [-np.log10(i * 10**(-9)) for i in list(df['Target'])]
-        if not regression:
-            df['Target'] = [int(i > threshold) for i in list(df['Target'])]
+    df['pIC50'] = [-np.log10(i * 10**(-9)) for i in list(df[IC50_column_name])]
+    
+    if output_csv_path != "":
+        df.to_csv(output_csv_path)
+    return df
 
-    df = df[['mol', 'Target']]
 
-    if use_descriptors:
-        new_df = CalculateDescriptors(df['mol'])
-    if use_fingerprints:
-        new_df = CalculateMorganFingerprint(df['mol'])
-        
-    new_df['Target'] = df['Target']
+def calculate_classification_labels(input_df, pIC50_column_name, threshold=7, output_csv_path=""): ### takes df or path as input
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+    
+    if not (pIC50_column_name in df.columns):
+        print("Column does not exist")
+        return
+    
+    df['label'] = [int(i > threshold) for i in list(df[pIC50_column_name])]
+    
+    if output_csv_path != "":
+        df.to_csv(output_csv_path)
+    return df
 
-    return new_df
 
-def Split_downloaded_CSV(df):
-    X = df.drop(['Target'], axis=1)
-    y = df[['Target']]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-    X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.111, random_state=42)
-    return X_train, y_train, X_test, y_test, X_valid, y_valid
+def calculate_features(input_df, calculate_descriptors, calculate_fingerprints, SMILES_column_name="SMILES", target_column_name="target", split_column_name="Split", output_csv_path=""): ### takes df or path as input
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+
+    if not (target_column_name in df.columns and SMILES_column_name in df.columns and split_column_name in df.columns):
+        print("Column does not exist")
+        return
+    
+    output_df = df[[target_column_name, split_column_name]]
+    
+    output_df.rename(columns={target_column_name: "Target", split_column_name: "Split"}, inplace=True)
+    
+    
+    if calculate_descriptors:
+        new_df = CalculateDescriptors(df[SMILES_column_name])
+        output_df = pd.concat([output_df, new_df], axis=1)
+
+    if calculate_fingerprints:
+        new_df = CalculateMorganFingerprint(df[SMILES_column_name])
+        output_df = pd.concat([output_df, new_df], axis=1)
+    
+    if output_csv_path != "":
+        output_df.to_csv(output_csv_path)
+    return output_df
 
 
 def model_builder(model_name, hyperparams, regression):
-    if model_name == 'rf':
-        if "n_estimators" not in hyperparams.keys():
-            hyperparams["n_estimators"] = 100
-        if "min_samples_split" not in hyperparams.keys():
-            hyperparams["min_samples_split"] = 2
-        if "bootstrap" not in hyperparams.keys():
-            hyperparams["bootstrap"] = True  
-
+    if model_name == 'dt':
         if regression:
-            if "criterion" not in hyperparams.keys():
-                hyperparams["criterion"] = "squared_error"
-            model = RandomForestRegressor(n_estimators=hyperparams["n_estimators"],
-                                    min_samples_split=hyperparams["min_samples_split"],
-                                    criterion=hyperparams["criterion"],
-                                    bootstrap=hyperparams["bootstrap"])
+            print(hyperparams)
+            model = tree.DecisionTreeRegressor(**hyperparams)
         else:
-            if "criterion" not in hyperparams.keys():
-                hyperparams["criterion"] = "gini"
-            model = RandomForestClassifier(n_estimators=hyperparams["n_estimators"],
-                                    min_samples_split=hyperparams["min_samples_split"], 
-                                    criterion=hyperparams["criterion"],
-                                    bootstrap=hyperparams["bootstrap"])
+            print(hyperparams)
+            model = tree.DecisionTreeClassifier(**hyperparams)
+    if model_name == 'rf':
+        if regression:
+            print(hyperparams)
+            model = RandomForestRegressor(**hyperparams)
+        else:
+            print(hyperparams)
+            model = RandomForestClassifier(**hyperparams)
             
     if model_name == 'lr':
         if regression:
-            model = LinearRegression()
+            print(hyperparams)
+            model = LinearRegression(**hyperparams)
         else:
-            if "C" not in hyperparams.keys():
-                hyperparams["C"] = 1
-            if "penalty" not in hyperparams.keys():
-                hyperparams["penalty"] = "l2"
-            if "solver" not in hyperparams.keys():
-                hyperparams["solver"] = "liblinear"
-            model = LogisticRegression(C=hyperparams["C"], penalty=hyperparams["penalty"], solver=hyperparams["solver"])
+            print(hyperparams)
+            model = LogisticRegression(**hyperparams)
 
     if model_name == 'nn':
-        if "hidden_layer_sizes" not in hyperparams.keys():
-            hyperparams["hidden_layer_sizes"] = (100,)
-        if "activation" not in hyperparams.keys():
-            hyperparams["activation"] = "relu"
-        if "alpha" not in hyperparams.keys():
-            hyperparams["alpha"] = 0.0001  
-        if "max_iter" not in hyperparams.keys():
-            hyperparams["max_iter"] = 500#200
         if regression:
-            model = MLPRegressor(hidden_layer_sizes=hyperparams["hidden_layer_sizes"], activation=hyperparams["activation"], 
-                                  alpha=hyperparams["alpha"], max_iter=hyperparams["max_iter"])
+            print(hyperparams)
+            model = MLPRegressor(**hyperparams)
         else:
-            model = MLPClassifier(hidden_layer_sizes=hyperparams["hidden_layer_sizes"], activation=hyperparams["activation"], 
-                                  alpha=hyperparams["alpha"], max_iter=hyperparams["max_iter"])
+            print(hyperparams)
+            model = MLPClassifier(**hyperparams)
         
     if model_name == 'gb':
-        if "n_estimators" not in hyperparams.keys():
-            hyperparams["n_estimators"] = 100
-        if "learning_rate" not in hyperparams.keys():
-            hyperparams["learning_rate"] = 0.1
         if regression:
-            model = GradientBoostingRegressor(n_estimators=hyperparams["n_estimators"], learning_rate=hyperparams["learning_rate"])
+            print(hyperparams)
+            model = GradientBoostingRegressor(**hyperparams)
         else:
-            model = GradientBoostingClassifier(n_estimators=hyperparams["n_estimators"], learning_rate=hyperparams["learning_rate"])
+            print(hyperparams)
+            model = GradientBoostingClassifier(**hyperparams)
 
-    if model_name == 'sv':
-        if "C" not in hyperparams.keys():
-            hyperparams["C"] = 1
-        if "degree" not in hyperparams.keys():
-            hyperparams["degree"] = 3
-        if "kernel" not in hyperparams.keys():
-            hyperparams["kernel"] = "rbf"
+    if model_name == 'xg':
         if regression:
-            if "epsilon" not in hyperparams.keys():
-                hyperparams["epsilon"] = 0.1
-            model = SVR(C=hyperparams["C"], degree=hyperparams["degree"], kernel=hyperparams["kernel"], epsilon=hyperparams["epsilon"])
+            print(hyperparams)
+            model = XGBRegressor(**hyperparams)
         else:
-            model = SVC(C=hyperparams["C"], degree=hyperparams["degree"], kernel=hyperparams["kernel"])
+            print(hyperparams)
+            model = XGBClassifier(**hyperparams)
+            
+    if model_name == 'sv':
+        if regression:
+            print(hyperparams)
+            model = SVR(**hyperparams)
+        else:
+            print(hyperparams)
+            model = SVC(**hyperparams)
             
     return model
 
 
-def train_and_test(model, X_train, y_train, X_test, y_test, X_valid, y_valid, regression, metrics=[], iterations=1):
+def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
+        ### TODO: Info if IC should've been calculated
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
-        y_valid_predicted = model.predict(X_valid)
+        y_test_predicted = list(map(round, y_test_predicted))
+
+        y_train_predicted = model.predict(X_train)
+        y_train_predicted = list(map(round, y_train_predicted))
 
         #print("Standard train-test results:")
 
         results_test = {}
-        results_valid = {}
 
         if regression:
             if 'rmse' in metrics or len(metrics) == 0:
                 metric_test = mean_squared_error(y_test, y_test_predicted, squared=False)
-                metric_valid = mean_squared_error(y_valid, y_valid_predicted, squared=False)
                 results_test["rmse"] = metric_test
-                results_valid["rmse"] = metric_valid
+                metric_test = mean_squared_error(y_train, y_train_predicted, squared=False)
+                results_test["train_rmse"] = metric_test
             if 'mse' in metrics or len(metrics) == 0:
                 metric_test = mean_squared_error(y_test, y_test_predicted)
-                metric_valid = mean_squared_error(y_valid, y_valid_predicted)
                 results_test["mse"] = metric_test
-                results_valid["mse"] = metric_valid
+                metric_test = mean_squared_error(y_train, y_train_predicted)
+                results_test["train_mse"] = metric_test
             if 'mae' in metrics or len(metrics) == 0:
                 metric_test = mean_absolute_error(y_test, y_test_predicted)
-                metric_valid = mean_absolute_error(y_valid, y_valid_predicted)
                 results_test["mae"] = metric_test
-                results_valid["mae"] = metric_valid
+                metric_test = mean_absolute_error(y_train, y_train_predicted)
+                results_test["train_mae"] = metric_test
             if 'r2' in metrics or len(metrics) == 0:
                 metric_test = r2_score(y_test, y_test_predicted)
-                metric_valid = r2_score(y_valid, y_valid_predicted)
                 results_test["r2"] = metric_test
-                results_valid["r2"] = metric_valid
+                metric_test = r2_score(y_train, y_train_predicted)
+                results_test["train_r2"] = metric_test
             
         else:
             if 'roc_auc' in metrics or len(metrics) == 0:
                 metric_test = roc_auc_score(y_test, y_test_predicted)
-                metric_valid = roc_auc_score(y_valid, y_valid_predicted)
                 results_test["roc_auc"] = metric_test
-                results_valid["roc_auc"] = metric_valid
+                metric_test = roc_auc_score(y_train, y_train_predicted)
+                results_test["train_roc_auc"] = metric_test
             if 'accuracy' in metrics or len(metrics) == 0:
                 metric_test = accuracy_score(y_test, y_test_predicted)
-                metric_valid = accuracy_score(y_valid, y_valid_predicted)
                 results_test["accuracy"] = metric_test
-                results_valid["accuracy"] = metric_valid
+                metric_test = accuracy_score(y_train, y_train_predicted)
+                results_test["train_accuracy"] = metric_test
             if 'precision' in metrics or len(metrics) == 0:
                 metric_test = precision_score(y_test, y_test_predicted)
-                metric_valid = precision_score(y_valid, y_valid_predicted)
                 results_test["precision"] = metric_test
-                results_valid["precision"] = metric_valid
+                metric_test = precision_score(y_train, y_train_predicted)
+                results_test["train_precision"] = metric_test
             if 'recall' in metrics or len(metrics) == 0:
                 metric_test = recall_score(y_test, y_test_predicted)
-                metric_valid = recall_score(y_valid, y_valid_predicted)
                 results_test["recall"] = metric_test
-                results_valid["recall"] = metric_valid
+                metric_test = recall_score(y_train, y_train_predicted)
+                results_test["train_recall"] = metric_test
             if 'f1' in metrics or len(metrics) == 0:
                 metric_test = f1_score(y_test, y_test_predicted)
-                metric_valid = f1_score(y_valid, y_valid_predicted)
                 results_test["f1"] = metric_test
-                results_valid["f1"] = metric_valid
+                metric_test = f1_score(y_train, y_train_predicted)
+                results_test["train_f1"] = metric_test
 
-    return results_test, results_valid
+    return results_test
 
-### All hyperparameters need to be supplimented into a function
-def pipeline(csv_path, regression, rf_parameters, lr_parameters, nn_parameters, gb_parameters, sv_parameters, calculate_pIC50=False, pIC50_classification_threshold=7, output_path="results.csv"):
-    model_name_dict_reg = {"rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "sv": "SVR"}
-    model_name_dict_class = {"rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "sv": "SVC"}
 
-    ### TODO: Change into args!
-    use_descriptors = True
-    use_fingerprints = False
+def split_df(df):
+    
+    train = df[df['Split'] == 'train']
+    test = df[df['Split'] == 'test']
 
-    regression = True
+    X_train = train.drop(['Target', 'Split'], axis=1)
+    X_train = X_train.drop([list(X_train.columns)[0]], axis=1)
+    y_train = train[['Target']]
+    X_test = test.drop(['Target', 'Split'], axis=1)
+    X_test = X_test.drop([list(X_test.columns)[0]], axis=1)
+    y_test = test[['Target']]
 
-    models_with_parameters = [
-    ['rf', rf_parameters],
-    ['lr', lr_parameters],
-    ['nn', nn_parameters],
-    ['gb', gb_parameters],
-    ['sv', sv_parameters]]
 
+    return X_train, y_train, X_test, y_test
+
+### input df can be a df or a csv to read
+def hyperparameter_search(input_df, parameters, unique=True, output_file_name="results.csv"):
+    model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "xg": "XGBRegressor", "sv": "SVR"}
+    model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "xg": "XGBClassifier", "sv": "SVC"}
+    
+
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+
+    if isinstance(parameters, dict):
+        parameters = list(parameters.items())
+
+    models_with_parameters = []
+
+    for model_name, parameter_grid in parameters:
+        keys = parameter_grid.keys()
+        param_combinations = list(product(*parameter_grid.values()))
+        for combination in param_combinations:
+            param_set = {}
+            for index, k in enumerate(keys):
+                param_set[k] = combination[index]
+            models_with_parameters.append([model_name, param_set])
+
+    
     metrics = []
-    
-    ### ror-gamma
-    #csv_path = r"C:\Users\admin\Documents\GitHub\czasteczkowa-inzynierka\experiments\ROR-gamma\ROR_data_1.csv"
-    #df_loaded = Load_downloaded_CSV(csv_path, regression=regression, calculate_pIC50=True)
-    ### bace
-    #csv_path = r"C:\Users\admin\Documents\GitHub\czasteczkowa-inzynierka\experiments\BACE\bace.csv"
-    #df_loaded = Load_downloaded_CSV(csv_path, regression=regression, use_descriptors=use_descriptors, use_fingerprints=use_fingerprints)
 
-    print("Calculating input data")
-    begin = datetime.datetime.now()
-    
-    df_loaded = Load_downloaded_CSV(csv_path, regression=regression, calculate_pIC50=calculate_pIC50, threshold=pIC50_classification_threshold,
-                                    use_descriptors=use_descriptors, use_fingerprints=use_fingerprints)
-    
-    elapsed = (datetime.datetime.now() - begin).total_seconds()
-    print(elapsed)
-    
-    X_train, y_train, X_test, y_test, X_valid, y_valid = Split_downloaded_CSV(df_loaded)
+    if df['Target'].nunique() > 2:
+        regression=True
+    else:
+        regression=False
 
-    data = {"model": [], "set": []}
+    print("Regression: ", regression)
+
+    data = {"model": [], "hyperparams": []}
     if regression:
-        for metric in ["rmse", "mse", "mae", "r2"]:
+        for metric in ["mse", "rmse", "mae", "r2"]:
             data[metric] = []
+            data["train_" + metric] = []
     else:
         for metric in ["roc_auc", "accuracy", "precision", "recall", "f1"]:
             data[metric] = []
+            data["train_" + metric] = []
+
+    best_model = None
+    if regression:
+        compared_score = "mse"
+        best_model_score = 100000
+    else:
+        compared_score = "roc_auc"
+        best_model_score = 0
+
+
+    output_path = "experiments\Standardized Pipeline\\" + output_file_name
+    if unique:
+        output_path = uniquify(output_path)
+    
+    f = open(output_path, "w")
+    f.write(",".join(data.keys()))
+    f.write("\n")
+    
+    X_train, y_train, X_test, y_test = split_df(df)
 
     results_df = pd.DataFrame(data)
+
+    i = -1
     for model_name, hyperparams in models_with_parameters:
+        i += 1
         print(model_name)
 
         model = model_builder(model_name, hyperparams, regression)
         
         begin = datetime.datetime.now()
         
-        results_test, results_valid = train_and_test(model, X_train, y_train, X_test, y_test, X_valid, y_valid, regression=regression, metrics=metrics)
+        results_test = train_and_test(model, X_train, y_train, X_test, y_test, regression=regression, metrics=metrics)
         
         elapsed = (datetime.datetime.now() - begin).total_seconds()
-        print(elapsed)
+        print("time: ", elapsed)
+
         
         if regression:
             results_test["model"] = model_name_dict_reg[model_name]
         else:
             results_test["model"] = model_name_dict_class[model_name]
-        results_test["set"] = "test"
+        results_test["hyperparams"] = str(hyperparams)
+        
         results_df.loc[len(results_df)] = results_test
-        if regression:
-            results_valid["model"] = model_name_dict_reg[model_name]
-        else:
-            results_valid["model"] = model_name_dict_class[model_name]
-        results_valid["set"] = "valid"
-        results_df.loc[len(results_df)] = results_valid
 
+        ### File write results
+        f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
+        f.write("\n")
+        print(" ".join([str(i)] + [str(i) for i in list(results_test.values())]))
+
+        if regression and results_test[compared_score] < best_model_score:
+            best_model_score = results_test[compared_score]
+            best_model = model
+        if not regression and results_test[compared_score] > best_model_score:
+            best_model_score = results_test[compared_score]
+            best_model = model
+
+    f.close()
+    results_df = results_df.sort_values(by=[compared_score], ascending=False)
     results_df.to_csv(output_path)
+
+    filename = os.path.join(os.path.dirname(output_path), 'model.sav')
+    pickle.dump(best_model, open(filename, 'wb'))
 
