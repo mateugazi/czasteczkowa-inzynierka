@@ -333,9 +333,9 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     if unique:
         output_path = uniquify(output_path)
     
-    f = open(output_path, "w")
-    f.write(",".join(data.keys()))
-    f.write("\n")
+    # f = open(output_path, "w")
+    # f.write(",".join(data.keys()))
+    # f.write("\n")
     
     X_train, y_train, X_test, y_test = split_df(df)
 
@@ -364,10 +364,10 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
         
         results_df.loc[len(results_df)] = results_test
 
-        ### File write results
-        f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
-        f.write("\n")
-        print(" ".join([str(i)] + [str(i) for i in list(results_test.values())]))
+        # File write results
+        # f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
+        # f.write("\n")
+        # print(" ".join([str(i)] + [str(i) for i in list(results_test.values())]))
 
         if regression and results_test[compared_score] < best_model_score:
             best_model_score = results_test[compared_score]
@@ -376,10 +376,11 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
             best_model_score = results_test[compared_score]
             best_model = model
 
-    f.close()
+    # f.close()
     results_df = results_df.sort_values(by=[compared_score], ascending=False)
-    results_df.to_csv(output_path)
+    return results_df
+    # results_df.to_csv(output_path)
 
-    filename = os.path.join(os.path.dirname(output_path), 'model.sav')
-    pickle.dump(best_model, open(filename, 'wb'))
+    # filename = os.path.join(os.path.dirname(output_path), 'model.sav')
+    # pickle.dump(best_model, open(filename, 'wb'))
 

@@ -3,13 +3,12 @@
 	import FileReceiver from "./selectMode/FileReceiver.svelte";
 	import SelectModeView from "./selectMode/SelectModeView.svelte";
 	import SummaryView from "./summaryMode/SummaryView.svelte";
+	import TraininingResultsView from "./trainModel/TrainingResultsView.svelte";
 
 	let viewMode;
-	let predictions;
 
 	const unsubscribe = store.subscribe((state) => {
 		viewMode = state.viewMode;
-		predictions = state.predictions;
 	});
 </script>
 
@@ -25,5 +24,7 @@
 			<h3 class="text-3xl font-bold">Loading...</h3>
 			<progress class="progress w-56"></progress>
 		</div>
+	{:else if viewMode === "trainMode"}
+		<TraininingResultsView />
 	{/if}
 </div>

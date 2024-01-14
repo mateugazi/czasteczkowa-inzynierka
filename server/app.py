@@ -134,16 +134,13 @@ def getAllModelTypes():
 def triggerTraining():
   csvFile = request.files['file']
   modelInfo = request.form['modelInfo']
-  parameters = json.loads(request.form['parameters'])
+  parameters = request.form['parameters']
 
   if not csvFile:
     return 'Upload a CSV file'
   
   if not modelInfo:
     return 'No model type'
-  
-  if not parameters:
-    return 'No parameters'
 
   # df, mess, stat = Validator(csvFile)
 
@@ -159,8 +156,10 @@ def triggerTraining():
   }
 
   # currently hyperparameters are ignored, because they are taking too long time
-  # for parameterName in parameters.keys():
-    # hyperparameters[modelInfo['identifier']][parameterName] = ast.literal_eval(parameters[parameterName]['value'])
+  if parameters:
+    parameters = json.loads(request.form['parameters'])
+    for parameterName in parameters.keys():
+      hyperparameters[modelInfo['identifier']][parameterName] = ast.literal_eval(parameters[parameterName]['value'])
 
 
   print(hyperparameters)
@@ -176,7 +175,12 @@ def triggerTraining():
     # regresja
       # sprawdzenie ic50 czy pic50
       # liczenie featerów
+  result = [list(df.columns.values)]
 
-  return jsonify({'message': 'OK'})
+  for index, _ in df.iterrows():
+     result.append(df.loc[index, :].values.flatten().tolist())
+
+  print(result)
+  return jsonify({'message': 'OK', 'data': result})
 
 Migrator().run()

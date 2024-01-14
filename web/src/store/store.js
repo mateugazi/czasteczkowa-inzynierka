@@ -4,5 +4,6 @@ export const store = writable({
 	viewMode: "selectMode",
 	predictions: [],
 	models: [],
-	modelTypes: []
+	modelTypes: [],
+	trainingResults: []
 });

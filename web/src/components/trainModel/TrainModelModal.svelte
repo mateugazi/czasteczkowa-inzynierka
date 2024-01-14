@@ -30,6 +30,11 @@
 			modelTypes.find((modelType) => modelType.name === selectedModelType)
 		);
 		console.log(trainingResults);
+		store.update((previousState) => ({
+			...previousState,
+			trainingResults: trainingResults.data,
+			viewMode: "trainMode",
+		}));
 	};
 </script>
 
