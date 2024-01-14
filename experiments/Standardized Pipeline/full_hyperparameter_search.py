@@ -7,14 +7,14 @@ import Finalized_pipeline
 name = "Wojtek"
 
 if name == "Asia":
-    descriptors = True
-    fingerprints = False
+    calculate_descriptors = True
+    calculate_fingerprints = False
 if name == "Kuba":
-    descriptors = True
-    fingerprints = True
+    calculate_descriptors = True
+    calculate_fingerprints = True
 if name == "Wojtek":
-    descriptors = False
-    fingerprints = True
+    calculate_descriptors = False
+    calculate_fingerprints = True
 
 for regression in [True, False]:
     if regression:
@@ -99,11 +99,14 @@ for regression in [True, False]:
         if "mol" in df.columns:
             df.rename(columns={"mol": "SMILES"}, inplace=True)
             
-        df = Finalized_pipeline.calculate_features(df, calculate_descriptors=descriptors, calculate_fingerprints=fingerprints, 
+        if regression:
+            runtype = "regression"
+        else:
+            runtype = "classification"
+        
+        df = Finalized_pipeline.calculate_features(df, calculate_descriptors=calculate_descriptors, calculate_fingerprints=calculate_fingerprints, 
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
-                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\\" + name + "_" + dataset[:13] + "_dataset_backup.csv")
+                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\\" + name + "_" + dataset[:13] + "_" + runtype + "_dataset_backup.csv")
                 
         hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
-        Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_run.csv")
-
-
+        Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_" + runtype + "_run.csv")

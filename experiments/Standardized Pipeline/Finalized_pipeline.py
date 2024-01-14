@@ -198,7 +198,10 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
-        y_test_predicted = list(map(round, y_test_predicted))
+        y_test_predicted = list(map(np.round, y_test_predicted))
+
+        y_train_predicted = model.predict(X_train)
+        y_train_predicted = list(map(np.round, y_train_predicted))
 
         y_train_predicted = model.predict(X_train)
         y_train_predicted = list(map(round, y_train_predicted))
