@@ -82,7 +82,7 @@ for regression in [False]:
         break
 
 
-    for dataset in datasets:
+    for dataset in datasets[10:]:
         dataset_path = os.path.join(r"experiments\split_datasets", dataset)
 
         df = pd.read_csv(dataset_path)
