@@ -9,6 +9,8 @@ from ModelType import ModelType
 from utils import *
 import json
 from Validator import Validator
+from Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search
+import ast
 
 app = Flask(__name__)
 CORS(app)
@@ -143,12 +145,37 @@ def triggerTraining():
   if not parameters:
     return 'No parameters'
 
-  df, mess, stat = Validator(csvFile)
+  # df, mess, stat = Validator(csvFile)
 
-  if df is None:
-    return jsonify({'message': mess, 'stat': stat})
+  # if df is None:
+    # return jsonify({'message': mess, 'stat': stat})
   
   modelInfo = json.loads(modelInfo)
+  df = generate_split_dataset(csvFile)
+  df = calculate_features(df, False, True, SMILES_column_name='mol', target_column_name='Class')
+
+  hyperparameters = {
+    modelInfo['identifier']: {}
+  }
+
+  # currently hyperparameters are ignored, because they are taking too long time
+  # for parameterName in parameters.keys():
+    # hyperparameters[modelInfo['identifier']][parameterName] = ast.literal_eval(parameters[parameterName]['value'])
+
+
+  print(hyperparameters)
+
+  df = hyperparameter_search(df, hyperparameters)
+
+  # sprawdzenie czy jest regresja
+    # klasyfikacja
+      # (optional) sprawdzenie ic50 czy pic50
+      # (optional) dodanie labels do klasyfikacji
+      # liczenie featerów
+      # hyperparameter searc
+    # regresja
+      # sprawdzenie ic50 czy pic50
+      # liczenie featerów
 
   return jsonify({'message': 'OK'})
 
