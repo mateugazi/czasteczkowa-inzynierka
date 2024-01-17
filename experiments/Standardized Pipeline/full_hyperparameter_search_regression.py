@@ -86,6 +86,9 @@ for regression in [True]:
         ### Check which files will be used:
         #print(dataset)
         #continue
+
+
+        ### CHANGE SV to not run C 1000 with linear kernel!
         dataset_path = os.path.join(r"experiments\split_datasets", dataset)
 
         df = pd.read_csv(dataset_path)
