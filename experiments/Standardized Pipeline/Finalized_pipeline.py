@@ -271,6 +271,7 @@ def split_df(df):
     X_test = X_test.drop([list(X_test.columns)[0]], axis=1)
     y_test = test[['Target']]
 
+    #print(X_train.columns)
 
     return X_train, y_train, X_test, y_test
 
@@ -392,9 +393,34 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
 #
 #    ### print/export new results and new model
 #
-#def make_prediction(model_path, input_SMILES, regression, calculate_descriptors, calculate_fingerprints):
-#    ### calculate features
-#
-#    ### make prediction on these features
-#
-#    ### return the label/pIC50 value
+def make_prediction(model, input_SMILES, regression, calculate_descriptors, calculate_fingerprints):
+    
+    ### Read model
+    if isinstance(model, str):
+        model_path = model
+        model = pickle.load(open(model_path, 'rb'))
+    
+    ### calculate features
+    
+    ### Check if only one smiles, and if it needs to be put into a df
+
+    input_df = pd.DataFrame()
+    if calculate_descriptors:
+        new_df = CalculateDescriptors(input_SMILES)
+        input_df = pd.concat([input_df, new_df], axis=1)
+
+    if calculate_fingerprints:
+        new_df = CalculateMorganFingerprint(input_SMILES)
+        input_df = pd.concat([input_df, new_df], axis=1)
+
+    input_df = input_df.drop([list(input_df.columns)[0]], axis=1)
+
+    #print(input_df)
+
+
+    ### make prediction on these features
+    predicted = model.predict(input_df)
+    predicted = list(map(np.round, predicted))
+
+    ### return the label/pIC50 value
+    return predicted

@@ -16,62 +16,59 @@ if name == "Wojtek":
     calculate_descriptors = False
     calculate_fingerprints = True
 
-for regression in [True]:
+for regression in [False]:
     if regression:
         param_grid_dt={
-            'max_depth': [None, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
-            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'splitter': ["best", "random"],
-            'criterion': ["squared_error", "friedman_mse", "absolute_error", "poisson"]
+            'max_depth': [10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
+            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'splitter': ["best", "random"]
         }
         param_grid_rf={
-            'max_depth': [None, 3, 7, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
-            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'n_estimators': [10, 50, 100, 200]
+            'max_depth': [3, 7, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
+            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'n_estimators': [10, 50, 100]
         }
         param_grid_lr = { ### Regression
         }
         param_grid_nn = {
-            'hidden_layer_sizes': [(50,), (100,), (50, 50)], 'activation': ['relu', 'tanh', 'logistic'],
+            'hidden_layer_sizes': [(50,), (100,), (50, 50)],
             'alpha': [0.0001, 0.001, 0.01], 'max_iter': [200, 500, 1000], 'solver': ['lbfgs', 'sgd', 'adam']
         }
         param_grid_gb={
-            'max_depth': [None, 3, 5, 7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
-            'n_estimators': [10, 50, 100, 200], 'learning_rate': [0.01, 0.1, 0.5, 1.0], # , 2.0],
-            'min_impurity_decrease': [0, 0.1, 0.2] # [0, 0.05, 0.1, 0.2]
+            'max_depth': [3, 5, 7], 'n_estimators': [10, 50, 100, 200], 
+            'learning_rate': [0.01, 0.1, 0.5, 1.0], 'min_impurity_decrease': [0, 0.1, 0.2]
         }
         param_grid_xg = {
-            'max_depth': [None, 3, 5, 7], 'eta': [0.01, 0.1, 0.2], 'gamma': [0, 0.01, 0.1]
+            'max_depth': [3, 5, 7], 'eta': [0.01, 0.1, 0.2], 'gamma': [0, 0.01, 0.1]
         }
         param_grid_sv = { ### regression
-            'C': [0.01, 0.1, 1, 10, 100, 1000], 'kernel': ["rbf", "poly", "sigmoid"], # , "linear"
+            'C': [0.01, 0.1, 1, 10, 100, 1000],
             'epsilon': [0.01, 0.1, 1], 'gamma': ["scale", 0.1, 0.05]
         }
 
     else:
         param_grid_dt={
-            'max_depth': [None, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
-            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'criterion': ['gini', 'entropy', 'log_loss'],
-            'splitter': ["best", "random"]
+            'max_depth': [10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
+            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'splitter': ["best", "random"]
         }
         param_grid_rf={
-            'max_depth': [None, 3, 7, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
-            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'n_estimators': [10, 50, 100, 200]
+            'max_depth': [3, 7, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
+            'min_impurity_decrease': [0, 0.05, 0.1, 0.2], 'n_estimators': [10, 50, 100]
         }
         param_grid_lr = {
             'C': [0.001, 0.01, 0.1, 1, 10, 100], 'penalty': ['l1', 'l2'], 'solver': ['liblinear', 'saga']
         }
         param_grid_nn = {
-            'hidden_layer_sizes': [(50,), (100,), (50, 50)], 'activation': ['relu', 'tanh', 'logistic'],
+            'hidden_layer_sizes': [(50,), (100,), (50, 50)],
             'alpha': [0.0001, 0.001, 0.01], 'max_iter': [200, 500, 1000], 'solver': ['lbfgs', 'sgd', 'adam']
         }
         param_grid_gb={
-            'max_depth': [None, 3, 5, 7], 'loss': ['log_loss', 'exponential'], 'n_estimators': [10, 50, 100, 200], 
-            'learning_rate': [0.01, 0.1, 0.5, 1.0, 2.0], 'min_impurity_decrease': [0, 0.05, 0.1, 0.2]
+            'max_depth': [3, 5, 7], 'n_estimators': [10, 50, 100, 200], 
+            'learning_rate': [0.01, 0.1, 0.5, 1.0], 'min_impurity_decrease': [0, 0.1, 0.2]
         }
         param_grid_xg = {
-            'max_depth': [None, 3, 5, 7], 'eta': [0.01, 0.1, 0.2], 'gamma': [0, 0.01, 0.1]
+            'max_depth': [3, 5, 7], 'eta': [0.01, 0.1, 0.2], 'gamma': [0, 0.01, 0.1]
         }
         param_grid_sv = { ### classification
-            'C': [0.01, 0.1, 1, 10, 100, 1000], 'kernel': ["rbf", "linear", "poly", "sigmoid"], 
+            'C': [0.01, 0.1, 1, 10, 100, 1000],
             'gamma': ["scale", 0.1, 0.05]
         }
 
@@ -82,7 +79,7 @@ for regression in [True]:
         break
 
 
-    for dataset in datasets[6:8]:
+    for dataset in datasets[0:1]:
         ### Check which files will be used:
         #print(dataset)
         #continue
@@ -112,7 +109,7 @@ for regression in [True]:
         
         df = Finalized_pipeline.calculate_features(df, calculate_descriptors=calculate_descriptors, calculate_fingerprints=calculate_fingerprints, 
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
-                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\\" + name + "_" + dataset[:13] + "_" + runtype + "_dataset_backup.csv")
+                                                        split_column_name="Split")
                 
         hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
-        Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_" + runtype + "_run.csv")
+        Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name="feature_test_" + dataset[:13] + "_" + runtype + "_run.csv")
