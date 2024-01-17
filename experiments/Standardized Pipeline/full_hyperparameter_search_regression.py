@@ -42,7 +42,7 @@ for regression in [True]:
             'max_depth': [None, 3, 5, 7], 'eta': [0.01, 0.1, 0.2], 'gamma': [0, 0.01, 0.1]
         }
         param_grid_sv = { ### regression
-            'C': [0.01, 0.1, 1, 10, 100, 1000], 'kernel': ["rbf", "linear", "poly", "sigmoid"],
+            'C': [0.01, 0.1, 1, 10, 100, 1000], 'kernel': ["rbf", "poly", "sigmoid"], # , "linear"
             'epsilon': [0.01, 0.1, 1], 'gamma': ["scale", 0.1, 0.05]
         }
 
@@ -82,7 +82,7 @@ for regression in [True]:
         break
 
 
-    for dataset in datasets[13:-1]:
+    for dataset in datasets[15:-1]:
         ### Check which files will be used:
         #print(dataset)
         #continue
