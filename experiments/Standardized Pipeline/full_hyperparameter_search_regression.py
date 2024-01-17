@@ -82,7 +82,7 @@ for regression in [True]:
         break
 
 
-    for dataset in datasets[16:-1]:
+    for dataset in datasets[6:8]:
         ### Check which files will be used:
         #print(dataset)
         #continue

@@ -383,3 +383,18 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
     pickle.dump(best_model, open(filename, 'wb'))
 
+#def retrain_model(model_path, dataset):
+#    ### unpack pickle
+#
+#    ### prepare dataset (shold be split and features calculated already)
+#
+#    ### train
+#
+#    ### print/export new results and new model
+#
+#def make_prediction(model_path, input_SMILES, regression, calculate_descriptors, calculate_fingerprints):
+#    ### calculate features
+#
+#    ### make prediction on these features
+#
+#    ### return the label/pIC50 value
