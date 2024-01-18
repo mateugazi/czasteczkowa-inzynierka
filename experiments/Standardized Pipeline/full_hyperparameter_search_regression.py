@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import Finalized_pipeline
 
-#name = "Asia"
+name = "Asia"
 #name = "Kuba"
-name = "Wojtek"
+#name = "Wojtek"
 
 if name == "Asia":
     calculate_descriptors = True
@@ -34,7 +34,7 @@ for regression in [True]:
             'alpha': [0.0001, 0.001, 0.01], 'max_iter': [200, 500, 1000], 'solver': ['lbfgs', 'sgd', 'adam']
         }
         param_grid_gb={
-            'max_depth': [None, 3, 5, 7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
+            'max_depth': [3, 5, 7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
             'n_estimators': [10, 50, 100, 200], 'learning_rate': [0.01, 0.1, 0.5, 1.0], # , 2.0],
             'min_impurity_decrease': [0, 0.1, 0.2] # [0, 0.05, 0.1, 0.2]
         }
@@ -82,7 +82,7 @@ for regression in [True]:
         break
 
 
-    for dataset in datasets[15:-1]:
+    for dataset in datasets[13:-4]:
         ### Check which files will be used:
         #print(dataset)
         #continue
@@ -112,7 +112,7 @@ for regression in [True]:
         
         df = Finalized_pipeline.calculate_features(df, calculate_descriptors=calculate_descriptors, calculate_fingerprints=calculate_fingerprints, 
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
-                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\\" + name + "_" + dataset[:13] + "_" + runtype + "_dataset_backup.csv")
-                
-        hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
+                                                        split_column_name="Split")
+        
+        hyperparams = {"gb": param_grid_gb}
         Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_" + runtype + "_run.csv")
