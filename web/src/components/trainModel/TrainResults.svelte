@@ -4,6 +4,7 @@
 	let rows = trainingResults.slice(1);
 </script>
 
+<h1 class="text-5xl font-bold">Your results</h1>
 <div class="overflow-x-auto">
 	<table class="table table-zebra table-xs">
 		<!-- head -->
@@ -31,5 +32,9 @@
 <style>
 	.overflow-x-auto {
 		min-height: 70vh;
+	}
+
+	h1 {
+		margin: 30px 0;
 	}
 </style>
