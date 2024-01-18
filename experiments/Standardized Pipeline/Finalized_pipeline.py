@@ -337,7 +337,7 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     f = open(output_path, "w")
     f.write(",".join(data.keys()))
     f.write("\n")
-    
+
     X_train, y_train, X_test, y_test = split_df(df)
 
     results_df = pd.DataFrame(data)
@@ -384,15 +384,39 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
     pickle.dump(best_model, open(filename, 'wb'))
 
-#def retrain_model(model_path, dataset):
-#    ### unpack pickle
-#
-#    ### prepare dataset (shold be split and features calculated already)
-#
-#    ### train
-#
-#    ### print/export new results and new model
-#
+def retrain_model(model, input_df):
+    ### Read model
+    if isinstance(model, str):
+        model_path = model
+        model = pickle.load(open(model_path, 'rb'))
+
+    
+    ### prepare dataset (shold be split and features calculated already)
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+
+    if df['Target'].nunique() > 2:
+        regression=True
+    else:
+        regression=False
+
+    X_train, y_train, X_test, y_test = split_df(df)
+
+    ### train
+    results_test = train_and_test(model, X_train, y_train, X_test, y_test, regression=regression, metrics=[])
+        
+
+    ### print/export new results and new model
+    output_path = "experiments\Standardized Pipeline\\"
+    
+    filename = os.path.join(os.path.dirname(output_path), 'retrained_model.sav')
+    pickle.dump(model, open(filename, 'wb'))
+
+    return results_test
+
 def make_prediction(model, input_SMILES, regression, calculate_descriptors, calculate_fingerprints):
     
     ### Read model
