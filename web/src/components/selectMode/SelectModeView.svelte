@@ -1,5 +1,6 @@
 <script>
-	import { store } from "../../store/store";
+	import PredictionModeCard from "../predictionMode/PredictionModeCard.svelte";
+	import TrainModelCard from "../trainModel/TrainModelCard.svelte";
 	import ModeCard from "./ModeCard.svelte";
 	import {
 		predictionIconPath,
@@ -26,13 +27,13 @@
 					iconPath={retrainModelIconPath}
 					viewMode={"predictionMode"}
 				/>
-				<ModeCard
+				<TrainModelCard
 					title={trainNewModelTitle}
 					description={trainNewModelDescription}
 					iconPath={trainNewModelIconPath}
-					viewMode={"predictionMode"}
+					viewMode={"trainMode"}
 				/>
-				<ModeCard
+				<PredictionModeCard
 					title={predictionsTitle}
 					description={predictionsDescription}
 					iconPath={predictionIconPath}
