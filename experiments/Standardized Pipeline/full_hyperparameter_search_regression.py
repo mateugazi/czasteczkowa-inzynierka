@@ -34,7 +34,7 @@ for regression in [True]:
             'alpha': [0.0001, 0.001, 0.01], 'max_iter': [200, 500, 1000], 'solver': ['lbfgs', 'sgd', 'adam']
         }
         param_grid_gb={ # 3, 
-            'max_depth': [5, 7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
+            'max_depth': [7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
             'n_estimators': [10, 50, 100, 200], 'learning_rate': [0.01, 0.1, 0.5, 1.0], # , 2.0],
             'min_impurity_decrease': [0, 0.1, 0.2] # [0, 0.05, 0.1, 0.2]
         }
