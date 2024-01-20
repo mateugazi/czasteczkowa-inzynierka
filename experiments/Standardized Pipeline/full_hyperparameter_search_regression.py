@@ -34,7 +34,7 @@ for regression in [True]:
             'alpha': [0.0001, 0.001, 0.01], 'max_iter': [200, 500, 1000], 'solver': ['lbfgs', 'sgd', 'adam']
         }
         param_grid_gb={ # 3, 
-            'max_depth': [7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
+            'max_depth': [3, 5, 7], 'loss': ['squared_error', 'absolute_error', 'huber'], #, 'quantile'],
             'n_estimators': [10, 50, 100, 200], 'learning_rate': [0.01, 0.1, 0.5, 1.0], # , 2.0],
             'min_impurity_decrease': [0, 0.1, 0.2] # [0, 0.05, 0.1, 0.2]
         }
@@ -82,18 +82,13 @@ for regression in [True]:
         break
 
 
-    for dataset in datasets[13:-4]:
+    for dataset in datasets[0:1]:
         ### Check which files will be used:
         #print(dataset)
         #continue
 
-
         ### CHANGE SV to not run C 1000 with linear kernel!
         dataset_path = os.path.join(r"experiments\split_datasets", dataset)
-
-
-
-
 
         df = pd.read_csv(dataset_path)
 
@@ -116,7 +111,7 @@ for regression in [True]:
         
         df = Finalized_pipeline.calculate_features(df, calculate_descriptors=calculate_descriptors, calculate_fingerprints=calculate_fingerprints, 
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
-                                                        split_column_name="Split")
+                                                        split_column_name="Split", output_csv_path=r"experiments\Standardized Pipeline\example_dataset.csv")
         
-        hyperparams = {"gb": param_grid_gb}
+        hyperparams = {"gb": {}}
         Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_" + runtype + "_run.csv")

@@ -42,7 +42,7 @@ def CalculateMorganFingerprint(mol):
     return fingerprint
 
 ### Input standard SMILES column
-def CalculateDescriptors(mol):
+def CalculateDescriptors(mol, drop_low_std=True):
     mol = mol.apply(Chem.MolFromSmiles)
     calc = Calculator(descriptors, ignore_3D=False)
     X_mordred = calc.pandas(mol, nproc=1)
@@ -50,7 +50,8 @@ def CalculateDescriptors(mol):
     #normalize
     X_mordred = (X_mordred-X_mordred.min())/(X_mordred.max()-X_mordred.min())
     #drop columns wth low std
-    X_mordred = X_mordred.loc[:,X_mordred.std()>0.01]
+    if drop_low_std:
+        X_mordred = X_mordred.loc[:,X_mordred.std()>0.01]
     return X_mordred
 
 
@@ -417,7 +418,7 @@ def retrain_model(model, input_df):
 
     return results_test
 
-def make_prediction(model, input_SMILES, regression, calculate_descriptors, calculate_fingerprints):
+def make_prediction(model, input_SMILES, calculate_descriptors, calculate_fingerprints):
     
     ### Read model
     if isinstance(model, str):
@@ -429,22 +430,24 @@ def make_prediction(model, input_SMILES, regression, calculate_descriptors, calc
     ### Check if only one smiles, and if it needs to be put into a df
 
     input_df = pd.DataFrame()
+    
     if calculate_descriptors:
-        new_df = CalculateDescriptors(input_SMILES)
+        new_df = CalculateDescriptors(input_SMILES, drop_low_std=False)
         input_df = pd.concat([input_df, new_df], axis=1)
 
     if calculate_fingerprints:
         new_df = CalculateMorganFingerprint(input_SMILES)
         input_df = pd.concat([input_df, new_df], axis=1)
 
-    input_df = input_df.drop([list(input_df.columns)[0]], axis=1)
+    input_df = input_df.filter(model.feature_names_in_, axis=1)
 
-    #print(input_df)
+    input_df = input_df.fillna(0)
+    
 
 
     ### make prediction on these features
-    predicted = model.predict(input_df)
-    predicted = list(map(np.round, predicted))
+    predicted = model.predict(X=input_df)
+    #predicted = list(map(np.round, predicted))
 
     ### return the label/pIC50 value
     return predicted

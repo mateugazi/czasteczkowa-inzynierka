@@ -10,7 +10,8 @@ for (dirpath, dirnames, filenames) in os.walk(r"experiments\split_datasets"):
 
 chosen_dataset = os.path.join(r"experiments\split_datasets", datasets[0])
 chosen_df = pd.read_csv(chosen_dataset)
-chosen_entries = chosen_df.iloc[1:3]
+chosen_entries = chosen_df.iloc[1:300]
+print(chosen_dataset)
 
 #print(chosen_entry)
 
@@ -26,5 +27,5 @@ else:
 
 model_path = r"experiments\Standardized Pipeline\model.sav"
 
-pred = Finalized_pipeline.make_prediction(model_path, smiles_df, True, False, True)
+pred = Finalized_pipeline.make_prediction(model_path, smiles_df, calculate_descriptors=True, calculate_fingerprints=False)
 print(pred)
