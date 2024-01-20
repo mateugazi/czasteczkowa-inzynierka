@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import Finalized_pipeline
 
-name = "Asia"
+#name = "Asia"
 #name = "Kuba"
-#name = "Wojtek"
+name = "Wojtek"
 
 if name == "Asia":
     calculate_descriptors = True
@@ -84,8 +84,8 @@ for regression in [True]:
 
     for dataset in datasets[10:]:
         ### Check which files will be used:
-        #print(dataset)
-        #continue
+        print(dataset)
+        continue
 
 
         dataset_path = os.path.join(r"experiments\split_datasets", dataset)
