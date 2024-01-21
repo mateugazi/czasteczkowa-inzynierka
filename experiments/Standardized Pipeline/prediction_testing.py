@@ -27,5 +27,5 @@ else:
 
 model_path = r"experiments\Standardized Pipeline\model.sav"
 
-pred = Finalized_pipeline.make_prediction(model_path, smiles_df, calculate_descriptors=True, calculate_fingerprints=False)
+pred = Finalized_pipeline.make_prediction(model_path, smiles_df, calculate_descriptors=True, calculate_fingerprints=True)
 print(pred)
