@@ -10,6 +10,7 @@
 	let defaultArchitecturePlaceholder = "Select architecture type";
 	let selectedModelType = defaultArchitecturePlaceholder;
 	let parametersValues = {};
+	let areDefaultParametersChecked = true;
 
 	const updateParametersValues = (event) => {
 		const parameterName = event.target.labels[0].textContent.trim();
@@ -44,7 +45,7 @@
 		<div class="modal-content">
 			<select
 				bind:value={selectedModelType}
-				class="select select-bordered w-full max-w-xs"
+				class="select select-bordered w-full max-w-xs text-l"
 			>
 				<option disabled selected>{defaultArchitecturePlaceholder}</option>
 				{#each modelTypes as modelType}
@@ -53,7 +54,7 @@
 			</select>
 			<label class="form-control w-full max-w-xs">
 				<div class="label">
-					<span class="label-text">Upload your dataset in the csv file</span>
+					<span class="text-l">Upload your dataset in the csv file</span>
 				</div>
 				<input
 					accept=".csv"
@@ -64,13 +65,24 @@
 			</label>
 
 			{#if selectedModelType !== defaultArchitecturePlaceholder}
-				{#each modelTypes.find((modelType) => modelType.name === selectedModelType).parameters as parameter}
-					<ParameterInputField
-						parameterLabel={parameter.name}
-						placeholder={parameter.example}
-						on:change={updateParametersValues}
+				<label class="label cursor-pointer default-parameters-checkbox">
+					<h4 class="text-l">Use default parameters</h4>
+					<input
+						type="checkbox"
+						bind:checked={areDefaultParametersChecked}
+						class="checkbox"
 					/>
-				{/each}
+				</label>
+
+				{#if !areDefaultParametersChecked}
+					{#each modelTypes.find((modelType) => modelType.name === selectedModelType).parameters as parameter}
+						<ParameterInputField
+							parameterLabel={parameter.name}
+							placeholder={parameter.example}
+							on:change={updateParametersValues}
+						/>
+					{/each}
+				{/if}
 			{/if}
 		</div>
 		<div class="modal-action">
@@ -88,6 +100,12 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		gap: 15px;
+	}
+
+	.default-parameters-checkbox {
+		display: flex;
+		flex-direction: row;
 		gap: 15px;
 	}
 </style>
