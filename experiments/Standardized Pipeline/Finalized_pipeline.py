@@ -22,6 +22,8 @@ from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier,
 from sklearn.svm import SVR, SVC
 from xgboost import XGBClassifier, XGBRegressor
 
+import shap
+
 
 def uniquify(path):
     filename, extension = os.path.splitext(path)
@@ -433,11 +435,23 @@ def make_prediction(model, input_SMILES, calculate_descriptors, calculate_finger
         input_df = pd.concat([input_df, new_df], axis=1)
 
     input_df = input_df.filter(model.feature_names_in_, axis=1)
-
     input_df = input_df.fillna(0)
-
+    
     ### make prediction on these features
     predicted = model.predict(X=input_df)
 
+    tree_models = [tree.DecisionTreeRegressor, tree.DecisionTreeClassifier, RandomForestClassifier, RandomForestRegressor, XGBClassifier, XGBRegressor, GradientBoostingClassifier, GradientBoostingRegressor]
+    kernel_models = [SVC, SVR, MLPClassifier, MLPRegressor, LinearRegression, LogisticRegression]
+    if type(model) in tree_models:
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(input_df)
+        plot = shap.summary_plot(shap_values, input_df, show=False)
+    if type(model) in kernel_models:
+        explainer = shap.KernelExplainer(model)
+        shap_values = explainer.shap_values(input_df)
+        plot = shap.summary_plot(shap_values, input_df, show=False)
     ### return the label/pIC50 value
+    output_path = "experiments\Standardized Pipeline\\"
+    filename = os.path.join(os.path.dirname(output_path), 'explainability_plot.png')
+    plt.savefig(filename)
     return predicted
