@@ -195,14 +195,11 @@ def model_builder(model_name, hyperparams, regression):
 
 def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
-        ### TODO: Info if IC should've been calculated
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
 
         y_train_predicted = model.predict(X_train)
-
-        #print("Standard train-test results:")
 
         results_test = {}
 
@@ -269,8 +266,6 @@ def split_df(df):
     X_test = test.drop(['Target', 'Split'], axis=1)
     X_test = X_test.drop([list(X_test.columns)[0]], axis=1)
     y_test = test[['Target']]
-
-    #print(X_train.columns)
 
     return X_train, y_train, X_test, y_test
 
@@ -423,12 +418,12 @@ def make_prediction(model, input_SMILES, calculate_descriptors, calculate_finger
         model_path = model
         model = pickle.load(open(model_path, 'rb'))
     
-    ### calculate features
     
     ### Check if only one smiles, and if it needs to be put into a df
 
     input_df = pd.DataFrame()
     
+    ### calculate features
     if calculate_descriptors:
         new_df = CalculateDescriptors(input_SMILES, drop_low_std=False)
         input_df = pd.concat([input_df, new_df], axis=1)
@@ -440,8 +435,6 @@ def make_prediction(model, input_SMILES, calculate_descriptors, calculate_finger
     input_df = input_df.filter(model.feature_names_in_, axis=1)
 
     input_df = input_df.fillna(0)
-    
-
 
     ### make prediction on these features
     predicted = model.predict(X=input_df)

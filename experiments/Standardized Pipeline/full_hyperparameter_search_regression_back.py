@@ -16,7 +16,7 @@ if name == "Wojtek":
     calculate_descriptors = False
     calculate_fingerprints = True
 
-for regression in [True, False]:
+for regression in [True]:
     if regression:
         param_grid_dt={
             'max_depth': [None, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
@@ -34,15 +34,15 @@ for regression in [True, False]:
             'alpha': [0.0001, 0.001, 0.01], 'max_iter': [200, 500, 1000], 'solver': ['lbfgs', 'sgd', 'adam']
         }
         param_grid_gb={
-            'max_depth': [3, 5, 7], 'loss': ['squared_error', 'absolute_error', 'huber', 'quantile'], # 'max_depth': [None, 3, 5, 7],
-            'n_estimators': [10, 50, 100, 200], 'learning_rate': [0.01, 0.1, 0.5, 1.0, 2.0],
-            'min_impurity_decrease': [0, 0.05, 0.1, 0.2]
+            'max_depth': [3, 5, 7], 'loss': ['squared_error', 'absolute_error', 'huber'],
+            'n_estimators': [10, 100, 200], 'learning_rate': [0.01, 0.1, 0.5, 1.0],
+            'min_impurity_decrease': [0, 0.1, 0.2]
         }
         param_grid_xg = {
             'max_depth': [None, 3, 5, 7], 'eta': [0.01, 0.1, 0.2], 'gamma': [0, 0.01, 0.1]
         }
         param_grid_sv = { ### regression
-            'C': [0.01, 0.1, 1, 10, 100, 1000], 'kernel': ["rbf", "linear", "poly", "sigmoid"],
+            'C': [0.01, 0.1, 1, 10, 100, 1000], 'kernel': ["rbf", "poly", "sigmoid"],
             'epsilon': [0.01, 0.1, 1], 'gamma': ["scale", 0.1, 0.05]
         }
 
@@ -82,11 +82,10 @@ for regression in [True, False]:
         break
 
 
-    for dataset in datasets[8:9]:
+    for dataset in datasets[-4:-3]:
         ### Check which files will be used:
         #print(dataset)
         #continue
-
 
         dataset_path = os.path.join(r"experiments\split_datasets", dataset)
 
