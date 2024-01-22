@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import Finalized_pipeline
 
-name = "Asia"
+#name = "Asia"
 #name = "Kuba"
-#name = "Wojtek"
+name = "Wojtek"
 
 if name == "Asia":
     calculate_descriptors = True
@@ -82,7 +82,7 @@ for regression in [True]:
         break
 
 
-    for dataset in datasets[11:12]:
+    for dataset in datasets[-1:]:
         ### Check which files will be used:
         #print(dataset)
         #continue
@@ -113,5 +113,5 @@ for regression in [True]:
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
                                                         split_column_name="Split")
         
-        hyperparams = {"gb": param_grid_gb}
+        hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
         Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_" + runtype + "_run.csv")
