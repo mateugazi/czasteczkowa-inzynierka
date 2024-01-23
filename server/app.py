@@ -2,19 +2,62 @@ from flask import Flask, jsonify, request
 import pickle
 from flask_cors import CORS
 from pydantic import ValidationError
-from redis_om import Migrator
 from redis_om.model import NotFoundError
 from Model import Model
 from ModelType import ModelType
 from utils import *
 import json
-from Validator import Validator
 from Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search
 import ast
+import pymongo
+from uuid import uuid1
 
 app = Flask(__name__)
+client = pymongo.MongoClient('localhost:27017')
+db = client.TaskManager
+
 CORS(app)
 # r = redis.StrictRedis(host='localhost', port=6379, db=0)
+
+@app.post("/user")
+def insert_user():
+
+    _id=str(uuid1().hex)
+    
+    content=dict(request.json)
+    content.update({ "_id":_id })
+
+    # model = pickle.dumps(pickle.load(open('./models/model_GBT_pipeline.sav', 'rb')))
+    # content.update({"model": model})
+    
+    result =db.user.insert_one(content)
+    if not result.inserted_id:
+        return {"message":"Failed to insert"}, 500
+    
+    return {
+        "message":"Success", 
+        "data":{
+            "id":result.inserted_id
+            }
+        }, 200
+
+
+@app.get("/users")
+def get_users():
+    users=db.user.find({})
+
+    newUsers = []
+    for user in users:
+      newUser = {'name': user['name'], 'age': user['age'], '_id': user['_id']}
+      if 'model' in user.keys():
+        loadedModel = pickle.loads(user['model'])
+        print(loadedModel)
+        newUser['model'] = 'here was a model'
+      newUsers.append(newUser)
+    return {
+        "data": newUsers
+    }, 200
+
 
 @app.route("/")
 def isUp():
@@ -31,7 +74,13 @@ def getPredictions():
   if not uniqueName:
       return 'No model'
   
-  model = pickle.load(open('./models/' + uniqueName  + '.sav', 'rb'))
+  query={
+    "_id": 'd659a7bcb9f811ee80cc62969ee3326d'
+  }
+  user = db.user.find_one(query)
+  model = pickle.loads(user['model'])
+
+  print(model)
   
   df = LoadDatasetCSV(csvFile)
   X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
@@ -182,5 +231,3 @@ def triggerTraining():
 
   print(result)
   return jsonify({'message': 'OK', 'data': result})
-
-Migrator().run()
