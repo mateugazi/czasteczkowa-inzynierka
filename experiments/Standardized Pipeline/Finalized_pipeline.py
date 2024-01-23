@@ -326,7 +326,7 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
         best_model_score = 0
 
 
-    output_path = "experiments\Standardized Pipeline\\" + output_file_name
+    output_path = output_file_name
     if unique:
         output_path = uniquify(output_path)
     
@@ -379,6 +379,8 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
 
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
     pickle.dump(best_model, open(filename, 'wb'))
+
+    return best_model, X_test
 
 def retrain_model(model, input_df):
     ### Read model
