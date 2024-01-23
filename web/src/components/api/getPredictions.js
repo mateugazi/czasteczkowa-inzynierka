@@ -1,4 +1,4 @@
-export async function fetchPredictions(smilesCsvFile) {
+export async function getPredictions(smilesCsvFile) {
 	const data = new FormData();
 	data.append("uniqueName", "model_GBT_pipeline");
 	data.append("file", smilesCsvFile);

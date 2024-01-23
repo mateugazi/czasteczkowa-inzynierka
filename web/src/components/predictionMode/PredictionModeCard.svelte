@@ -1,6 +1,6 @@
 <script>
-	import { getModels } from "../../helpers/getModels";
 	import { store } from "../../store/store";
+	import { getModels } from "../api/getModels";
 	export let title;
 	export let description;
 	export let iconPath;

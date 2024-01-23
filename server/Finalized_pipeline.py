@@ -378,7 +378,7 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
 
     # f.close()
     results_df = results_df.sort_values(by=[compared_score], ascending=False)
-    return results_df
+    return results_df, best_model
     # results_df.to_csv(output_path)
 
     # filename = os.path.join(os.path.dirname(output_path), 'model.sav')
