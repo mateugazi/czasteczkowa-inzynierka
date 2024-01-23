@@ -1,6 +1,6 @@
-export async function getPredictions(smilesCsvFile) {
+export async function getPredictions(_id, smilesCsvFile) {
 	const data = new FormData();
-	data.append("uniqueName", "model_GBT_pipeline");
+	data.append("_id", _id);
 	data.append("file", smilesCsvFile);
 	const res = await fetch("http://localhost:3000/get-predictions", {
 		method: "POST",
@@ -8,5 +8,5 @@ export async function getPredictions(smilesCsvFile) {
 	});
 
 	const json = await res.json();
-	return json;
+	return json.data;
 }

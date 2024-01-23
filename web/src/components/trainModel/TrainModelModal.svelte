@@ -118,19 +118,3 @@
 		</div>
 	</div>
 </dialog>
-
-<style>
-	.modal-content {
-		margin-top: 15px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 15px;
-	}
-
-	.default-parameters-checkbox {
-		display: flex;
-		flex-direction: row;
-		gap: 15px;
-	}
-</style>

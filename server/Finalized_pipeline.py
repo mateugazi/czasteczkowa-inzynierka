@@ -22,6 +22,8 @@ from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier,
 from sklearn.svm import SVR, SVC
 from xgboost import XGBClassifier, XGBRegressor
 
+import shap
+
 
 def uniquify(path):
     filename, extension = os.path.splitext(path)
@@ -42,7 +44,7 @@ def CalculateMorganFingerprint(mol):
     return fingerprint
 
 ### Input standard SMILES column
-def CalculateDescriptors(mol):
+def CalculateDescriptors(mol, drop_low_std=True):
     mol = mol.apply(Chem.MolFromSmiles)
     calc = Calculator(descriptors, ignore_3D=False)
     X_mordred = calc.pandas(mol, nproc=1)
@@ -50,7 +52,8 @@ def CalculateDescriptors(mol):
     #normalize
     X_mordred = (X_mordred-X_mordred.min())/(X_mordred.max()-X_mordred.min())
     #drop columns wth low std
-    X_mordred = X_mordred.loc[:,X_mordred.std()>0.01]
+    if drop_low_std:
+        X_mordred = X_mordred.loc[:,X_mordred.std()>0.01]
     return X_mordred
 
 
@@ -194,16 +197,11 @@ def model_builder(model_name, hyperparams, regression):
 
 def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
-        ### TODO: Info if IC should've been calculated
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
-        y_test_predicted = list(map(round, y_test_predicted))
 
         y_train_predicted = model.predict(X_train)
-        y_train_predicted = list(map(round, y_train_predicted))
-
-        #print("Standard train-test results:")
 
         results_test = {}
 
@@ -271,7 +269,6 @@ def split_df(df):
     X_test = X_test.drop([list(X_test.columns)[0]], axis=1)
     y_test = test[['Target']]
 
-
     return X_train, y_train, X_test, y_test
 
 ### input df can be a df or a csv to read
@@ -332,11 +329,6 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     output_path = "experiments\Standardized Pipeline\\" + output_file_name
     if unique:
         output_path = uniquify(output_path)
-    
-    # f = open(output_path, "w")
-    # f.write(",".join(data.keys()))
-    # f.write("\n")
-    
     X_train, y_train, X_test, y_test = split_df(df)
 
     results_df = pd.DataFrame(data)
@@ -364,10 +356,6 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
         
         results_df.loc[len(results_df)] = results_test
 
-        # File write results
-        # f.write(",".join([str(i)] + [str(i) for i in list(results_test.values())]))
-        # f.write("\n")
-        # print(" ".join([str(i)] + [str(i) for i in list(results_test.values())]))
 
         if regression and results_test[compared_score] < best_model_score:
             best_model_score = results_test[compared_score]
@@ -376,11 +364,83 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
             best_model_score = results_test[compared_score]
             best_model = model
 
-    # f.close()
     results_df = results_df.sort_values(by=[compared_score], ascending=False)
+
     return results_df, best_model
-    # results_df.to_csv(output_path)
 
-    # filename = os.path.join(os.path.dirname(output_path), 'model.sav')
-    # pickle.dump(best_model, open(filename, 'wb'))
+    
+def retrain_model(model, input_df):
+    ### Read model
+    if isinstance(model, str):
+        model_path = model
+        model = pickle.load(open(model_path, 'rb'))
 
+    
+    ### prepare dataset (shold be split and features calculated already)
+    if isinstance(input_df, str):
+        path = input_df
+        df = pd.read_csv(path)
+    else:
+        df = input_df
+
+    if df['Target'].nunique() > 2:
+        regression=True
+    else:
+        regression=False
+
+    X_train, y_train, X_test, y_test = split_df(df)
+
+    ### train
+    results_test = train_and_test(model, X_train, y_train, X_test, y_test, regression=regression, metrics=[])
+        
+
+    ### print/export new results and new model
+    output_path = "experiments\Standardized Pipeline\\"
+    
+    filename = os.path.join(os.path.dirname(output_path), 'retrained_model.sav')
+    pickle.dump(model, open(filename, 'wb'))
+
+    return results_test
+
+def make_prediction(model, input_SMILES, calculate_descriptors, calculate_fingerprints, SMILES_column_name='mol'):
+    
+    ### Read model
+    if isinstance(model, str):
+        model_path = model
+        model = pickle.load(open(model_path, 'rb'))
+    
+    
+    ### Check if only one smiles, and if it needs to be put into a df
+
+    input_df = pd.DataFrame()
+    
+    ### calculate features
+    if calculate_descriptors:
+        new_df = CalculateDescriptors(input_SMILES[SMILES_column_name], drop_low_std=False)
+        input_df = pd.concat([input_df, new_df], axis=1)
+
+    if calculate_fingerprints:
+        new_df = CalculateMorganFingerprint(input_SMILES[SMILES_column_name])
+        input_df = pd.concat([input_df, new_df], axis=1)
+
+    input_df = input_df.filter(model.feature_names_in_, axis=1)
+    input_df = input_df.fillna(0)
+    
+    ### make prediction on these features
+    predicted = model.predict(X=input_df)
+
+    tree_models = [tree.DecisionTreeRegressor, tree.DecisionTreeClassifier, RandomForestClassifier, RandomForestRegressor, XGBClassifier, XGBRegressor, GradientBoostingClassifier, GradientBoostingRegressor]
+    kernel_models = [SVC, SVR, MLPClassifier, MLPRegressor, LinearRegression, LogisticRegression]
+    # if type(model) in tree_models:
+    #     explainer = shap.TreeExplainer(model)
+    #     shap_values = explainer.shap_values(input_df)
+    #     plot = shap.summary_plot(shap_values, input_df, show=False)
+    # if type(model) in kernel_models:
+    #     explainer = shap.KernelExplainer(model)
+    #     shap_values = explainer.shap_values(input_df)
+    #     plot = shap.summary_plot(shap_values, input_df, show=False)
+    ### return the label/pIC50 value
+    # output_path = "experiments/Standardized Pipeline/"
+    # filename = os.path.join(os.path.dirname(output_path), 'explainability_plot.png')
+    # plt.savefig(filename)
+    return predicted

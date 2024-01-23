@@ -16,7 +16,7 @@
 		store.update((state) => ({
 			...state,
 			viewMode: "summaryMode",
-			predictions: fetchedPredictions.predictions,
+			predictions: fetchedPredictions,
 		}));
 	}
 </script>

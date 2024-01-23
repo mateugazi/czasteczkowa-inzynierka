@@ -1,12 +1,13 @@
 from flask import Flask, jsonify, request
 import pickle
+import pandas as pd
 from flask_cors import CORS
-from utils import *
 import json
-from Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search
+from Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search, make_prediction
 import ast
 import pymongo
 from uuid import uuid1
+
 
 app = Flask(__name__)
 client = pymongo.MongoClient('localhost:27017')
@@ -22,34 +23,33 @@ def isUp():
 @app.route("/get-predictions", methods=['POST'])
 def getPredictions():
   csvFile = request.files['file']
-  uniqueName = request.form['uniqueName']
+  _id = request.form['_id']
 
   if not csvFile:
-      return 'Upload a CSV file'
+      return 'Upload a CSV file', 500
   
-  if not uniqueName:
-      return 'No model'
+  if not _id:
+      return 'No _id', 500
   
   query={
-    "_id": 'd659a7bcb9f811ee80cc62969ee3326d'
+    "_id": _id
   }
-  user = database.user.find_one(query)
-  model = pickle.loads(user['model'])
+  foundModel = database.model.find_one(query)
+  model = pickle.loads(foundModel['pickleData'])
 
-  print(model)
-  
-  df = LoadDatasetCSV(csvFile)
-  X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
-
-  predictions = model.predict(X_morgan).tolist()
+  dataDf = pd.read_csv(csvFile)
+  predictions = make_prediction(
+    model, dataDf.iloc[:10], False, True, SMILES_column_name='mol'
+  )
   result = []
+  # print(len(dataDf.index), len(resultDf.index))
 
   for index, prediction in enumerate(predictions):
-     result.append({'mol': df.iloc[index]['mol'], 'predictedClass': prediction})
+     result.append({'mol': dataDf.iloc[index]['mol'], 'predictedClass': int(prediction)})
 
   return jsonify({
-    'predictions': result
-  })
+    'data': result
+  }), 200
 
   
 @app.route('/model', methods=['GET'])
@@ -59,6 +59,7 @@ def getAllModels():
   tempModels = []
   for model in models:
      tempModels.append({
+        '_id': model['_id'],
         'name': model['name'],
         'description': model['description'],
         'architecture': model['architecture'],
@@ -67,22 +68,6 @@ def getAllModels():
   return jsonify({
     'data': tempModels
   }), 200
-
-
-@app.route('/model/byid/<id>', methods=['GET'])
-def getModelById(id):
-  return jsonify({
-    'message': 'TO BE IMPLEMENTED'
-  })
-  # try:
-  #   model = Model.get(id)
-  #   return jsonify({
-  #     'name': model.name,
-  #     'description': model.description,
-  #     'pk': model.pk
-  #   })
-  # except NotFoundError:
-  #   return {}
   
 
 @app.route('/create-model-architecture', methods=['POST'])
@@ -146,6 +131,7 @@ def triggerTraining():
 
   df, bestModel = hyperparameter_search(df, hyperparameters)
   model = {
+    '_id': str(uuid1().hex),
     'name': name,
     'description': description,
     'architecture': modelArchitecture,
