@@ -59,4 +59,8 @@ def createModel(database, request):
   for index, _ in df.iterrows():
      result.append(df.loc[index, :].values.flatten().tolist())
 
-  return jsonify({'message': 'OK', 'data': result})
+  flippedResult = []
+  for columnIndex in range(len(result[:2][0])):
+    flippedResult.append([result[0][columnIndex], result[1][columnIndex]])
+
+  return jsonify({'message': 'OK', 'data': flippedResult, 'withModelInfo': True})

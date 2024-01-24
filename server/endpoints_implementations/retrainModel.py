@@ -44,7 +44,7 @@ def retrainModel(database, request):
   
 
   result = []
-  result.append(list(resultDict.keys()))
-  result.append(list(resultDict.values()))
+  for key, value in resultDict.items():
+     result.append([key, value])
 
   return jsonify({'message': 'OK', 'data': result})

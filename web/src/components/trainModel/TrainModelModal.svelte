@@ -47,7 +47,7 @@
 		console.log(trainingResults);
 		store.update((previousState) => ({
 			...previousState,
-			trainingResults: trainingResults.data,
+			trainingResults: trainingResults,
 			viewMode: "trainMode",
 		}));
 	};
