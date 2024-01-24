@@ -17,8 +17,9 @@
 <style>
 	.navbar-container {
 		display: flex;
-		/* position: sticky; */
-		/* top: 0; */
+		position: sticky;
+		top: 0;
+		z-index: 5000;
 	}
 
 	.navbar {
