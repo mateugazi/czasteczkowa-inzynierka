@@ -331,6 +331,9 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     if unique:
         output_path = uniquify(output_path)
     
+    if return_df:
+        output_path = "tmp.csv"
+
     f = open(output_path, "w")
     f.write(",".join(data.keys()))
     f.write("\n")
