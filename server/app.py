@@ -18,40 +18,8 @@ CORS(app)
 @app.route("/")
 def isUp():
   return "UP AND RUNNING"
-
-
-@app.route("/get-predictions", methods=['POST'])
-def getPredictions():
-  csvFile = request.files['file']
-  _id = request.form['_id']
-
-  if not csvFile:
-      return 'Upload a CSV file', 500
   
-  if not _id:
-      return 'No _id', 500
-  
-  query={
-    "_id": _id
-  }
-  foundModel = database.model.find_one(query)
-  model = pickle.loads(foundModel['pickleData'])
 
-  dataDf = pd.read_csv(csvFile)
-  predictions = make_prediction(
-    model, dataDf.iloc[:10], False, True, SMILES_column_name='mol'
-  )
-  result = []
-  # print(len(dataDf.index), len(resultDf.index))
-
-  for index, prediction in enumerate(predictions):
-     result.append({'mol': dataDf.iloc[index]['mol'], 'predictedClass': int(prediction)})
-
-  return jsonify({
-    'data': result
-  }), 200
-
-  
 @app.route('/model', methods=['GET'])
 def getAllModels():
   models = database.model.find({})
@@ -159,3 +127,35 @@ def triggerTraining():
 
   print(result)
   return jsonify({'message': 'OK', 'data': result})
+
+
+@app.route("/get-predictions", methods=['POST'])
+def getPredictions():
+  csvFile = request.files['file']
+  _id = request.form['_id']
+
+  if not csvFile:
+      return 'Upload a CSV file', 500
+  
+  if not _id:
+      return 'No _id', 500
+  
+  query={
+    "_id": _id
+  }
+  foundModel = database.model.find_one(query)
+  model = pickle.loads(foundModel['pickleData'])
+
+  dataDf = pd.read_csv(csvFile)
+  predictions = make_prediction(
+    model, dataDf, False, True, SMILES_column_name='mol'
+  )
+  result = []
+  # print(len(dataDf.index), len(resultDf.index))
+
+  for index, prediction in enumerate(predictions):
+     result.append({'mol': dataDf.iloc[index]['mol'], 'predictedClass': int(prediction)})
+
+  return jsonify({
+    'data': result
+  }), 200

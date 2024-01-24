@@ -4,6 +4,9 @@ import os
 import datetime
 from itertools import product
 import pickle
+import matplotlib
+matplotlib.use('agg')
+
 from matplotlib import pyplot as plt
 
 from mordred import Calculator, descriptors
@@ -431,16 +434,14 @@ def make_prediction(model, input_SMILES, calculate_descriptors, calculate_finger
 
     tree_models = [tree.DecisionTreeRegressor, tree.DecisionTreeClassifier, RandomForestClassifier, RandomForestRegressor, XGBClassifier, XGBRegressor, GradientBoostingClassifier, GradientBoostingRegressor]
     kernel_models = [SVC, SVR, MLPClassifier, MLPRegressor, LinearRegression, LogisticRegression]
-    # if type(model) in tree_models:
-    #     explainer = shap.TreeExplainer(model)
-    #     shap_values = explainer.shap_values(input_df)
-    #     plot = shap.summary_plot(shap_values, input_df, show=False)
-    # if type(model) in kernel_models:
-    #     explainer = shap.KernelExplainer(model)
-    #     shap_values = explainer.shap_values(input_df)
-    #     plot = shap.summary_plot(shap_values, input_df, show=False)
-    ### return the label/pIC50 value
-    # output_path = "experiments/Standardized Pipeline/"
-    # filename = os.path.join(os.path.dirname(output_path), 'explainability_plot.png')
-    # plt.savefig(filename)
+    if type(model) in tree_models:
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(input_df)
+        plot = shap.summary_plot(shap_values, input_df, show=False)
+    if type(model) in kernel_models:
+        explainer = shap.KernelExplainer(model)
+        shap_values = explainer.shap_values(input_df)
+        # plot = shap.summary_plot(shap_values, input_df, show=False)
+    ## return the label/pIC50 value
+    # plt.savefig('explainability_plot.png')
     return predicted
