@@ -1,6 +1,7 @@
 <script>
 	import { store } from "../../store/store";
 	import { triggerTraining } from "../api/triggerTraining";
+	import DataInfoSection from "../common/DataInfoSection.svelte";
 	import ParameterInputField from "./ParameterInputField.svelte";
 
 	let files;
@@ -55,60 +56,53 @@
 <dialog id="train-model-modal" class="modal">
 	<div class="modal-box w-11/12 max-w-5xl">
 		<h2 class="font-bold text-3xl">Train a new model</h2>
-		<div class="modal-content">
-			<select
-				bind:value={selectedModelArchitecture}
-				class="select select-bordered w-full max-w-xs text-l"
-			>
-				<option disabled selected>{defaultArchitecturePlaceholder}</option>
-				{#each modelArchitectures as modelArchitecture}
-					<option>{modelArchitecture.name}</option>
-				{/each}
-			</select>
-			<ParameterInputField
-				parameterLabel={"Model name"}
-				placeholder={"Please provide a unique model name"}
-				shouldPrefill={false}
-				on:change={(event) => (modelName = event.target.value)}
-			/>
-			<ParameterInputField
-				parameterLabel={"Model description"}
-				placeholder={"Please provide a model description"}
-				shouldPrefill={false}
-				on:change={(event) => (modelDescription = event.target.value)}
-			/>
-			<label class="form-control w-full max-w-xs">
-				<div class="label">
-					<span class="text-l">Upload your dataset in the csv file</span>
-				</div>
-				<input
-					accept=".csv"
-					bind:files
-					type="file"
-					class="file-input file-input-bordered file-input-primary w-full max-w-xs"
-				/>
-			</label>
-
-			{#if selectedModelArchitecture !== defaultArchitecturePlaceholder}
-				<label class="label cursor-pointer default-parameters-checkbox">
-					<h4 class="text-l">Use default parameters</h4>
-					<input
-						type="checkbox"
-						bind:checked={areDefaultParametersChecked}
-						class="checkbox"
-					/>
-				</label>
-
-				{#if !areDefaultParametersChecked}
-					{#each modelArchitectures.find((modelArchitecture) => modelArchitecture.name === selectedModelArchitecture).parameters as parameter}
-						<ParameterInputField
-							parameterLabel={parameter.name}
-							placeholder={parameter.example}
-							on:change={updateParametersValues}
-						/>
+		<div class="prediction-modal-body">
+			<div class="models-section">
+				<h2 class="font-bold text-2xl">Fill form data</h2>
+				<select
+					bind:value={selectedModelArchitecture}
+					class="select select-bordered w-full max-w-xs text-l"
+				>
+					<option disabled selected>{defaultArchitecturePlaceholder}</option>
+					{#each modelArchitectures as modelArchitecture}
+						<option>{modelArchitecture.name}</option>
 					{/each}
+				</select>
+				<ParameterInputField
+					parameterLabel={"Model name"}
+					placeholder={"Please provide a unique model name"}
+					shouldPrefill={false}
+					on:change={(event) => (modelName = event.target.value)}
+				/>
+				<ParameterInputField
+					parameterLabel={"Model description"}
+					placeholder={"Please provide a model description"}
+					shouldPrefill={false}
+					on:change={(event) => (modelDescription = event.target.value)}
+				/>
+
+				{#if selectedModelArchitecture !== defaultArchitecturePlaceholder}
+					<label class="label cursor-pointer default-parameters-checkbox">
+						<h4 class="text-l">Use default parameters</h4>
+						<input
+							type="checkbox"
+							bind:checked={areDefaultParametersChecked}
+							class="checkbox"
+						/>
+					</label>
+
+					{#if !areDefaultParametersChecked}
+						{#each modelArchitectures.find((modelArchitecture) => modelArchitecture.name === selectedModelArchitecture).parameters as parameter}
+							<ParameterInputField
+								parameterLabel={parameter.name}
+								placeholder={parameter.example}
+								on:change={updateParametersValues}
+							/>
+						{/each}
+					{/if}
 				{/if}
-			{/if}
+			</div>
+			<DataInfoSection bind:files />
 		</div>
 		<div class="modal-action">
 			<form method="dialog">
@@ -120,11 +114,19 @@
 </dialog>
 
 <style>
-	.modal-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+	h2 {
+		margin-bottom: 10px;
+	}
+
+	.models-section {
 		gap: 5px;
-		margin-top: 15px;
+	}
+
+	.checkbox {
+		margin-left: 5px;
+	}
+
+	.data-info-section {
+		gap: 5px !important;
 	}
 </style>
