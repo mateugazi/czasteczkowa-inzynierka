@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import Finalized_pipeline
+import numpy as np
 
 #name = "Asia"
 #name = "Kuba"
@@ -16,7 +17,8 @@ if name == "Wojtek":
     calculate_descriptors = False
     calculate_fingerprints = True
 
-for regression in [True]:
+
+for regression in [False]:
     if regression:
         param_grid_dt={
             'max_depth': [None, 10, 20], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4],
@@ -113,5 +115,6 @@ for regression in [True]:
                                                         SMILES_column_name="SMILES", target_column_name=target_column, 
                                                         split_column_name="Split")
         
-        hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
+        #hyperparams = {"dt": param_grid_dt, "rf": param_grid_rf, "lr": param_grid_lr, "nn": param_grid_nn, "gb": param_grid_gb, "xg": param_grid_xg, "sv": param_grid_sv}
+        hyperparams = {"dt": {}, "rf": {}, "lr": {}, "nn": {}, "gb": {}, "xg": {}, "sv": {}}
         Finalized_pipeline.hyperparameter_search(df, hyperparams, output_file_name=name + "_" + dataset[:13] + "_" + runtype + "_run.csv")
