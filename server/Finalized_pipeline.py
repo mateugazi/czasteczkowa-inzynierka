@@ -398,12 +398,12 @@ def retrain_model(model, input_df):
         
 
     ### print/export new results and new model
-    output_path = "experiments\Standardized Pipeline\\"
+    # output_path = "experiments\Standardized Pipeline\\"
     
-    filename = os.path.join(os.path.dirname(output_path), 'retrained_model.sav')
-    pickle.dump(model, open(filename, 'wb'))
+    # filename = os.path.join(os.path.dirname(output_path), 'retrained_model.sav')
+    # pickle.dump(model, open(filename, 'wb'))
 
-    return results_test
+    return results_test, model
 
 def make_prediction(model, input_SMILES, calculate_descriptors, calculate_fingerprints, SMILES_column_name='mol'):
     

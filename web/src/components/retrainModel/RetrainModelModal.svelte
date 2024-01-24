@@ -1,6 +1,6 @@
 <script>
 	import { store } from "../../store/store";
-	import { getPredictions } from "../api/getPredictions";
+	import { retrainModel } from "../api/retrainModel";
 
 	let files;
 	let models = [];
@@ -12,18 +12,18 @@
 
 	async function onTriggerCalculations() {
 		store.update((state) => ({ ...state, viewMode: "loadingMode" }));
-		const fetchedPredictions = await getPredictions(selectedModel, files[0]);
+		const retrainingResults = await retrainModel(selectedModel, files[0]);
 		store.update((state) => ({
 			...state,
-			viewMode: "summaryMode",
-			predictions: fetchedPredictions,
+			viewMode: "trainMode",
+			trainingResults: retrainingResults,
 		}));
 	}
 </script>
 
 <dialog id="prediction-mode-modal" class="modal">
 	<div class="modal-box w-11/12 max-w-5xl">
-		<h2 class="font-bold text-3xl">Get predictions</h2>
+		<h2 class="font-bold text-3xl">Retrain model</h2>
 		<div class="prediction-modal-body">
 			<div class="models-section">
 				<h2 class="font-bold text-2xl">Select model</h2>
@@ -72,7 +72,7 @@
 				<button class="btn">Close</button>
 			</form>
 			<button class="btn btn-primary" on:click={onTriggerCalculations}
-				>Run predictions</button
+				>Start retraining</button
 			>
 		</div>
 	</div>
@@ -81,11 +81,6 @@
 <style>
 	p {
 		text-align: start;
-	}
-
-	figure {
-		padding-top: 5rem;
-		padding-bottom: 5rem;
 	}
 
 	.card {
