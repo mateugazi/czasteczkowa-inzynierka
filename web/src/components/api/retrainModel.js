@@ -8,5 +8,5 @@ export const retrainModel = async (_id, smilesCsvFile) => {
 	});
 
 	const json = await res.json();
-	return json.data;
+	return json;
 }

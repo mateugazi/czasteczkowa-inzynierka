@@ -12,7 +12,7 @@
 			...previousState,
 			models,
 		}));
-		document.getElementById("prediction-mode-modal").showModal();
+		document.getElementById("retrain-model-modal").showModal();
 	};
 </script>
 

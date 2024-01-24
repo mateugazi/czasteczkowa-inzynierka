@@ -19,7 +19,7 @@ export async function triggerTraining(
 		data.append("description", description);
 	}
 
-	const res = await fetch("http://localhost:3000/trigger-training", {
+	const res = await fetch("http://localhost:3000/create-model", {
 		method: "POST",
 		body: data,
 	});

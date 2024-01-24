@@ -16,7 +16,7 @@ export const trainNewModelDescription = `
 export const trainNewModelIconPath =
 	"../../../assets/clipboard-list-alt-svgrepo-com.svg";
 
-export const predictionsTitle = "Get predictions only";
+export const predictionsTitle = "Get predictions";
 
 export const predictionsDescription = `
   Choose this path if you want to get predictions from one of already existing models on your data

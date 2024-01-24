@@ -1,6 +1,7 @@
 <script>
 	import { store } from "../../store/store";
 	import { getPredictions } from "../api/getPredictions";
+	import DataInfoSection from "../common/DataInfoSection.svelte";
 
 	let files;
 	let models = [];
@@ -48,24 +49,13 @@
 							</div>
 						</div>
 					{/each}
+					<div id="container"></div>
 				{:else}
 					<p class="py-4">Sorry, no models available</p>
 				{/if}
 			</div>
 
-			<div class="data-info-section">
-				<label class="form-control w-full max-w-xs">
-					<div class="label">
-						<span class="text-l">Upload your dataset in the csv file</span>
-					</div>
-					<input
-						accept=".csv"
-						bind:files
-						type="file"
-						class="file-input file-input-bordered file-input-primary w-full max-w-xs"
-					/>
-				</label>
-			</div>
+			<DataInfoSection bind:files />
 		</div>
 		<div class="modal-action">
 			<form method="dialog">
@@ -83,9 +73,8 @@
 		text-align: start;
 	}
 
-	figure {
-		padding-top: 5rem;
-		padding-bottom: 5rem;
+	h2 {
+		margin-bottom: 10px;
 	}
 
 	.card {
@@ -95,16 +84,18 @@
 	.prediction-modal-body {
 		display: flex;
 		gap: 5%;
+		height: 450px;
+		overflow: auto;
 	}
 
-	.models-section,
-	.data-info-section {
+	.models-section {
 		width: 50%;
 	}
 
 	.models-section {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 20px;
 	}
 </style>
