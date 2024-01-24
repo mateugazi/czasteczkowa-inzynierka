@@ -15,8 +15,6 @@
 <div class="hero min-h-screen">
 	{#if viewMode === "selectMode"}
 		<SelectModeView />
-	{:else if viewMode === "predictionMode"}
-		<FileReceiver />
 	{:else if viewMode === "summaryMode"}
 		<SummaryView />
 	{:else if viewMode === "loadingMode"}

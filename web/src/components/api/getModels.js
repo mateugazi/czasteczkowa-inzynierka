@@ -4,5 +4,5 @@ export async function getModels() {
 	});
 
 	const json = await res.json();
-	return json;
+	return json.data;
 }

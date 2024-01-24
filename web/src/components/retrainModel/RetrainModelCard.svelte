@@ -1,7 +1,7 @@
 <script>
 	import { store } from "../../store/store";
 	import { getModels } from "../api/getModels";
-	import PredictionModeModal from "./PredictionModeModal.svelte";
+	import RetrainModelModal from "./RetrainModelModal.svelte";
 	export let title;
 	export let description;
 	export let iconPath;
@@ -25,7 +25,7 @@
 		<p>{description}</p>
 		<div class="card-actions justify-end">
 			<button class="btn" on:click={fetchModels}>Select</button>
-			<PredictionModeModal />
+			<RetrainModelModal />
 		</div>
 	</div>
 </div>

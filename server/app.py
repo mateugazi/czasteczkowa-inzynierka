@@ -1,171 +1,116 @@
 from flask import Flask, jsonify, request
 import pickle
+import pandas as pd
 from flask_cors import CORS
-from pydantic import ValidationError
-from redis_om import Migrator
-from redis_om.model import NotFoundError
-from Model import Model
-from ModelType import ModelType
-from utils import *
 import json
-from Validator import Validator
-from Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search
+from Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search, make_prediction, retrain_model
 import ast
+import pymongo
+from uuid import uuid1
+
 
 app = Flask(__name__)
+client = pymongo.MongoClient('localhost:27017')
+database = client.TaskManager
+
 CORS(app)
-# r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 @app.route("/")
 def isUp():
   return "UP AND RUNNING"
-
-@app.route("/get-predictions", methods=['POST'])
-def getPredictions():
-  csvFile = request.files['file']
-  uniqueName = request.form['uniqueName']
-
-  if not csvFile:
-      return 'Upload a CSV file'
   
-  if not uniqueName:
-      return 'No model'
-  
-  model = pickle.load(open('./models/' + uniqueName  + '.sav', 'rb'))
-  
-  df = LoadDatasetCSV(csvFile)
-  X_morgan = CalculateMorganFingerprint(df['mol_from_smiles'])
 
-  predictions = model.predict(X_morgan).tolist()
-  result = []
-
-  for index, prediction in enumerate(predictions):
-     result.append({'mol': df.iloc[index]['mol'], 'predictedClass': prediction})
-
-  return jsonify({
-    'predictions': result
-  })
-
-
-@app.route("/create-model", methods=['POST'])
-def createModel():
-  try:
-    newModel = Model(
-      uniqueName = 'model_GBT_pipeline',
-      name = 'Basic model',
-      description = 'Basic model for our initial tests',
-    )
-    print('======PK:', newModel.pk)
-    newModel.save()
-    return newModel.pk
-
-  except ValidationError as e:
-    print(e)
-    return "Bad request.", 400
-  
 @app.route('/model', methods=['GET'])
 def getAllModels():
-  models = Model.find().all()
-  response = []
+  models = database.model.find({})
 
+  tempModels = []
   for model in models:
-    response.append({
-      'name': model.name,
-      'description': model.description,
-      'pk': model.pk
-    })
+     tempModels.append({
+        '_id': model['_id'],
+        'name': model['name'],
+        'description': model['description'],
+        'architecture': model['architecture'],
+     })
 
-  return jsonify(response)
-
-@app.route('/model/byid/<id>', methods=['GET'])
-def getModelById(id):
-  try:
-    model = Model.get(id)
-    return jsonify({
-      'name': model.name,
-      'description': model.description,
-      'pk': model.pk
-    })
-  except NotFoundError:
-    return {}
+  return jsonify({
+    'data': tempModels
+  }), 200
   
-@app.route('/create-model-type', methods=['POST'])
-def createModelType():
-  data = request.json
-  name = data.get('name')
-  identifier = data.get('identifier')
-  regression = data.get('regression')
-  parameters = data.get('parameters')
 
-  try:
-    newModelType = ModelType(
-      name = name,
-      identifier = identifier,
-      regression = regression,
-      parameters = parameters
-    )
-    print('======PK:', newModelType.pk)
-    newModelType.save()
-    return newModelType.pk
+@app.route('/create-model-architecture', methods=['POST'])
+def createModelArchitecture():
+  modelArchitectureData = dict(request.json)
+  modelArchitectureData['_id'] = str(uuid1().hex) 
 
-  except ValidationError as e:
-    print(e)
-    return "Bad request.", 400
+  result = database.modelArchitecture.insert_one(modelArchitectureData)
+
+  if not result.inserted_id:
+    return jsonify({
+      "message" : "Something went wrong, while creating the model architecutre"
+    }), 500
+  
+  return jsonify({
+    "message": "Model architecture added", 
+    "data": {
+      "id":result.inserted_id
+    }
+  }), 200
 
 
-@app.route('/model-type', methods=['GET'])
+@app.route('/model-architecture', methods=['GET'])
 def getAllModelTypes():
-  modelTypes = ModelType.find().all()
-  response = []
+  modelArchitectures = database.modelArchitecture.find({})
 
-  for modelType in modelTypes:
-    response.append({
-      'name': modelType.name,
-      'identifier': modelType.identifier,
-      'regression': modelType.regression,
-      'parameters': [{'name': parameter.name, 'example': parameter.example, 'type': parameter.type} for parameter in modelType.parameters],
-      'pk': modelType.pk
-    })
-
-  return jsonify(response)
+  return jsonify({
+    'data': list(modelArchitectures)
+  }), 200
 
 
 @app.route("/trigger-training", methods=['POST'])
 def triggerTraining():
-  csvFile = request.files['file']
-  modelInfo = request.form['modelInfo']
+  csvFile = request.files['dataFile']
+  modelArchitecture = request.form['modelArchitecture']
+  name = request.form['name']
+  description = request.form['description']
   parameters = request.form['parameters']
 
   if not csvFile:
-    return 'Upload a CSV file'
+    return 'Upload a CSV file', 500
   
-  if not modelInfo:
-    return 'No model type'
+  if not modelArchitecture:
+    return 'No model type', 500
 
-  # df, mess, stat = Validator(csvFile)
-
-  # if df is None:
-    # return jsonify({'message': mess, 'stat': stat})
-  
-  modelInfo = json.loads(modelInfo)
+  modelArchitecture = json.loads(modelArchitecture)
   df = generate_split_dataset(csvFile)
   df = calculate_features(df, False, True, SMILES_column_name='mol', target_column_name='Class')
 
   hyperparameters = {
-    modelInfo['identifier']: {}
+    modelArchitecture['mlIdentifier']: {}
   }
 
-  # currently hyperparameters are ignored, because they are taking too long time
   if parameters:
     parameters = json.loads(request.form['parameters'])
     for parameterName in parameters.keys():
-      hyperparameters[modelInfo['identifier']][parameterName] = ast.literal_eval(parameters[parameterName]['value'])
+      hyperparameters[modelArchitecture['mlIdentifier']][parameterName] = ast.literal_eval(parameters[parameterName]['value'])
 
 
   print(hyperparameters)
 
-  df = hyperparameter_search(df, hyperparameters)
+  df, bestModel = hyperparameter_search(df, hyperparameters)
+  model = {
+    '_id': str(uuid1().hex),
+    'name': name,
+    'description': description,
+    'architecture': modelArchitecture,
+    'pickleData': pickle.dumps(bestModel)
+  }
+  result = database.model.insert_one(model)
 
+  if not result.inserted_id:
+    return jsonify({
+      "message" : "Something went wrong, while saving model"
+    }), 500
   # sprawdzenie czy jest regresja
     # klasyfikacja
       # (optional) sprawdzenie ic50 czy pic50
@@ -183,4 +128,87 @@ def triggerTraining():
   print(result)
   return jsonify({'message': 'OK', 'data': result})
 
-Migrator().run()
+
+
+@app.route("/retrain-model", methods=['POST'])
+def retrainModel():
+  csvFile = request.files['file']
+  _id = request.form['_id']
+
+  if not csvFile:
+      return 'Upload a CSV file', 500
+  
+  if not _id:
+      return 'No _id', 500
+  
+  query={
+    "_id": _id
+  }
+  foundModel = database.model.find_one(query)
+
+  if not foundModel:
+     return 'Model not found', 500
+
+  model = pickle.loads(foundModel['pickleData'])
+
+  df = generate_split_dataset(csvFile)
+  df = calculate_features(df, False, True, SMILES_column_name='mol', target_column_name='Class')
+  resultDict, retrainedModel = retrain_model(model, df)
+
+  modelToSave = {
+    'name': foundModel['name'],
+    'description': foundModel['description'],
+    'architecture': foundModel['architecture'],
+    'pickleData': pickle.dumps(retrainedModel)
+  }
+
+  content={ "$set": modelToSave }
+
+  insertResults = database.model.update_one(query, content)
+
+  if not insertResults.matched_count:
+    return jsonify({
+      "message" : "Something went wrong, while saving model"
+    }), 500
+  
+
+  result = []
+  result.append(list(resultDict.keys()))
+  result.append(list(resultDict.values()))
+
+  print(result)
+
+  print(result)
+  return jsonify({'message': 'OK', 'data': result})
+
+
+@app.route("/get-predictions", methods=['POST'])
+def getPredictions():
+  csvFile = request.files['file']
+  _id = request.form['_id']
+
+  if not csvFile:
+      return 'Upload a CSV file', 500
+  
+  if not _id:
+      return 'No _id', 500
+  
+  query={
+    "_id": _id
+  }
+  foundModel = database.model.find_one(query)
+  model = pickle.loads(foundModel['pickleData'])
+
+  dataDf = pd.read_csv(csvFile)
+  predictions = make_prediction(
+    model, dataDf, False, True, SMILES_column_name='mol'
+  )
+  result = []
+  # print(len(dataDf.index), len(resultDf.index))
+
+  for index, prediction in enumerate(predictions):
+     result.append({'mol': dataDf.iloc[index]['mol'], 'predictedClass': int(prediction)})
+
+  return jsonify({
+    'data': result
+  }), 200
