@@ -1,8 +1,8 @@
 <script>
 	import { onMount } from "svelte";
-	import { fetchPredictions } from "../../helpers/fetchPredictions";
 	import { store } from "../../store/store";
 	import { scrollToTop } from "../../helpers/scrollToTop";
+	import { getPredictions } from "../api/getPredictions";
 
 	let files;
 
@@ -12,11 +12,11 @@
 
 	async function onTriggerCalculations() {
 		store.update((state) => ({ ...state, viewMode: "loadingMode" }));
-		const fetchedPredictions = await fetchPredictions(files[0]);
+		const fetchedPredictions = await getPredictions(files[0]);
 		store.update((state) => ({
 			...state,
 			viewMode: "summaryMode",
-			predictions: fetchedPredictions.predictions,
+			predictions: fetchedPredictions,
 		}));
 	}
 </script>
