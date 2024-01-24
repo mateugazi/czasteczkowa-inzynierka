@@ -5,11 +5,13 @@
 	import PredictionsTable from "../PredictionsTable.svelte";
 	import SummaryDetails from "../SummaryDetails.svelte";
 	import { scrollToTop } from "../../helpers/scrollToTop";
+	import { getExplainabilityPlot } from "../api/getExplainabilityPlot";
 
 	let predictions;
 
 	onMount(() => {
 		scrollToTop();
+		getExplainabilityPlot();
 	});
 
 	const unsubscribe = store.subscribe((state) => {
@@ -21,8 +23,7 @@
 	<h1 class="text-5xl font-bold">Your results</h1>
 	<PredictionsTable {predictions} />
 	<div class="hero-content flex-col lg:flex-row">
-		<SamplePlot />
-		<SummaryDetails />
+		<img id="explainability-plot" src="" alt="" width="500px" />
 	</div>
 </div>
 

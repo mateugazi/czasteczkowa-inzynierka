@@ -1,12 +1,7 @@
-from flask import Flask, jsonify, request
-import pickle
-import pandas as pd
+from flask import Flask, request
+from flask import send_file
 from flask_cors import CORS
-import json
-import ast
 import pymongo
-from uuid import uuid1
-from ml_actions.Finalized_pipeline import generate_split_dataset, calculate_features, hyperparameter_search, make_prediction, retrain_model
 from endpoints_implementations.getAllModels import getAllModels
 from endpoints_implementations.createModelArchitecture import createModelArchitecture
 from endpoints_implementations.getAllModelArchitectures import getAllModelArchitectures
@@ -53,3 +48,7 @@ def retrainModelController():
 @app.route("/get-predictions", methods=['POST'])
 def getPredictionsController():
   return getPredictions(database, request)
+
+@app.route("/explainability-plot", methods=['GET'])
+def getImage():
+  return send_file('explainability_plot.png')
