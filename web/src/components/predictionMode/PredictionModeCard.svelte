@@ -1,24 +1,18 @@
 <script>
-	import { getModels } from "../../helpers/getModels";
 	import { store } from "../../store/store";
+	import { getModels } from "../api/getModels";
+	import PredictionModeModal from "./PredictionModeModal.svelte";
 	export let title;
 	export let description;
 	export let iconPath;
-	export let viewMode;
-
-	let models;
-
-	const unsubscribe = store.subscribe((state) => {
-		models = state.models;
-	});
 
 	const fetchModels = async () => {
-		models = await getModels();
+		let models = await getModels();
 		store.update((previousState) => ({
 			...previousState,
 			models,
 		}));
-		document.getElementById("my_modal_4").showModal();
+		document.getElementById("prediction-mode-modal").showModal();
 	};
 </script>
 
@@ -31,38 +25,7 @@
 		<p>{description}</p>
 		<div class="card-actions justify-end">
 			<button class="btn" on:click={fetchModels}>Select</button>
-			<dialog id="my_modal_4" class="modal">
-				<div class="modal-box w-11/12 max-w-5xl">
-					<h2 class="font-bold text-3xl">Select model</h2>
-					{#if models && models.length > 0}
-						{#each models as model}
-							<div class="card w-96 bg-base-100 shadow-xl">
-								<div class="card-body">
-									<h2 class="card-title">{model.name}</h2>
-									<p>{model.description}</p>
-									<div class="card-actions justify-end">
-										<button
-											class="btn btn-primary"
-											on:click={() =>
-												store.update((previousState) => ({
-													...previousState,
-													viewMode,
-												}))}>Select</button
-										>
-									</div>
-								</div>
-							</div>
-						{/each}
-					{:else}
-						<p class="py-4">Sorry, no models available</p>
-					{/if}
-					<div class="modal-action">
-						<form method="dialog">
-							<button class="btn">Close</button>
-						</form>
-					</div>
-				</div>
-			</dialog>
+			<PredictionModeModal />
 		</div>
 	</div>
 </div>

@@ -197,6 +197,7 @@ def model_builder(model_name, hyperparams, regression):
 
 def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=[], iterations=1):
     for i in range(iterations):
+        np.random.seed(148253)
         model.fit(X_train, np.reshape(y_train, (-1, )))
         
         y_test_predicted = model.predict(X_test)
@@ -272,7 +273,7 @@ def split_df(df):
     return X_train, y_train, X_test, y_test
 
 ### input df can be a df or a csv to read
-def hyperparameter_search(input_df, parameters, unique=True, output_file_name="results.csv"):
+def hyperparameter_search(input_df, parameters, unique=True, output_file_name="results.csv", return_df=False):
     model_name_dict_reg = {"dt": "DecisionTreeRegressor", "rf": "RandomForestRegressor", "lr": "LinearRegression", "nn": "MLPRegressor", "gb": "GradientBoostingRegressor", "xg": "XGBRegressor", "sv": "SVR"}
     model_name_dict_class = {"dt": "DecisionTreeClassifier", "rf": "RandomForestClassifier", "lr": "LogisticRegression", "nn": "MLPClassifier", "gb": "GradientBoostingClassifier", "xg": "XGBClassifier", "sv": "SVC"}
     
@@ -330,6 +331,9 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     if unique:
         output_path = uniquify(output_path)
     
+    if return_df:
+        output_path = "tmp.csv"
+
     f = open(output_path, "w")
     f.write(",".join(data.keys()))
     f.write("\n")
@@ -380,7 +384,8 @@ def hyperparameter_search(input_df, parameters, unique=True, output_file_name="r
     filename = os.path.join(os.path.dirname(output_path), 'model.sav')
     pickle.dump(best_model, open(filename, 'wb'))
 
-    return best_model, X_test
+    if return_df:
+        return results_df
 
 def retrain_model(model, input_df):
     ### Read model
