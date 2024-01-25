@@ -441,7 +441,7 @@ def make_prediction(model, input_SMILES, calculate_descriptors, calculate_finger
     if type(model) in kernel_models:
         explainer = shap.KernelExplainer(model)
         shap_values = explainer.shap_values(input_df)
-        # plot = shap.summary_plot(shap_values, input_df, show=False)
+        plot = shap.summary_plot(shap_values, input_df, show=False)
     ## return the label/pIC50 value
-    # plt.savefig('explainability_plot.png')
+    plt.savefig('explainability_plot.png')
     return predicted
