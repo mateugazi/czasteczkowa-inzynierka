@@ -210,51 +210,51 @@ def train_and_test(model, X_train, y_train, X_test, y_test, regression, metrics=
 
         if regression:
             if 'rmse' in metrics or len(metrics) == 0:
-                metric_test = mean_squared_error(y_test, y_test_predicted, squared=False)
+                metric_test = round(mean_squared_error(y_test, y_test_predicted, squared=False), 3)
                 results_test["rmse"] = metric_test
-                metric_test = mean_squared_error(y_train, y_train_predicted, squared=False)
+                metric_test = round(mean_squared_error(y_train, y_train_predicted, squared=False), 3)
                 results_test["train_rmse"] = metric_test
             if 'mse' in metrics or len(metrics) == 0:
-                metric_test = mean_squared_error(y_test, y_test_predicted)
+                metric_test = round(mean_squared_error(y_test, y_test_predicted), 3)
                 results_test["mse"] = metric_test
-                metric_test = mean_squared_error(y_train, y_train_predicted)
+                metric_test = round(mean_squared_error(y_train, y_train_predicted), 3)
                 results_test["train_mse"] = metric_test
             if 'mae' in metrics or len(metrics) == 0:
-                metric_test = mean_absolute_error(y_test, y_test_predicted)
+                metric_test = round(mean_absolute_error(y_test, y_test_predicted), 3)
                 results_test["mae"] = metric_test
-                metric_test = mean_absolute_error(y_train, y_train_predicted)
+                metric_test = round(mean_absolute_error(y_train, y_train_predicted), 3)
                 results_test["train_mae"] = metric_test
             if 'r2' in metrics or len(metrics) == 0:
-                metric_test = r2_score(y_test, y_test_predicted)
+                metric_test = round(r2_score(y_test, y_test_predicted), 3)
                 results_test["r2"] = metric_test
-                metric_test = r2_score(y_train, y_train_predicted)
+                metric_test = round(r2_score(y_train, y_train_predicted), 3)
                 results_test["train_r2"] = metric_test
             
         else:
             if 'roc_auc' in metrics or len(metrics) == 0:
-                metric_test = roc_auc_score(y_test, y_test_predicted)
+                metric_test = round(roc_auc_score(y_test, y_test_predicted), 3)
                 results_test["roc_auc"] = metric_test
-                metric_test = roc_auc_score(y_train, y_train_predicted)
+                metric_test = round(roc_auc_score(y_train, y_train_predicted), 3)
                 results_test["train_roc_auc"] = metric_test
             if 'accuracy' in metrics or len(metrics) == 0:
-                metric_test = accuracy_score(y_test, y_test_predicted)
+                metric_test = round(accuracy_score(y_test, y_test_predicted), 3)
                 results_test["accuracy"] = metric_test
-                metric_test = accuracy_score(y_train, y_train_predicted)
+                metric_test = round(accuracy_score(y_train, y_train_predicted), 3)
                 results_test["train_accuracy"] = metric_test
             if 'precision' in metrics or len(metrics) == 0:
-                metric_test = precision_score(y_test, y_test_predicted)
+                metric_test = round(precision_score(y_test, y_test_predicted), 3)
                 results_test["precision"] = metric_test
-                metric_test = precision_score(y_train, y_train_predicted)
+                metric_test = round(precision_score(y_train, y_train_predicted), 3)
                 results_test["train_precision"] = metric_test
             if 'recall' in metrics or len(metrics) == 0:
-                metric_test = recall_score(y_test, y_test_predicted)
+                metric_test = round(recall_score(y_test, y_test_predicted), 3)
                 results_test["recall"] = metric_test
-                metric_test = recall_score(y_train, y_train_predicted)
+                metric_test = round(recall_score(y_train, y_train_predicted), 3)
                 results_test["train_recall"] = metric_test
             if 'f1' in metrics or len(metrics) == 0:
-                metric_test = f1_score(y_test, y_test_predicted)
+                metric_test = round(f1_score(y_test, y_test_predicted), 3)
                 results_test["f1"] = metric_test
-                metric_test = f1_score(y_train, y_train_predicted)
+                metric_test = round(f1_score(y_train, y_train_predicted), 3)
                 results_test["train_f1"] = metric_test
 
     return results_test
