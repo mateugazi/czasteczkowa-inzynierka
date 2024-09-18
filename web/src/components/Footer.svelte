@@ -2,7 +2,7 @@
 	<footer class="footer footer-center p-10 bg-primary text-primary-content">
 		<aside>
 			<p class="font-bold">POLITECHNIKA POZNAŃSKA</p>
-			<p>Copyright © 2023 - All right reserved</p>
+			<p>Copyright © 2024 - All right reserved</p>
 		</aside>
 		<nav>
 			<div class="grid grid-flow-col gap-4">

@@ -25,3 +25,10 @@
 		</tbody>
 	</table>
 </div>
+
+<style>
+	.overflow-x-auto {
+		height: 450px;
+		overflow: auto;
+	}
+</style>

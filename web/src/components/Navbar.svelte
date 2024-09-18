@@ -9,7 +9,7 @@
 <div class="navbar-container">
 	<div class="navbar bg-primary text-primary-content">
 		<button class="btn btn-ghost text-xl" on:click={handleLogoClick}
-			>cząsteczki</button
+			>CheML</button
 		>
 	</div>
 </div>
@@ -17,8 +17,9 @@
 <style>
 	.navbar-container {
 		display: flex;
-		/* position: sticky; */
-		/* top: 0; */
+		position: sticky;
+		top: 0;
+		z-index: 5000;
 	}
 
 	.navbar {
